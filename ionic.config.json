@@ -1,6 +1,5 @@
 {
   "name": "Anon Wallet",
-  "app_id": "com.anoncom.anon-wallet-osx",
   "integrations": {
     "cordova": {}
   },
@@ -10,5 +9,6 @@
     "www/**/*",
     "!www/lib/**/*",
     "!www/**/*.map"
-  ]
+  ],
+  "pro_id": "com.anoncom.anon-wallet-osx"
 }
