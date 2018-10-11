@@ -3,8 +3,8 @@
   "//":"        Modify it in the app-template directory",
 
   "manifest_version": 2,
-  "name": "snowgem",
-  "description": "A Secure SnowGem Wallet",
+  "name": "anon",
+  "description": "A Secure Anon Wallet",
   "version": "1.0.0",
   "permissions": [
     "storage",

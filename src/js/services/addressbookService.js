@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('copayApp.services').factory('addressbookService', function($log, bitcoreXsg, storageService, lodash) {
+angular.module('copayApp.services').factory('addressbookService', function($log, bitcoreAnon, storageService, lodash) {
   var root = {};
 
   var getNetwork = function(address) {
     var network;
-    network = (new bitcoreXsg.Address(address)).network.name;
+    network = (new bitcoreAnon.Address(address)).network.name;
     return network;
   };
 
@@ -42,7 +42,7 @@ angular.module('copayApp.services').factory('addressbookService', function($log,
 
   root.add = function(entry, cb) {
     var network = getNetwork(entry.address);
-    if (lodash.isEmpty(network)) return cb('Not valid snowgem address');
+    if (lodash.isEmpty(network)) return cb('Not valid anon address');
     storageService.getAddressbook(network, function(err, ab) {
       if (err) return cb(err);
       if (ab) ab = JSON.parse(ab);
@@ -61,7 +61,7 @@ angular.module('copayApp.services').factory('addressbookService', function($log,
 
   root.remove = function(addr, cb) {
     var network = getNetwork(addr);
-    if (lodash.isEmpty(network)) return cb('Not valid snowgem address');
+    if (lodash.isEmpty(network)) return cb('Not valid anon address');
     storageService.getAddressbook(network, function(err, ab) {
       if (err) return cb(err);
       if (ab) ab = JSON.parse(ab);

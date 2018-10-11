@@ -1,21 +1,21 @@
-Sichere SnowGems zu eigenen Bedingungen, mit einem quelloffenen Gemeinschaftswallet (elektronische Brieftasche mit Mehrfachunterschriften) von BitPay. 
+Sichere Anons zu eigenen Bedingungen, mit einem quelloffenen Gemeinschaftswallet (elektronische Brieftasche mit Mehrfachunterschriften) von BitPay. 
 Copay Nutzer können ihre Beträge individuell speichern oder ihre Finanzen mit anderen Nutzern in Gemeinschaftswallets teilen, die je nach Einstellung mehrere Bestätigungen (elektronische Unterschriften) benötigen und so nichtautorisierte Zahlungen verhindern. Ein paar Einsatzmöglichkeiten, wie ein solches Wallet mit anderen Copayern genutzt werden kann:
 
 Ansparen von Beträgen für Urlaub oder gemeinsame Anschaffungen (z.B. mit Freunden) 
 Überwachung von Ausgaben und Einkünften der Familie.
 Organisation der Ausgaben in Firmen, Vereinen oder Organisationen.
 
-Folgende Funktionen wurden in diese Version von Copay eingebaut um ein SnowGem Wallet anzubieten, das keine Kompromisse in Sicherheit oder Zugänglichkeit eingeht:
+Folgende Funktionen wurden in diese Version von Copay eingebaut um ein Anon Wallet anzubieten, das keine Kompromisse in Sicherheit oder Zugänglichkeit eingeht:
 
 Anlage und Verwaltung von mehreren Wallets innerhalb der Anwendung 
 Intiutive mehrfachunterschriften Sicherheit für persönliche und geteilete Wallets
 Einfache Ausgabenvorschläge für geteilte Walltes und Gruppenzahlungen
 Hierarchische deterministische(HD) Adresserzeugung und Sicherung der Wallets 
 Gerätebasierte Sicherheit: Alle privaten Schlüssel werden auf dem Gerät und nicht in der Cloud gespreichert
-Unterstützung von SnowGem Testnet Wallets
+Unterstützung von Anon Testnet Wallets
 Gleichzeitiger Zugriff über alle wichtigen mobilen Systeme und Desktop-Plattformen
-Zahlungsprotokoll (BIP70-BIP73) Unterstützung: Leicht identifizierbare Zahlungsanforderungen und nachvollziehbare sichere SnowGemzahlungen.
-Unterstützung von 150+ verschiedenen Währungen und Stückelung in XSG oder bits
+Zahlungsprotokoll (BIP70-BIP73) Unterstützung: Leicht identifizierbare Zahlungsanforderungen und nachvollziehbare sichere Anonzahlungen.
+Unterstützung von 150+ verschiedenen Währungen und Stückelung in ANON oder bits
 E-Mail Benachrichtigung für Zahlungen und Transaktionen
 Anpasspare Wallets: Eigene Namen und Hintergrundfarben
 Unterstützung von 9 Sprachen (EN, CS, FR, DE, IT, ES, JA, PL, RU)

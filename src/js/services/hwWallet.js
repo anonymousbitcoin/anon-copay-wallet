@@ -65,7 +65,7 @@ angular.module('copayApp.services')
     };
 
     root.pubKeyToEntropySource = function(xPubKey) {
-      var b = bwcService.getBitcoreXsg();
+      var b = bwcService.getBitcoreAnon();
       var x = b.HDPublicKey(xPubKey);
       return x.publicKey.toString();
     };

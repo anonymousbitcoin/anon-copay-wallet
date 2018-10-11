@@ -1,21 +1,21 @@
 {
   "//": "        Modify it in the app-template directory",
-  "name": "snowgem",
-  "description": "A Secure SnowGem Wallet",
-  "author": "SnowGem Foundation",
+  "name": "anon",
+  "description": "A Secure Anon Wallet",
+  "author": "Anon Foundation",
   "version": "1.0.3",
   "keywords": [
-    "snowgem",
+    "bitcoin",
     "wallet",
     "bitpay",
-    "snowgem",
+    "anon",
     "multisignature",
     "bitcore"
   ],
   "main": "www/index.html",
-  "title": "SnowGem Copay Wallet",
+  "title": "Anon Copay Wallet",
   "window": {
-    "title": "SnowGem - SnowGem Wallet",
+    "title": "Anon - Anon Wallet",
     "icon": "www/img/app/icon.png",
     "toolbar": false,
     "show": true,
@@ -37,14 +37,14 @@
   },
   "dom_storage_quota": 200,
   "id": "jid1-x7bV5evAaI1P9Q",
-  "homepage": "https://snowgem.org",
+  "homepage": "https://anonfork.io",
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/snowgem/snowgem-copay-wallet.git",
+    "url": "git://github.com/anonymousbitcoin/anon-copay-wallet.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/snowgem/snowgem-copay-wallet/issues"
+    "url": "https://github.com/anonymousbitcoin/anon-copay-wallet/issues"
   },
   "engines": {
     "node": "6",
@@ -57,7 +57,7 @@
     "bezier-easing": "^2.0.3",
     "bhttp": "^1.2.4",
     "bitauth": "^0.2.1",
-    "bitcore-wallet-client-xsg": "git+https://github.com/snowgem/bitcore-wallet-client-xsg.git",
+    "bitcore-wallet-client-anon": "git+https://github.com/anonymousbitcoin/bitcore-wallet-client-anon.git",
     "bower": "^1.7.9",
     "cordova": "^7.1.0",
     "cordova-android": "^6.4.0",
@@ -139,7 +139,7 @@
     "run:android": "cordova run android --device",
     "run:android-release": "cordova run android --device --release",
     "log:android": "adb logcat | grep chromium",
-    "sign:android": "rm -f platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../snowgem.keystore -signedjar platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-unsigned.apk copay_play && $ANDROID_HOME/build-tools/27.0.3/zipalign -v 4 platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk",
+    "sign:android": "rm -f platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../anon.keystore -signedjar platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-unsigned.apk copay_play && $ANDROID_HOME/build-tools/27.0.3/zipalign -v 4 platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk",
     "test": "echo \"no package tests configured\"",
     "clean": "trash platforms && trash plugins && cordova prepare",
     "unstage-package": "git reset package.json",
@@ -182,7 +182,7 @@
       "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "snowgem"
+        "URL_SCHEME": "anon"
       },
       "cordova-custom-config": {},
       "cordova-plugin-queries-schemes": {},

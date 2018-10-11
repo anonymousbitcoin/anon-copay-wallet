@@ -1,6 +1,6 @@
 {
-  "name": "SnowGem Wallet",
-  "app_id": "com.xsgcom.xsg-wallet-osx",
+  "name": "Anon Wallet",
+  "app_id": "com.anoncom.anon-wallet-osx",
   "integrations": {
     "cordova": {}
   },

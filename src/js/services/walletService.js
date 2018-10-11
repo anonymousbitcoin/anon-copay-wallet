@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('walletService', function($log, $timeout, lodash, trezor, ledger, intelTEE, storageService, configService, rateService, uxLanguage, $filter, gettextCatalog, bwcError, $ionicPopup, fingerprintService, ongoingProcess, gettext, $rootScope, txFormatService, $ionicModal, $state, bwcService, bitcoreXsg, popupService) {
+angular.module('copayApp.services').factory('walletService', function($log, $timeout, lodash, trezor, ledger, intelTEE, storageService, configService, rateService, uxLanguage, $filter, gettextCatalog, bwcError, $ionicPopup, fingerprintService, ongoingProcess, gettext, $rootScope, txFormatService, $ionicModal, $state, bwcService, bitcoreAnon, popupService) {
 
   // Ratio low amount warning (fee/amount) in incoming TX
   var LOW_AMOUNT_RATIO = 0.15;
@@ -1236,14 +1236,14 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
   };
 
   root.getProtocolHandler = function(wallet) {
-    return 'snowgem';
+    return 'anon';
   }
 
 
   root.copyCopayers = function(wallet, newWallet, cb) {
     var c = wallet.credentials;
 
-    var walletPrivKey = bitcoreXsg.PrivateKey.fromString(c.walletPrivKey);
+    var walletPrivKey = bitcoreAnon.PrivateKey.fromString(c.walletPrivKey);
 
     var copayer = 1,
       i = 0,

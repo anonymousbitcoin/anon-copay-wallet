@@ -704,7 +704,7 @@ angular.module('copayApp.services')
       opts.m = 1;
       opts.n = 1;
       opts.networkName = 'livenet';
-      opts.coin = 'xsg';
+      opts.coin = 'anon';
       root.createWallet(opts, cb);
     };
 

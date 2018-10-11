@@ -14,7 +14,7 @@ angular.module('copayApp.controllers').controller('addressbookAddController', fu
     $timeout(function() {
       var form = addressbookForm;
       if (data && form) {
-        data = data.replace(/^snowgem(cash)?:/, '');
+        data = data.replace(/^anon(cash)?:/, '');
         form.address.$setViewValue(data);
         form.address.$isValid = true;
         form.address.$render();

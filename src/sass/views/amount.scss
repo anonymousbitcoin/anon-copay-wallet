@@ -9,7 +9,7 @@
       border-top: 0;
   }
   @media(max-width: 480px) {
-    .snowgem-address {
+    .anon-address {
       .icon {
         left: 8px;
         font-size: 24px;
@@ -27,7 +27,7 @@
     }
   }
   @media(max-width: 320px) {
-    .snowgem-address {
+    .anon-address {
       & > span:last-child {
         margin-left: -2px;
       }

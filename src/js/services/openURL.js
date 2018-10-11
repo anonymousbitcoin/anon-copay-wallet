@@ -57,10 +57,10 @@ angular.module('copayApp.services').factory('openURLService', function($rootScop
 
       // This event is sent to an existent instance of Copay (only for standalone apps)
       gui.App.on('open', function(pathData) {
-        if (pathData.indexOf(/^snowgem(cash)?:/) != -1) {
-          $log.debug('SnowGem URL found');
+        if (pathData.indexOf(/^anon(cash)?:/) != -1) {
+          $log.debug('Anon URL found');
           handleOpenURL({
-            url: pathData.substring(pathData.indexOf(/^snowgem(cash)?:/))
+            url: pathData.substring(pathData.indexOf(/^anon(cash)?:/))
           });
         } else if (pathData.indexOf(appConfigService.name + '://') != -1) {
           $log.debug(appConfigService.name + ' URL found');
@@ -83,8 +83,8 @@ angular.module('copayApp.services').factory('openURLService', function($rootScop
 
       if (navigator.registerProtocolHandler) {
         $log.debug('Registering Browser handlers base:' + base);
-        navigator.registerProtocolHandler('snowgem', url, 'Copay SnowGem Handler');
-        navigator.registerProtocolHandler('web+snowgem', url, 'Copay Wallet Handler');
+        navigator.registerProtocolHandler('anon', url, 'Copay Anon Handler');
+        navigator.registerProtocolHandler('web+anon', url, 'Copay Wallet Handler');
         navigator.registerProtocolHandler('web+bitpay', url, 'BitPay Wallet Handler');
       }
     }

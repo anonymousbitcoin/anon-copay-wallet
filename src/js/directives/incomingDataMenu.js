@@ -27,23 +27,23 @@ angular.module('copayApp.directives')
         scope.goToUrl = function(url) {
           externalLinkService.open(url);
         };
-        scope.sendPaymentToAddress = function(snowgemAddress) {
+        scope.sendPaymentToAddress = function(anonAddress) {
           scope.showMenu = false;
           $state.go('tabs.send').then(function() {
             $timeout(function() {
               $state.transitionTo('tabs.send.amount', {
-                toAddress: snowgemAddress
+                toAddress: anonAddress
               });
             }, 50);
           });
         };
-        scope.addToAddressBook = function(snowgemAddress) {
+        scope.addToAddressBook = function(anonAddress) {
           scope.showMenu = false;
           $timeout(function() {
             $state.go('tabs.send').then(function() {
               $timeout(function() {
                 $state.transitionTo('tabs.send.addressbook', {
-                  addressbookEntry: snowgemAddress
+                  addressbookEntry: anonAddress
                 });
               });
             });

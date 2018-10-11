@@ -1,13 +1,13 @@
 'use strict';
 angular.module('copayApp.directives')
-  .directive('validAddress', ['$rootScope', 'bitcoreXsg',
-    function($rootScope, bitcoreXsg) {
+  .directive('validAddress', ['$rootScope', 'bitcoreAnon',
+    function($rootScope, bitcoreAnon) {
       return {
         require: 'ngModel',
         link: function(scope, elem, attrs, ctrl) {
-          // SnowGem address
-          var URI = bitcoreXsg.URI;
-          var Address = bitcoreXsg.Address
+          // Anon address
+          var URI = bitcoreAnon.URI;
+          var Address = bitcoreAnon.Address
 
           var validator = function(value) {
 
@@ -19,7 +19,7 @@ angular.module('copayApp.directives')
 
             // Bip21 uri
             var uri, isAddressValidLivenet, isAddressValidTestnet;
-            if (/^snowgem:/.test(value)) {
+            if (/^anon:/.test(value)) {
               var isUriValid = URI.isValid(value);
               if (isUriValid) {
                 uri = new URI(value);
@@ -35,7 +35,7 @@ angular.module('copayApp.directives')
               return;
             }
 
-            // Regular Address: try SnowGem
+            // Regular Address: try Anon
             var regularAddressLivenet = Address.isValid(value, 'livenet');
             var regularAddressTestnet = Address.isValid(value, 'testnet');
             return value;
@@ -88,7 +88,7 @@ angular.module('copayApp.directives')
       };
     }
   ])
-  .directive('walletSecret', function(bitcoreXsg) {
+  .directive('walletSecret', function(bitcoreAnon) {
     return {
       require: 'ngModel',
       link: function(scope, elem, attrs, ctrl) {

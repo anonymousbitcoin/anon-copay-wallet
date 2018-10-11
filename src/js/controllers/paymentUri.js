@@ -1,22 +1,22 @@
 'use strict';
 angular.module('copayApp.controllers').controller('paymentUriController',
-  function($rootScope, $scope, $stateParams, $location, $timeout, $ionicHistory, profileService, configService, lodash, bitcoreXsg, $state) {
+  function($rootScope, $scope, $stateParams, $location, $timeout, $ionicHistory, profileService, configService, lodash, bitcoreAnon, $state) {
     function strip(number) {
       return (parseFloat(number.toPrecision(12)));
     };
 
-    // Build snowgemURI with querystring
+    // Build anonURI with querystring
     this.init = function() {
       var query = [];
-      this.snowgemURI = $stateParams.url;
+      this.anonURI = $stateParams.url;
 
-      var URI = bitcoreXsg.URI;
-      var isUriValid = URI.isValid(this.snowgemURI);
-      if (!URI.isValid(this.snowgemURI)) {
+      var URI = bitcoreAnon.URI;
+      var isUriValid = URI.isValid(this.anonURI);
+      if (!URI.isValid(this.anonURI)) {
         this.error = true;
         return;
       }
-      var uri = new URI(this.snowgemURI);
+      var uri = new URI(this.anonURI);
 
       if (uri && uri.address) {
         var config = configService.getSync().wallet.settings;
@@ -50,7 +50,7 @@ angular.module('copayApp.controllers').controller('paymentUriController',
       $ionicHistory.removeBackView();
       $state.go('tabs.home');
       $timeout(function() {
-        $rootScope.$emit('paymentUri', self.snowgemURI);
+        $rootScope.$emit('paymentUri', self.anonURI);
       }, 1000);
     };
   });

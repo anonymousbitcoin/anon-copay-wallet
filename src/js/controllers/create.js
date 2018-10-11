@@ -28,7 +28,7 @@ angular.module('copayApp.controllers').controller('createController',
       $scope.formData.bwsurl = defaults.bws.url;
       $scope.TCValues = lodash.range(2, defaults.limits.totalCopayers + 1);
       $scope.formData.derivationPath = derivationPathHelper.default;
-      $scope.formData.coin = 'xsg';
+      $scope.formData.coin = 'anon';
 
       if (config.cashSupport) $scope.enableCash = true;
 
@@ -97,7 +97,7 @@ angular.module('copayApp.controllers').controller('createController',
 
       */
 
-      if (appConfigService.name == 'snowgem') {
+      if (appConfigService.name == 'anon') {
         if (n > 1 && walletService.externalSource.ledger.supported)
           seedOptions.push({
             id: walletService.externalSource.ledger.id,
@@ -177,7 +177,7 @@ angular.module('copayApp.controllers').controller('createController',
 
       if ($scope.formData.seedSource.id == walletService.externalSource.ledger.id || $scope.formData.seedSource.id == walletService.externalSource.trezor.id || $scope.formData.seedSource.id == walletService.externalSource.intelTEE.id) {
         if ($scope.formData.coin == 'bch') {
-          popupService.showAlert(gettextCatalog.getString('Error'), gettextCatalog.getString('Hardware wallets are not yet supported with SnowGem Cash'));
+          popupService.showAlert(gettextCatalog.getString('Error'), gettextCatalog.getString('Hardware wallets are not yet supported with Anon Cash'));
           return;
         }
 

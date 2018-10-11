@@ -23,9 +23,9 @@ angular.module('copayApp.services').factory('buyAndSellService', function($log, 
 
     if (linkedServices.length == 0) {
       nextStepsService.register({
-        title: 'Buy or Sell SnowGem',
+        title: 'Buy or Sell Anon',
         name: 'buyandsell',
-        icon: 'icon-buy-snowgem',
+        icon: 'icon-buy-anon',
         sref: 'tabs.buyandsell',
       });
     } else {

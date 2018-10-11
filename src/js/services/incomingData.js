@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreXsg, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog) {
+angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog) {
 
   var root = {};
 
@@ -21,7 +21,7 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       var value = match[0].replace(',', '.');
       var newUri = data.replace(regex, value);
 
-      // mobile devices, uris like snowgem://glidera
+      // mobile devices, uris like anon://glidera
       newUri.replace('://', ':');
 
       return newUri;
@@ -39,7 +39,7 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
 
     function checkPrivateKey(privateKey) {
       try {
-        new bitcoreXsg.PrivateKey(privateKey, 'livenet');
+        new bitcoreAnon.PrivateKey(privateKey, 'livenet');
       } catch (err) {
         return false;
       }
@@ -69,8 +69,8 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       }, 100);
     }
     // data extensions for Payment Protocol with non-backwards-compatible request
-    if ((/^snowgem(cash)?:\?r=[\w+]/).exec(data)) {
-      data = decodeURIComponent(data.replace(/snowgem(cash)?:\?r=/, ''));
+    if ((/^anon(cash)?:\?r=[\w+]/).exec(data)) {
+      data = decodeURIComponent(data.replace(/anon(cash)?:\?r=/, ''));
       $state.go('tabs.send', {}, {
         'reload': true,
         'notify': $state.current.name == 'tabs.send' ? false : true
@@ -84,9 +84,9 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
 
     data = sanitizeUri(data);
 
-    if (bitcoreXsg.URI.isValid(data)) {
-        var coin = 'xsg';
-        var parsed = new bitcoreXsg.URI(data);
+    if (bitcoreAnon.URI.isValid(data)) {
+        var coin = 'anon';
+        var parsed = new bitcoreAnon.URI(data);
 
         var addr = parsed.address ? parsed.address.toString() : '';
         var message = parsed.message;
@@ -118,11 +118,11 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
         return true;
       });
       // Plain Address
-    } else if (bitcoreXsg.Address.isValid(data, 'livenet') || bitcoreXsg.Address.isValid(data, 'testnet')) {
+    } else if (bitcoreAnon.Address.isValid(data, 'livenet') || bitcoreAnon.Address.isValid(data, 'testnet')) {
       if ($state.includes('tabs.scan')) {
         root.showMenu({
           data: data,
-          type: 'snowgemAddress'
+          type: 'anonAddress'
         });
       } else {
         goToAmountPage(data);
@@ -146,7 +146,7 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       return true;
 
       // Join
-    } else if (data && data.match(/^snowgem:[0-9A-HJ-NP-Za-km-z]{70,80}$/)) {
+    } else if (data && data.match(/^anon:[0-9A-HJ-NP-Za-km-z]{70,80}$/)) {
       $state.go('tabs.home', {}, {
         'reload': true,
         'notify': $state.current.name == 'tabs.home' ? false : true
