@@ -10,5 +10,6 @@
     "!www/lib/**/*",
     "!www/**/*.map"
   ],
-  "pro_id": "com.anoncom.anon-wallet-osx"
+  "pro_id": "com.anoncom.anon-wallet-osx",
+  "app_id": ""
 }
