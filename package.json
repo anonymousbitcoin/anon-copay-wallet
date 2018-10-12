@@ -59,6 +59,7 @@
     "bitauth": "^0.2.1",
     "bitcore-wallet-client-anon": "git+https://github.com/anonymousbitcoin/bitcore-wallet-client-anon.git",
     "bower": "^1.7.9",
+    "browserify": "^16.2.3",
     "cordova": "^8.0.0",
     "cordova-android": "^6.4.0",
     "cordova-clipboard": "^1.1.1",
