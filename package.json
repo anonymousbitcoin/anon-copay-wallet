@@ -3,7 +3,7 @@
   "name": "anon",
   "description": "A Secure Anon Wallet",
   "author": "Anon Foundation",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -57,7 +57,7 @@
     "bezier-easing": "^2.0.3",
     "bhttp": "^1.2.4",
     "bitauth": "^0.2.1",
-    "bitcore-wallet-client-anon": "git+https://github.com/anonymousbitcoin/bitcore-wallet-client-anon.git",
+    "bitcore-wallet-client-anon": "^1.0.0",
     "bower": "^1.7.9",
     "browserify": "^16.2.3",
     "cordova": "^8.0.0",
