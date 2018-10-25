@@ -45,7 +45,7 @@ RateService.prototype.updateRates = function() {
 
   var backoffSeconds = 5;
   var updateFrequencySeconds = 5 * 60;
-  var rateServiceUrl = 'https://masq.btcz.rocks/rates';
+  var rateServiceUrl = 'https://coinmarketcap.anonfork.io/rates';
 
   function getANON(cb, tries) {
     tries = tries || 0;
