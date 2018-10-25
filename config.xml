@@ -129,7 +129,7 @@
     <plugin name="cordova-plugin-queries-schemes" spec="~0.1.5" />
     <plugin name="cordova-plugin-fcm" spec="https://github.com/cmgustavo/cordova-plugin-fcm.git" />
     <plugin name="cordova-clipboard" spec="^1.1.1" />
-    <engine name="ios" spec="^4.5.4" />
+    <engine name="ios" spec="~4.5.4" />
     <engine name="android" spec="^6.4.0" />
-    <engine name="windows" spec="^6.0.0" />
+    <engine name="windows" spec="~6.0.0" />
 </widget>

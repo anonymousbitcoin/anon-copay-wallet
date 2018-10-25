@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "asn1.js-rfc5280": "=2.0.0",
     "android-versions": "^1.2.1",
     "angular": "^1.6.7",
     "bezier-easing": "^2.0.3",
