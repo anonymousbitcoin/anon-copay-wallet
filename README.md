@@ -1,3 +1,5 @@
+# WORK IN PROGRESS - DO NOT USE #
+
 # WARNING #
 This software should be used at your own risk. It is experimental.
 
@@ -35,7 +37,7 @@ Clone the repo and open the directory:
 
 ```
 git clone https://github.com/anonymousbitcoin/anon-copay-wallet.git
-cd anon-wallet
+cd anon-copay-wallet
 ```
 
 Install npm modules
