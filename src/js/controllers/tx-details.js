@@ -16,7 +16,7 @@ angular.module('copayApp.controllers').controller('txDetailsController', functio
     $scope.isShared = $scope.wallet.credentials.n > 1;
     $scope.txsUnsubscribedForNotifications = config.confirmedTxsNotifications ? !config.confirmedTxsNotifications.enabled : true;
 
-    blockexplorerUrl = 'https://explorer.anonfork.io/insight/api';
+    blockexplorerUrl = 'https://explorer.anonfork.io/insight';
 
     txConfirmNotification.checkIfEnabled(txId, function(res) {
       $scope.txNotification = {
@@ -181,7 +181,7 @@ angular.module('copayApp.controllers').controller('txDetailsController', functio
 
   $scope.viewOnBlockchain = function() {
     var btx = $scope.btx;
-    var url = 'https://' + ($scope.getShortNetworkName() == 'test' ? 'test-' : '') + blockexplorerUrl + '/tx/' + btx.txid;
+    var url = '' + ($scope.getShortNetworkName() == 'test' ? 'test-' : '') + blockexplorerUrl + '/tx/' + btx.txid;
     var optIn = true;
     var title = null;
     var message = gettextCatalog.getString('View Transaction on Insight');
