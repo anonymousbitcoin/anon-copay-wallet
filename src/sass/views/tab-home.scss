@@ -1,7 +1,7 @@
 #tab-home {
   @extend .deflash-blue;
   .icon-create-wallet {
-    background-color: #4A90E2; // default wallet color
+    background-color: #ed1e24; // default wallet color
   }
   .icon-buy-anon {
     background-image: $v-anon-icon;
@@ -99,7 +99,7 @@
   }
   .tab-home {
     &__logo {
-      height: 18px;
+      height: 36px;
       position: relative;
       top: 3px;
     }
