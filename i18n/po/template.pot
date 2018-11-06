@@ -3460,7 +3460,7 @@ msgid "You can see the latest developments and contribute to this open source ap
 msgstr ""
 
 #: www/views/onboarding/tour.html:19
-msgid "You can spend anon at millions of websites and stores worldwide."
+msgid "Store, send and receive your ANON. Take power over your money with your ANON wallet."
 msgstr ""
 
 #: www/views/backup.html:15
