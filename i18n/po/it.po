@@ -178,11 +178,11 @@ msgid "All Addresses"
 msgstr "Tutti gli indirizzi"
 
 #: www/views/modals/wallet-balance.html:18
-msgid "All of your anon wallet balance may not be available for immediate spending."
+msgid "All of your ANON wallet balance may not be available for immediate spending."
 msgstr "Tutto il bilancio del tuo portafoglio potrebbe non essere disponibile ad essere speso nell'immediato."
 
 #: www/views/tab-receive.html:25
-msgid "All signing devices must be added to this multisig wallet before anon addresses can be created."
+msgid "All signing devices must be added to this multisig wallet before ANON addresses can be created."
 msgstr "Tutti i dispositivi firmanti devono essere aggiunti a questo portafoglio multisig prima che si possano creare indirizzi anon."
 
 #: www/views/tab-scan.html:21
@@ -229,11 +229,11 @@ msgid "An update to this app is available. For your security, please update to t
 msgstr "Un aggiornamento dell'app è disponibile. Per la tua sicurezza è consigliato aggiornare all'ultima versione."
 
 #: www/views/backupWarning.html:14
-msgid "Anyone with your backup phrase can access or spend your anon."
+msgid "Anyone with your backup phrase can access or spend your ANON."
 msgstr "Qualcuno con la tua frase di recupero potrebbe avere accesso o spendere i tuoi anon."
 
 #: www/views/addresses.html:94
-msgid "Approximate Anon network fee to transfer wallet's balance (with normal priority)"
+msgid "Approximate ANON network fee to transfer wallet's balance (with normal priority)"
 msgstr "La tariffa approssimativa della rete Anon per il trasferimento del saldo del portafoglio ( con priorità normale)"
 
 #: www/views/backupWarning.html:10
@@ -241,7 +241,7 @@ msgid "Are you being watched?"
 msgstr "Sei osservato?"
 
 #: src/js/controllers/preferencesExternal.js:15
-msgid "Are you being watched? Anyone with your recovery phrase can access or spend your anon."
+msgid "Are you being watched? Anyone with your recovery phrase can access or spend your ANON."
 msgstr "Siete osservati? Chiunque con la vostra frase di recupero può accedere o spendere i vostri anon."
 
 #: src/js/controllers/copayers.js:56
@@ -368,7 +368,7 @@ msgstr "Supporto Anon Cash"
 #: www/views/modals/chooseFeeLevel.html:4
 #: www/views/preferencesFee.html:4
 #: www/views/tab-settings.html:90
-msgid "Anon Network Fee Policy"
+msgid "ANON Network Fee Policy"
 msgstr "Criterio delle Commissioni del Anon Network"
 
 #: src/js/services/incomingData.js:151
@@ -376,15 +376,15 @@ msgid "Anon cash Payment"
 msgstr "Pagamento Anon Cash"
 
 #: www/views/onboarding/tour.html:31
-msgid "Anon is a currency."
+msgid "ANON is a currency."
 msgstr "Anon è una moneta."
 
 #: www/views/onboarding/disclaimer.html:15
-msgid "Anon is different &ndash; it cannot be safely held with a bank or web service."
+msgid "ANON is different &ndash; it cannot be safely held with a bank or web service."
 msgstr "Anon è differente e non può essere custodito in una banca o con un servizio web."
 
 #: www/views/onboarding/tour.html:18
-msgid "Anon is secure,<br>digital money."
+msgid "ANON is secure,<br/>digital money."
 msgstr "Anon è sicuro,<br>moneta digitale."
 
 #: www/views/preferencesFee.html:11
@@ -933,7 +933,7 @@ msgid "Duplicating wallet..."
 msgstr "Duplicazione di portafoglio..."
 
 #: www/views/addresses.html:19
-msgid "Each anon wallet can generate billions of addresses from your 12-word backup. A new address is automatically generated and shown each time you receive a payment."
+msgid "Each ANON Wallet can generate billions of addresses from your 12-word backup. A new address is automatically generated and shown each time you receive a payment."
 msgstr "Ogni portafoglio anon è in grado di generare miliardi di indirizzi dal tuo backup di 12 parole. Un nuovo indirizzo verrà automaticamente generato e mostrato ogni volta che riceverai un pagamento."
 
 #: src/js/services/feeService.js:13
@@ -1469,7 +1469,7 @@ msgid "I understand"
 msgstr "Ho capito"
 
 #: www/views/onboarding/disclaimer.html:21
-msgid "I understand that if this app is moved to another device or deleted, my anon can only be recovered with the backup phrase."
+msgid "I understand that if this app is moved to another device or deleted, my ANON can only be recovered with the backup phrase."
 msgstr "Ho compreso che se questa app sarà trasferita ad un altro dispositivo o cancellata, i miei anon potranno essere recuperati solo tramite la tua frase di recupero."
 
 #: www/views/onboarding/disclaimer.html:18
@@ -1837,7 +1837,7 @@ msgid "No access key defined"
 msgstr "Nessuna chiave di accesso definita"
 
 #: www/views/onboarding/backupRequest.html:5
-msgid "No backup, no anon."
+msgid "No backup, no ANON."
 msgstr "Nessun backup, nessun anon."
 
 #: www/views/addressbook.html:19
@@ -1930,7 +1930,7 @@ msgid "Note"
 msgstr "Nota"
 
 #: www/views/modals/wallets.html:25
-msgid "Notice: only 1-1 (single signature) wallets can be used for sell anon"
+msgid "Notice: only 1-1 (single signature) wallets can be used for sell ANON"
 msgstr "Avviso: solo i portafogli 1-1 (con singola firma) possono essere utilizzati per vendere anon"
 
 #: www/views/preferencesNotifications.html:3
@@ -2484,7 +2484,7 @@ msgid "Search Transactions"
 msgstr "Cerca Transazioni"
 
 #: www/views/tab-send.html:13
-msgid "Search or enter anon address"
+msgid "Search or enter ANON address"
 msgstr "Cerca o inserisci indirizzo anon"
 
 #: www/views/modals/search.html:16
@@ -2735,11 +2735,11 @@ msgid "Spending Password needed"
 msgstr "Necessaria password di spesa"
 
 #: www/views/walletDetails.html:173
-msgid "Spending this balance will need significant Anon network fees"
+msgid "Spending this balance will need significant ANON network fees"
 msgstr "Per spendere questa quantità saranno necessarie significative commissioni di rete Anon"
 
 #: www/views/tab-send.html:28
-msgid "Start sending anon"
+msgid "Start sending ANON"
 msgstr "Iniziare a inviare anon"
 
 #: www/views/lockSetup.html:3
@@ -2781,7 +2781,7 @@ msgid "THIS ACTION CANNOT BE REVERSED"
 msgstr "QUESTA AZIONE NON PUÒ ESSERE INVERTITA"
 
 #: www/views/onboarding/welcome.html:5
-msgid "Take control of your money,<br>get started with anon."
+msgid "Take control of your money,<br/>get started with ANON."
 msgstr "Prendi il controllo del tuo denaro, <br>inizia con anon."
 
 #: www/views/walletDetails.html:132
@@ -2837,15 +2837,15 @@ msgid "The Ledger Chrome application is not installed"
 msgstr "Non è installata l'applicazione di contabilità Chrome"
 
 #: www/views/modals/wallet-balance.html:55
-msgid "The amount of anon immediately spendable from this wallet."
+msgid "The amount of ANON immediately spendable from this wallet."
 msgstr "La quantità di anon immediatamente spendibile da questo portafoglio."
 
 #: www/views/modals/wallet-balance.html:93
-msgid "The amount of anon stored in this wallet that is allocated as inputs to your pending transaction proposals. The amount is determined using unspent transaction outputs associated with this wallet and may be more than the actual amounts associated with your pending transaction proposals."
+msgid "The amount of ANON stored in this wallet that is allocated as inputs to your pending transaction proposals. The amount is determined using unspent transaction outputs associated with this wallet and may be more than the actual amounts associated with your pending transaction proposals."
 msgstr "La quantità di anon memorizzati in questo portafoglio è allocata come input per le sue proposte di transazione in sospeso. L'importo è determinato usando le transazioni in uscita non spese associate a questo portafoglio e potrebbero essere superiori agli importi effettivi associati con le vostre proposte di transazione in sospeso."
 
 #: www/views/modals/wallet-balance.html:74
-msgid "The amount of anon stored in this wallet with less than 1 blockchain confirmation."
+msgid "The amount of ANON stored in this wallet with less than 1 blockchain confirmation."
 msgstr "La quantità di anon memorizzati in questo portafoglio con meno di una conferma su blockchain."
 
 #: www/views/tab-import-phrase.html:5
@@ -2900,7 +2900,7 @@ msgid "The spend proposal is not pending"
 msgstr "La proposta di pagamento non è in sospeso"
 
 #: www/views/modals/wallet-balance.html:36
-msgid "The total amount of anon stored in this wallet."
+msgid "The total amount of ANON stored in this wallet."
 msgstr "La quantità totale di anon depositati su questo portafoglio."
 
 #: www/views/preferencesHistory.html:27
@@ -2931,11 +2931,11 @@ msgid "This app is fantastic!"
 msgstr "Questa applicazione è fantastica!"
 
 #: www/views/onboarding/tour.html:47
-msgid "This app stores your anon with cutting-edge security."
+msgid "This app stores your ANON with cutting-edge security."
 msgstr "Questa app memorizza i tuoi anon con sicurezza all'avanguardia."
 
 #: src/js/controllers/confirm.js:502
-msgid "This anon payment request has expired."
+msgid "This ANON payment request has expired."
 msgstr "Questa richiesta di pagamento in anon è scaduta."
 
 #: www/views/join.html:133
@@ -2949,7 +2949,7 @@ msgid "This recovery phrase was created with a password. To recover this wallet 
 msgstr "Questa frase di recupero è stata creata con una password. Per recuperare questo portafoglio sono necessari sia la frase di recupero e che la password."
 
 #: www/views/tx-details.html:93
-msgid "This transaction amount is too small compared to current Anon network fees. Spending these funds will need a Anon network fee cost comparable to the funds itself."
+msgid "This transaction amount is too small compared to current ANON network fees. Spending these funds will need a ANON network fee cost comparable to the funds itself."
 msgstr "Questo importo della transazione è troppo piccolo rispetto alle attuali commissioni della rete Anon. Per spendere questi fondi sarà necessaria una commissione Anon paragonabile ai fondi stessi."
 
 #: www/views/tx-details.html:89
@@ -2976,11 +2976,11 @@ msgid "To"
 msgstr "A"
 
 #: www/views/tab-send.html:32
-msgid "To get started, buy anon or share your address. You can receive anon from any wallet or service."
+msgid "To get started, buy ANON or share your address. You can receive ANON from any wallet or service."
 msgstr "Per iniziare, acquista anon o condividi il tuo indirizzo. È possibile ricevere anon da qualsiasi servizio o portafoglio."
 
 #: www/views/tab-send.html:33
-msgid "To get started, you'll need to create a anon wallet and get some anon."
+msgid "To get started, you'll need to create a ANON wallet and get some ANON."
 msgstr "Per iniziare, è necessario che tu crei un portafoglio anon e ottenerne qualcuno."
 
 #: src/js/services/bitpayAccountService.js:73
@@ -3434,7 +3434,7 @@ msgid "You can make contributions by signing up on our Crowdin community transla
 msgstr "È possibile contribuire registrandovi sulla comunità di traduzione Crowdin. Non vediamo l'ora di sentirvi!"
 
 #: www/views/tab-scan.html:16
-msgid "You can scan anon addresses, payment requests, paper wallets, and more."
+msgid "You can scan ANON addresses, payment requests, paper wallets, and more."
 msgstr "È possibile scansionare indirizzi anon, richieste di pagamento, portafogli di carta e altro ancora."
 
 #: src/js/controllers/preferencesAbout.js:14
@@ -3442,8 +3442,8 @@ msgid "You can see the latest developments and contribute to this open source ap
 msgstr "Potete vedere gli ultimi sviluppi e contribuire a questa applicazione open source andando al nostro progetto su GitHub."
 
 #: www/views/onboarding/tour.html:19
-msgid "You can spend anon at millions of websites and stores worldwide."
-msgstr "Si può spendere anon in milioni di siti web e negozi in tutto il mondo."
+msgid "Store, send and receive your ANON. Take power over your money with your ANON wallet."
+msgstr ""
 
 #: www/views/backup.html:12
 msgid "You can still export it from Advanced &gt; Export."
@@ -3454,7 +3454,7 @@ msgid "You can trade it for other currencies like US Dollars, Euros, or Pounds."
 msgstr "È possibile scambiarlo con altre valute come i dollari USA, Euro o Sterline."
 
 #: www/views/onboarding/tour.html:46
-msgid "You control your anon."
+msgid "You control your ANON."
 msgstr "Controlli i tuoi anon."
 
 #: www/views/modals/chooseFeeLevel.html:64
@@ -3479,11 +3479,11 @@ msgid "Your Gift Cards"
 msgstr "Le tue carte regalo"
 
 #: www/views/includes/confirmBackupPopup.html:6
-msgid "Your anon wallet is backed up!"
+msgid "Your ANON Wallet is backed up!"
 msgstr "Il tuo portafoglio anon ha eseguito il backup!"
 
 #: www/views/tab-home.html:36
-msgid "Your anon wallet is ready!"
+msgid "Your ANON Wallet is ready!"
 msgstr "Il tuo portafoglio anon è pronto!"
 
 #: www/views/modals/chooseFeeLevel.html:61
@@ -3570,7 +3570,7 @@ msgid "{{appName}} depends on Bitcore Wallet Service (BWS) for blockchain inform
 msgstr "{{appName}} dipende dal servizio portafoglio di Bitcore (BWS) per informazioni blockchain, networking e sincronizzazione di Copayer. La configurazione predefinita fa riferimento a https://bws.bitpay.com (istanza di BitPay BWS pubblica)."
 
 #: src/js/controllers/confirm.js:387
-msgid "{{fee}} will be deducted for anon networking fees."
+msgid "{{fee}} will be deducted for ANON networking fees."
 msgstr "{{fee}} verranno detratti come commissione per il network."
 
 #: www/views/confirm.html:87

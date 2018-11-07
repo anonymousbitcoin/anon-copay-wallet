@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="383013" id="com.anoncom.anon" ios-CFBundleVersion="1.0.3" version="1.0.3">
-    <name>Anon Wallet</name>
+<widget android-versionCode="010101" id="com.anoncom.anon" ios-CFBundleVersion="1.0.3" version="1.0.3">
+    <name>ANON Wallet</name>
     <description>
-      Anon Wallet
+      ANON Wallet
     </description>
     <author email="disclosure@bushidolab.com" href="https://anonfork.io">
-        Anon Foundation
+        ANON Foundation
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -14,7 +14,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="HideKeyboardFormAccessoryBar" value="true" />
     <preference name="WindowsStoreIdentityName" value="18C7659D.Copay-SecureAnonWallet" />
-    <preference name="WindowsStoreDisplayName" value="Anon Wallet - Secure Anon Wallet" />
+    <preference name="WindowsStoreDisplayName" value="ANON Wallet - Secure ANON Wallet" />
     <preference name="StatusBarBackgroundColor" value="#192c3a" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="windows-target-version" value="10.0" />

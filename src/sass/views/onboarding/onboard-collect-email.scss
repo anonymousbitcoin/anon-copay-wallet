@@ -1,7 +1,8 @@
 $relish-success: 1.3s;
 
 #onboarding-collect-email {
-  background: rgb(17, 209, 166);
+  background-image: url("../img/app/success-background.svg");
+  background-repeat: repeat;
 
   #success-container {
     top: 41vh;

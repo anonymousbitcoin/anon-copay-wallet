@@ -61,7 +61,8 @@ angular.module('copayApp.services').factory('platformInfo', function($window) {
   ret.isDevel = !ret.isMobile && !ret.isChromeApp && !ret.isNW;
 
   ret.supportsLedger = ret.isChromeApp;
-  ret.supportsTrezor = ret.isChromeApp || ret.isDevel;
+  // ret.supportsTrezor = ret.isChromeApp || ret.isDevel;
+  ret.supportsTrezor = false;
 
   ret.versionIntelTEE = getVersionIntelTee();
   ret.supportsIntelTEE = ret.versionIntelTEE.length > 0;

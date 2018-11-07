@@ -3,24 +3,26 @@
  */
 
 /* Colors */
-$v-primary-color:                                    #192c3a;
+$v-primary-color:                                    #231f20;
 $v-secondary-color:                                  #31465b;
-$v-accent-color:                                     #1abb9b;
+$v-accent-color:                                     #ed1e24;
+// $v-accent-color:                                     #1abb9b;
 
 $v-text-primary-color:                               #192c3a;
 $v-text-secondary-color:                             #c2c9d1;
-$v-text-accent-color:                                #1abb9b;
+// $v-text-accent-color:                                #1abb9b;
+$v-text-accent-color:                                #ed1e24;
 
-$v-success-color:                                    #1abb9b;
+$v-success-color:                                    #ed1e24;
 $v-warning-color:                                    #bb331a;
 
 /* Theme */
-$v-default-wallet-color-index:                       6;
+$v-default-wallet-color-index:                       0;
 $v-top-tabs-color:                                   $v-accent-color;
 $v-wallet-backup-phrase-color:                       $v-text-primary-color;
 $v-wallet-backup-select-phrase-color:                $v-secondary-color;
 $v-wallet-backup-select-word-bg:                     $v-accent-color;
-$v-wallet-backup-select-word-color:                  $v-text-primary-color;
+$v-wallet-backup-select-word-color:                  #fff;
 $v-wallet-backup-select-word-disabled-color:         $v-accent-color;
 $v-tou-bg:                                           $v-secondary-color;
 $v-tou-color:                                        $v-text-secondary-color;
@@ -41,12 +43,13 @@ $v-button-secondary-outline-active-color:            $v-accent-color;
 /* Slide */
 
 $v-slide-bg-color:                                   $v-accent-color;
-$v-slider-bg-color:                                  #069074;
+$v-slider-bg-color:                                  #890296;
+// $v-slider-bg-color:                                  #069074;
 $v-slide-text-color:                                 #FFFFFF;
 
 /* Onboarding */
 $v-onboarding-welcome-bg:                            none;
-$v-onboarding-color:                                 $v-text-secondary-color;
+$v-onboarding-color:                                 #FFFFFF;
 $v-onboarding-bar-header-color:                      $v-text-primary-color;
 $v-onboarding-bar-header-button-color:               $v-accent-color;
 
