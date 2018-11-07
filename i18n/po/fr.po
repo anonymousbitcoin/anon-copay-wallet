@@ -3442,8 +3442,8 @@ msgid "You can see the latest developments and contribute to this open source ap
 msgstr "Vous pouvez voir les derniers développements et contribuer à cette application open source en visitant notre projet sur GitHub."
 
 #: www/views/onboarding/tour.html:19
-msgid "You can spend anon at millions of websites and stores worldwide."
-msgstr "Vous pouvez dépenser des anons dans des millions de sites internet et de boutiques à travers le monde."
+msgid "Store, send and receive your ANON. Take power over your money with your ANON wallet."
+msgstr ""
 
 #: www/views/backup.html:12
 msgid "You can still export it from Advanced &gt; Export."

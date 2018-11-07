@@ -3448,8 +3448,8 @@ msgid "You can see the latest developments and contribute to this open source ap
 msgstr "GitHubのページにて最近の開発動向を見たり、改善案のソースコードの貢献したりすることができます。"
 
 #: www/views/onboarding/tour.html:19
-msgid "You can spend anon at millions of websites and stores worldwide."
-msgstr "世界中のECサイトや店舗でビットコインを使って支払いができます。"
+msgid "Store, send and receive your ANON. Take power over your money with your ANON wallet."
+msgstr ""
 
 #: www/views/backup.html:12
 msgid "You can still export it from Advanced &gt; Export."
