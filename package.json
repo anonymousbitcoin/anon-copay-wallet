@@ -1,8 +1,8 @@
 {
   "//": "        Modify it in the app-template directory",
   "name": "anon",
-  "description": "A Secure Anon Wallet",
-  "author": "Anon Foundation",
+  "description": "A Secure ANON Wallet",
+  "author": "ANON Foundation",
   "version": "1.1.0",
   "keywords": [
     "bitcoin",
@@ -13,9 +13,9 @@
     "bitcore"
   ],
   "main": "www/index.html",
-  "title": "Anon Copay Wallet",
+  "title": "ANON Copay Wallet",
   "window": {
-    "title": "Anon - Anon Wallet",
+    "title": "ANON - ANON Wallet",
     "icon": "www/img/app/icon.png",
     "toolbar": false,
     "show": true,

@@ -5,7 +5,7 @@ angular.module('copayApp.directives')
       return {
         require: 'ngModel',
         link: function(scope, elem, attrs, ctrl) {
-          // Anon address
+          // ANON Address
           var URI = bitcoreAnon.URI;
           var Address = bitcoreAnon.Address
 

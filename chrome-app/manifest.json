@@ -4,7 +4,7 @@
 
   "manifest_version": 2,
   "name": "anon",
-  "description": "A Secure Anon Wallet",
+  "description": "A Secure ANON Wallet",
   "version": "1.1.0",
   "permissions": [
     "storage",

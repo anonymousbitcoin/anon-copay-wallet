@@ -39,9 +39,9 @@ angular.module('copayApp.controllers').controller('rateAppController', function(
     var defaults = configService.getDefaults();
     var url;
     if (isAndroid)
-      url = $scope.appName == 'Anon Wallet' ? defaults.rateApp.copay.android : defaults.rateApp.anoncom.android;
+      url = $scope.appName == 'ANON Wallet' ? defaults.rateApp.copay.android : defaults.rateApp.anoncom.android;
     if (isIOS)
-      url = $scope.appName == 'Anon Wallet' ? defaults.rateApp.copay.ios : defaults.rateApp.anoncom.ios;
+      url = $scope.appName == 'ANON Wallet' ? defaults.rateApp.copay.ios : defaults.rateApp.anoncom.ios;
 
     externalLinkService.open(url);
     $state.go('tabs.rate.complete', {
