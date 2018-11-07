@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Anon Copay Wallet"
-#define MyAppVersion "1.0.3"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Anon Project"
 #define MyAppURL "https://github.com/anonymousbitcoin/anon-copay-wallet"
 #define MyAppExeName "Anon Copay Wallet.exe"
