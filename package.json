@@ -3,7 +3,7 @@
   "name": "anon",
   "description": "A Secure ANON Wallet",
   "author": "ANON Foundation",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -140,7 +140,7 @@
     "run:android": "cordova run android --device",
     "run:android-release": "cordova run android --device --release",
     "log:android": "adb logcat | grep chromium",
-    "sign:android": "rm -f platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../anon.keystore -signedjar platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-unsigned.apk copay_play && $ANDROID_HOME/build-tools/27.0.3/zipalign -v 4 platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk",
+    "sign:android": "rm -f platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../anon.keystore -signedjar platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-unsigned.apk key0 && /Users/nlevo/Library/Android/sdk/build-tools/28.0.3/zipalign -v 4 platforms/android/build/outputs/apk/release/android-release-signed.apk platforms/android/build/outputs/apk/release/android-release-signed-aligned.apk",
     "test": "echo \"no package tests configured\"",
     "clean": "trash platforms && trash plugins && cordova prepare",
     "unstage-package": "git reset package.json",
