@@ -29,7 +29,6 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
     fetch("http://127.0.0.1:3232/bws/api/v2/proposals/", { headers: { "Content-Type": "application/json; charset=utf-8" }})
     .then(res => res.json()) // parse response as JSON (can be res.text() for plain response)
     .then(response => {
-      console.log(response);
       proposals = response.gobjects;
         // here you do what you want with response
         return cb(null, proposals);

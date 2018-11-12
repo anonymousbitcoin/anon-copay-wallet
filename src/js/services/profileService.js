@@ -2,9 +2,6 @@
 angular.module('copayApp.services')
   .factory('profileService', function profileServiceFactory($rootScope, $timeout, $filter, $log, $state, $http, sjcl, lodash, storageService, bwcService, configService, gettextCatalog, bwcError, uxLanguage, platformInfo, txFormatService, appConfigService) {
 
-    console.log("DO I RECIEVE IT ", bwcService.getUtils());
-
-
     var isChromeApp = platformInfo.isChromeApp;
     var isCordova = platformInfo.isCordova;
     var isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;

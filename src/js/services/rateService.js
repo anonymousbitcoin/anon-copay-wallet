@@ -15,8 +15,6 @@ var RateService = function(opts) {
 
   opts = opts || {};
   self.httprequest = opts.httprequest; // || request;
-  console.log("some say")
-  console.log(self.httprequest);
   self.lodash = opts.lodash;
 
   self.SAT_TO_ANON = 1 / 1e8;
