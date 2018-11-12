@@ -1,0 +1,59 @@
+<ion-view show-tabs>
+  <ion-nav-bar class="bar-royal">
+    <ion-nav-title>{{'Governance' | translate}}</ion-nav-title>
+  </ion-nav-bar>
+
+  <ion-content>
+    <div class="settings-list list">
+      <div class="item item-divider"></div>
+      <table class="table table-hover table-striped text-center">
+        <thead>
+          <tr>
+            <!-- <th class="text-center"><p>Start Epoch</p></th>
+            <th class="text-center"><p>End Epoch</p></th> -->
+            <th class="text-center"><p>Name</p></th>
+            <!-- <th class="text-center"><p>Payment Address</p></th>
+            <th class="text-center"><p>Payment Amount</p></th> -->
+            <th class="text-center"><p>Absolute Yes <br/>Count</p></th>
+            <!-- <th class="text-center"><p>Yes Count</p></th>
+            <th class="text-center"><p>No Count</p></th>
+            <th class="text-center"><p>Abstain Count</p></th> -->
+          </tr>
+        </thead>
+        <div class="item item-divider"></div>
+        <tbody>
+          <tr data-ng-show="loading">
+            <td colspan="7"><span>Waiting for governance objects...</span> <span class="loader-gif"></span></td>
+          </tr>
+          <!-- <div ng-show="proposals[0] && !fetchingProposals" style="padding: 0;"> -->
+          
+          <div data-ng-repeat="proposal in proposals" ng-click="openGovernanceProposalModal(proposal)">
+              <a  class="item item-icon-left item-big-icon-left item-icon-right next-step">
+               <i class="icon big-icon-svg">
+                 <img src="img/icon-wallet.svg" class="bg wallet icon-create-wallet"/>
+               </i>
+                <span translate>{{proposal.DataObject.name}}  {{proposal.DataObject.AbsoluteYesCount}}</span>
+                <i class="icon bp-arrow-right"></i>
+              </a>
+              <a ng-repeat="wallet in wallets track by $index"
+                 class="item item-sub item-icon-left item-big-icon-left item-icon-right wallet"
+                 >
+                <i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i>
+                <span>
+                  
+                </span>
+                <p>
+                
+                </span>
+                &nbsp;
+                </p>
+                <i class="icon bp-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </tbody>
+      </table>
+    </div>
+  </ion-content>
+</ion-view>
+      

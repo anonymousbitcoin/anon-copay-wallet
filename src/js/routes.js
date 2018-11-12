@@ -279,6 +279,30 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      /*
+      *
+      * Goverance 
+      * 
+      */
+      .state('tabs.governance', {
+        url: '/governance',
+        views: {
+          'tab-governance': {
+            controller: 'tabGovernanceController',
+            templateUrl: 'views/tab-governance.html',
+          }
+        }
+      })
+
+      .state('tabs.governanceProposals', {
+        url: '/governance/governanceProposals',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'governanceProposalsController',
+            templateUrl: 'views/governance-proposals.html'
+          }
+        }
+      })
 
       /*
        *

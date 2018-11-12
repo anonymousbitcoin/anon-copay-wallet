@@ -1,0 +1,131 @@
+<ion-modal-view id="wallet-balance">
+    <ion-header-bar align-title="center" ng-class="{'wallet-background-color-default': !wallet.color}" ng-style="{'background-color': wallet.color}">
+      <button class="button button-clear" ng-click="close()" translate>
+        Close
+      </button>
+      <div class="title">
+          {{proposal.DataObject.name}}
+      </div>
+      <div class="buttons buttons-right header-item">
+        <span class="secondary-buttons">
+          <button class="button button-clear" ng-click="updateAll(true)">
+            <i class="icon ion-ios-refresh-empty"></i>
+          </button>
+      </span>
+    </div>
+    </ion-header-bar>
+    <ion-content>
+      <div class="wallet-balance__heading" translate></div>
+      <div class="wallet-balance__list list card">
+        <div class="wallet-balance__item item">
+          <!-- <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\> -->
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>Payment Address</div>
+            <span class="item-note text-right wallet-balance__amount">
+              <span class="wallet-balance__amount wallet-balance__amount--total">
+                  {{proposal.DataObject.payment_address}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="wallet-balance__list list card">
+          <div class="wallet-balance__item item">
+            <!-- <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\> -->
+            <div class="wallet-balance__content no-border">
+              <div class="wallet-balance__title" translate>Proposal Description</div>
+              <span class="item-note text-right wallet-balance__amount">
+                <span class="wallet-balance__amount wallet-balance__amount--total">
+                    <a href="{{proposal.DataObject.url}}">Proposal Description</a>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      <div class="wallet-balance__list list card">
+        <div class="wallet-balance__item item">
+          <!-- <i class="wallet-balance__icon icon ion-ios-checkmark-outline"></i> -->
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>Start Epoch</div>
+            <span class="item-note text-right wallet-balance__amount">
+              <span class="wallet-balance__amount wallet-balance__amount--available">
+                  {{proposal.DataObject.start_epoch}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="wallet-balance__list list card">
+        <div class="wallet-balance__item item">
+          <!-- <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\> -->
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>End Epoch</div>
+            <span class="item-note text-right wallet-balance__amount">
+              <span class="wallet-balance__amount wallet-balance__amount--available">
+                  {{proposal.DataObject.end_epoch}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
+        <div class="wallet-balance__item item">
+          <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>Absolute Yes Count</div>
+            <span class="item-note text-right wallet-balance__amount">
+              <span class="wallet-balance__amount wallet-balance__amount--available">
+                  {{proposal.AbsoluteYesCount}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
+          <div class="wallet-balance__item item">
+            <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
+            <div class="wallet-balance__content no-border">
+              <div class="wallet-balance__title" translate>No Count</div>
+              <span class="item-note text-right wallet-balance__amount">
+                <span class="wallet-balance__amount wallet-balance__amount--available">
+                    {{proposal.NoCount}}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
+            <div class="wallet-balance__item item">
+              <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
+              <div class="wallet-balance__content no-border">
+                <div class="wallet-balance__title" translate>Yes Count</div>
+                <span class="item-note text-right wallet-balance__amount">
+                  <span class="wallet-balance__amount wallet-balance__amount--available">
+                      {{proposal.YesCount}}
+                  </span>
+                  <div>
+                    <span class="wallet-balance__amount--alternative ng-binding">                </span>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+        <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
+            <div class="wallet-balance__item item">
+              <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
+              <div class="wallet-balance__content no-border">
+                <div class="wallet-balance__title" translate>Abstain Count</div>
+                <span class="item-note text-right wallet-balance__amount">
+                  <span class="wallet-balance__amount wallet-balance__amount--available">
+                      {{proposal.AbstainCount}}
+                  </span>
+                  <div>
+                    <span class="wallet-balance__amount--alternative ng-binding">                </span>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+    </ion-content>
+  </ion-modal-view>
+  

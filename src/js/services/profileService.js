@@ -1,6 +1,8 @@
 'use strict';
 angular.module('copayApp.services')
-  .factory('profileService', function profileServiceFactory($rootScope, $timeout, $filter, $log, $state, sjcl, lodash, storageService, bwcService, configService, gettextCatalog, bwcError, uxLanguage, platformInfo, txFormatService, appConfigService) {
+  .factory('profileService', function profileServiceFactory($rootScope, $timeout, $filter, $log, $state, $http, sjcl, lodash, storageService, bwcService, configService, gettextCatalog, bwcError, uxLanguage, platformInfo, txFormatService, appConfigService) {
+
+    console.log("DO I RECIEVE IT ", bwcService.getUtils());
 
 
     var isChromeApp = platformInfo.isChromeApp;
@@ -1001,6 +1003,39 @@ angular.module('copayApp.services')
       txps = lodash.sortBy(txps, 'pendingForUs', 'createdOn');
       txps = lodash.compact(lodash.flatten(txps)).slice(0, opts.limit || MAX);
       return cb(null, txps, n);
+    };
+
+    root.getProposals = function(opts, cb) {
+      console.log("YOU HAAVE A COLLAPSE")
+      // var MAX = 100;
+      // opts = opts || {};
+
+      // var w = root.getWallets();
+      // if (lodash.isEmpty(w)) return cb();
+
+      // var txps = [];
+
+      // lodash.each(w, function(x) {
+      //   if (x.pendingTxps)
+      //     txps = txps.concat(x.pendingTxps);
+      // });
+      // var n = txps.length;
+      // txps = lodash.sortBy(txps, 'pendingForUs', 'createdOn');
+      // txps = lodash.compact(lodash.flatten(txps)).slice(0, opts.limit || MAX);
+
+      var walletClient = bwcService.getClient(null, opts);
+      console.log("WALLETCLIENT", walletClient)
+      self = this;
+      let httprequest = $http;
+      self.httprequest.get("http://127.0.0.1:3232/bws/api//v1/proposals/").success(function(res) {
+        console.log("I GOT A RESPONSE");
+        console.log(res)
+      });
+        
+      // proposals = walletClient.request(get,"http://127.0.0.1:3232/bws/api//v1/proposals/").get("http://127.0.0.1:3232/bws/api//v1/proposals/", null, _checkProposalsInBlockchain);
+      conosle.log("YEAH")
+      let proposals = [{name:"Stuff"}]
+      return cb(null, proposals);
     };
 
     return root;
