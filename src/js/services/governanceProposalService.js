@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('copayApp.services').factory('governanceProposalService', function($log, bitcoreAnon, storageService, lodash, profileService) {
+angular.module('copayApp.services').factory('governanceProposalService', function($log, bitcoreAnon, storageService, lodash, profileService, bwcService) {
   var root = {};
 
-  var getNetwork = function(address) {
-    var network;
-    network = (new bitcoreAnon.Address(address)).network.name;
-    return network;
-  };
+//   var getNetwork = function(address) {
+//     var network;
+//     network = (new bitcoreAnon.Address(address)).network.name;
+//     return network;
+//   };
 
 //   root.get = function(addr, cb) {
 //     storageService.getAddressbook('testnet', function(err, ab) {
@@ -24,9 +24,65 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 //     });
 //   };
 
+	// function serialize(targetObject) {
+	// 	if (typeof targetObject !== "object")
+	// 		return console.error("Data for serializing must be an object");
+	// 	let result = []
+	// 	targetObject = JSON.stringify(targetObject);
+	// 	for (let i = 0; i < targetObject.length; i++) {
+	// 		result.push(targetObject.charCodeAt(i));
+	// 	}
+	// 	return result;
+	// }
+
+	root.serialize = function(targetObject){
+		if (typeof targetObject !== "object")
+			return console.error("Data for serializing must be an object");
+		let result = []
+		targetObject = JSON.stringify(targetObject);
+		for (let i = 0; i < targetObject.length; i++) {
+			result.push(targetObject.charCodeAt(i));
+		}
+		return result;
+	}
+
+	// function deserialize(serialized_data) {
+	// 	if (!Array.isArray(serialized_data))
+	// 		return console.error("Data for deserialization must be an array");
+	// 	let result = "";
+	// 	for (let i = 0; i < serialized_data.length; i++) {
+	// 		result += String.fromCharCode(serialized_data[i]);
+	// 	}
+	// 	result = JSON.parse(result);
+	// 	return result;
+	// }
+
+	root.deserialize = function(serialized_data){
+		if (!Array.isArray(serialized_data))
+			return console.error("Data for deserialization must be an array");
+		let result = "";
+		for (let i = 0; i < serialized_data.length; i++) {
+			result += String.fromCharCode(serialized_data[i]);
+		}
+		result = JSON.parse(result);
+		return result;
+	}
+
+	root.bufferProposal = function(toBuffer){
+		console.log('here');
+		var buffed = bwcService.getProposalBuffer();
+		var thisHERE = buffed.util.buffer.fubber(toBuffer);
+		// let newBuffer = buffed(toBuffer);
+		console.log("-x--x----x--");
+		console.log(buffed.util.buffer);
+		console.log(thisHERE.toString('hex'));
+		console.log("--y--y--y---");
+		// return newBuffer;
+	}
+
   root.list = function(cb) {
     let proposals = []
-    fetch("http://127.0.0.1:3232/bws/api/v2/proposals/", { headers: { "Content-Type": "application/json; charset=utf-8" }})
+    fetch("http://localhost:3232/bws/api/v2/proposals/", { headers: { "Content-Type": "application/json; charset=utf-8" }})
     .then(res => res.json()) // parse response as JSON (can be res.text() for plain response)
     .then(response => {
       proposals = response.gobjects;
@@ -34,9 +90,14 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
         return cb(null, proposals);
     })
     .catch(err => {
-        console.log("u")
         console.log("sorry, there are no results for your search")
-    });
+	});
+	
+	
+  root.add = function(entry, cb) {
+	// var network = getNetwork(entry.address);
+	
+  };
 
     
     // profileService.getProposals(function(err, proposals) {
