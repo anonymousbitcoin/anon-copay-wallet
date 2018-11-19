@@ -30,7 +30,7 @@
 				<input type="text"
 					   id="address"
 					   name="address"
-					   ng-model="governanceProposal.address">
+					   ng-model="governanceProposal.payment_address">
 			  </label>
 			<label class="item item-input item-stacked-label">
 				<span class="input-label" translate>URL: </span>
@@ -41,21 +41,38 @@
 				<input type="text"
 						id="URL"
 						name="URL"
-						ng-model="governanceProposal.URL"
+						ng-model="governanceProposal.url"
 						valid-address required>
 			</label>
 			</div>
-	  
+
+			<div class="padding">
+				<button type="submit"
+					class="button button-standard button-primary"
+					ng-click="showWalletSelector() && makeVisible()"
+					ng-disabled="!addressbookForm.$valid" translate>
+				Choose Wallet
+				</button>
+			</div>
+
 			<div class="padding">
 			  <button type="submit"
 					  class="button button-standard button-primary"
 					  ng-click="add(governanceProposal)"
-					  ng-disabled="!addressbookForm.$valid" translate>
+					  ng-disabled="!wallet" translate>
 				Save
 			  </button>
 			</div>
 	  
 		  </form>
 		</ion-content>
+		<wallet-selector
+			ng-hide="!showModal"
+			wallet-selector-title="walletSelectorTitle"
+			wallet-selector-wallets="wallets"
+			wallet-selector-selected-wallet="wallet"
+			wallet-selector-show="showWallets"
+			wallet-selector-on-select="onWalletSelect">
+		</wallet-selector>
 	  </ion-view>
 	  

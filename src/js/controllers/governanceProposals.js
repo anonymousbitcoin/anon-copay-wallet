@@ -40,5 +40,4 @@ angular.module('copayApp.controllers').controller('governanceProposalsController
     };
   };
 
-
 });
