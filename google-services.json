@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "149194066736",
-    "firebase_url": "https://bitpay-wallet.firebaseio.com",
-    "project_id": "bitpay-wallet",
-    "storage_bucket": "bitpay-wallet.appspot.com"
+    "project_number": "813349233557",
+    "firebase_url": "https://anon-copay.firebaseio.com",
+    "project_id": "anon-copay",
+    "storage_bucket": "anon-copay.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:149194066736:android:6de8942b48fea047",
+        "mobilesdk_app_id": "1:813349233557:android:d5d05c836753e0f9",
         "android_client_info": {
           "package_name": "com.anoncom.anon"
         }
       },
       "oauth_client": [
         {
-          "client_id": "149194066736-1gf0d9nk288dke5jdiuj8unkplhl8nco.apps.googleusercontent.com",
+          "client_id": "813349233557-4ab1c4ir6gmomvud8l8p9f2s89v7of37.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCZ8nyjRBe-0Lyur0LjO-SOkjv32uNQKy0"
+          "current_key": "AIzaSyBWgUClx3Rd6aWsH8VHIzR6VK-DGfL6p3w"
         }
       ],
       "services": {

@@ -227,11 +227,20 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         templateUrl: 'views/tabs.html'
       })
       .state('tabs.home', {
-        url: '/home/:fromOnboarding',
+        url: '/home:fromOnboarding',
         views: {
           'tab-home': {
             controller: 'tabHomeController',
             templateUrl: 'views/tab-home.html',
+          }
+        }
+      })
+      .state('tabs.test', {
+        url: '/test:fromOnboarding',
+        views: {
+          'tab-test': {
+            controller: 'tabTestController',
+            templateUrl: 'views/tab-test.html',
           }
         }
       })

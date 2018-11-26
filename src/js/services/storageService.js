@@ -219,6 +219,14 @@ angular.module('copayApp.services')
       storage.set('homeTip', val, cb);
     };
 
+    root.setAnonCoreInstalled = function(val, cb) {
+      storage.set('anonCore', val, cb);
+    };
+
+    root.getAnonCoreInstalled = function(val, cb) {
+      storage.get('anonCore', val, cb);
+    };
+
     root.setHideBalanceFlag = function(walletId, val, cb) {
       storage.set('hideBalance-' + walletId, val, cb);
     };

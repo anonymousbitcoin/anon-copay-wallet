@@ -25,15 +25,15 @@ angular.module('copayApp.controllers').controller('preferencesBwsUrlController',
       switch ($scope.bwsurl.value) {
         case 'prod':
         case 'production':
-          bws = 'http://198.58.124.152:3232/bws/api'
+          bws = 'https://natalita.com'
           break;
         case 'sta':
         case 'staging':
-          bws = 'http://198.58.124.152:3232/bws/api'
+          bws = 'https://natalita.com'
           break;
         case 'loc':
         case 'local':
-          bws = 'http://198.58.124.152:3232/bws/api'
+          bws = 'https://natalita.com'
           break;
       };
       if (bws) {
