@@ -36,11 +36,6 @@ angular.module('copayApp.services').factory('masternodeCreateService', function(
     .catch(err => {
         console.log("sorry, there are no results for your search")
 	});
-	
-	
-
-
-    
     // profileService.getProposals(function(err, proposals) {
     //     console.log("wher ame i?")
     //   if (err) return cb('Could not get the Proposals');

@@ -115,6 +115,7 @@
   "scripts": {
     "postinstall": "sed -i  -e \"s/.*require(...\\/...);//g\" node_modules/asn1.js-rfc5280/index.js && bower install",
     "start": "npm run build:www && ionic serve --no-livereload --nogulp -s --address 0.0.0.0",
+    "start:dev": "npm run build:www && ionic serve --nogulp -s --address 0.0.0.0 && npm run watch",
     "start:ios": "npm run build:www && npm run build:ios && npm run open:ios",
     "start:android": "npm run build:www && npm run build:android && npm run run:android",
     "start:windows": "npm run build:www && npm run build:windows",
@@ -153,6 +154,7 @@
     "ionic": "^3.6.0",
     "lodash": "^4.17.4",
     "node-sass": "^4.9.0",
+    "nodemon": "^1.18.6",
     "trash-cli": "^1.4.0"
   },
   "cordova": {

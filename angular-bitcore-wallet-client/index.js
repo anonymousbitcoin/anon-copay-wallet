@@ -7,16 +7,22 @@ bwcModule.constant('MODULE_VERSION', '1.0.0');
 bwcModule.provider("bwcService", function() {
   var provider = {};
 
-
   provider.$get = function() {
     var service = {};
-
-	//KEV & LUIS BUFFEER STUFF
+	//KEV & LUIS BUFFER STUFF
 
 	service.getProposalBuffer = function() {
-		console.log("Bitcore proposal here:");
-		console.log(Bitcore.util.buffer);
+		// console.log("Bitcore proposal here:");
+		// console.log(Bitcore.util.buffer);
 		return Bitcore;
+	};
+
+	// kev & luis z transaction stuff
+	service.shell = function() {
+		var shell = Bitcore.util.buffer;
+		console.log('ITS WORKING BOOIS');
+		console.log(shell);
+		return shell;
 	};
 
     service.getBitcoreAnon = function() {
