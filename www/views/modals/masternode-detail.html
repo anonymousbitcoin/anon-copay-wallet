@@ -1,0 +1,143 @@
+<ion-modal-view id="wallet-balance">
+  <ion-header-bar
+    align-title="center"
+    ng-class="{'wallet-background-color-default': !wallet.color}"
+    ng-style="{'background-color': wallet.color}"
+  >
+    <button class="button button-clear" ng-click="close()" translate>
+      Close
+    </button>
+    <div class="title">Masternode Detail:</div>
+    <div class="buttons buttons-right header-item">
+      <span class="secondary-buttons">
+        <button class="button button-clear" ng-click="updateAll(true)">
+          <i class="icon ion-ios-refresh-empty"></i>
+        </button>
+      </span>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>VIN:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.vin }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Payee:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.payee }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Status:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.status }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Rank:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.rank }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <i class="wallet-balance__icon icon ion-ios-checkmark-outline"></i>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Node IP:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.ip }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Active Seconds:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.activeseconds }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Last Seen:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.lastseen }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="wallet-balance__list list card">
+      <div class="wallet-balance__item item">
+        <!--
+          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
+        -->
+        <div class="wallet-balance__content no-border">
+          <div class="wallet-balance__title" translate>Protocol:</div>
+          <span class="item-note text-right wallet-balance__amount">
+            <span class="wallet-balance__amount wallet-balance__amount--total">
+              {{ masternode.protocol }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

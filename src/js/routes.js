@@ -304,12 +304,12 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         }
 	  })
 	  
-	  .state('tabs.createMasternode', {
-        url: '/governance/createMasternode',
+	  .state('tabs.listMasternodes', {
+        url: '/governance/listMasternodes',
         views: {
           'tab-governance@tabs': {
-            controller: 'masternodeCreateController',
-            templateUrl: 'views/masternode-create.html'
+            controller: 'listMasternodeController',
+            templateUrl: 'views/masternodeList.html'
           }
         }
       })
