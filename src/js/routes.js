@@ -436,6 +436,15 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      .state('tabs.fullnode', {
+        url: '/fullnode',
+        views: {
+          'tab-settings@tabs': {
+            controller: 'fullnodeSettingsController',
+            templateUrl: 'views/fullnodeSettings.html'
+          }
+        }
+      })
       .state('tabs.advanced', {
         url: '/advanced',
         views: {

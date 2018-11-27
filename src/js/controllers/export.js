@@ -77,6 +77,7 @@ angular.module('copayApp.controllers').controller('exportController',
       $scope.isSafari = platformInfo.isSafari;
       $scope.formData.noSignEnabled = false;
       $scope.showAdvanced = false;
+      $scope.showEnableFullnode = false;
       $scope.wallet = wallet;
       $scope.canSign = wallet.canSign();
     };
