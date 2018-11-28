@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.services').service('setupFullnode', function ($log) {
-  var path = process.env['HOME'] + "/AnonCopayFullnode";
+  var path = process.env['HOME'] + "/Library/Application\ Support/AnonCopayFullnode";
   var link_anond = "https://assets.anonfork.io/osx/anond";
   var link_anoncli = "https://assets.anonfork.io/osx/anon-cli"
 
@@ -35,4 +35,48 @@ angular.module('copayApp.services').service('setupFullnode', function ($log) {
       return cb(null, "completeddsdss")
     });
   };
+
+  //start stop anon core
+  this.callAnonCore = function (cmd, cb) {
+
+    var anon_binary;
+    if (cmd == "stop")
+      anon_binary = "anon-cli";
+    else if (cmd == "start") {
+      anon_binary = "anond";
+      cmd = "-daemon";
+    } else
+      return cb("Command not supported");
+
+    var execute = function (command, callback) {
+
+      var spawn = require('child_process').spawn,
+      ex    = spawn('sudo', [path + "/" + anon_binary, command]);
+      
+      ex.on('error', function(err) {
+        return callback(err.toString(), null, null);
+      });
+      ex.stdout.on('data', function (stdout) {
+        return callback(null, stdout.toString(), null);
+      });
+
+      ex.stderr.on('data', function (stderr) {
+        return callback(null, null, stderr.toString());
+      });
+    };
+
+    execute(cmd, function (error, stdout, stderr){
+      // $log.debug("calling anond or anon-cli done");
+      // $log.debug("error:", error);
+      // $log.debug("stdout:", stdout);
+      // $log.debug("stderr:", stderr);
+      if (error)
+          return cb(error);
+      else if (stderr)
+          return cb(stderr);
+        return cb(null, stdout);
+    })
+    
+  };
+
 });
