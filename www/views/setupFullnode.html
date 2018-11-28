@@ -1,0 +1,29 @@
+<ion-view id="advanced-settings" class="settings" show-tabs>
+  <ion-nav-bar class="bar-royal">
+    <ion-nav-title>{{'Setup fullnode' | translate}}</ion-nav-title>
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+  <ion-content ng-show="!isFullnodeDownloaded" scroll="false" id="add-address">
+        <div class="zero-state">
+          <i class="icon zero-state-icon icon-big-svg">
+            <img class="bg" src="img/icon-setup.svg"/>
+          </i>
+          <div class="zero-state-heading" translate>Couldn't locate Anon Full Node</div>
+          <div class="zero-state-description" translate>Get started by adding your first one.</div>
+          <div class="zero-state-cta">
+            <button class="button button-standard button-primary" ng-disabled="installationStarted" ng-click="downloadAnonCore()" translate>{{ installationStarted ? "Installing" : "Install" }}</button>
+          </div>
+        </div>
+    </ion-content>
+    <ion-content ng-if="isFullnodeDownloaded && !isAnonCoreON" scroll="false" id="add-address">
+        <div class="zero-state">
+          <button class="button button-standard button-primary" ng-click="startAnonCore()" translate>Start Full Node</button>
+        </div>
+  </ion-content>
+  <ion-content ng-if="isAnonCoreON" scroll="false" id="add-address">
+      <div class="zero-state">
+        <button class="button button-standard button-primary" ng-click="stopAnonCore()" translate>Stop Full Node</button>
+    </div>
+</ion-content>
+</ion-view>

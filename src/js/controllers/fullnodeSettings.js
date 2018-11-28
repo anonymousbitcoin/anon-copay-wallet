@@ -4,11 +4,11 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
 
     var readConfig = function () {
     var config = configService.getSync();
-
     $scope.isFullnodeMode = config.wallet.isFullnodeMode;
   };
 
   $scope.fullNodeChange = function () {
+    $scope.isFullnodeMode = $scope.isFullnodeMode ? false : true;
     var opts = {
       wallet: {
         isFullnodeMode: $scope.isFullnodeMode

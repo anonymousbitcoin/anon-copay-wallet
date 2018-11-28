@@ -13,12 +13,12 @@
           <!-- <tt>debug = {{isFullnodeMode}}</tt><br/> -->
         </ion-toggle>
         <div class="comment" translate>
-          If enabled, you will be able to use private transactions (z), create and start a masternode, vote for proposals.
+          If enabled, you will be able to use private transactions (z), create/start a masternode and vote for proposals.
         </div>
   
         <div class="item item-divider"></div>
 
-        <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.advanced">
+        <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
             <i class="icon icon-svg">
               <img src="img/icon-setup.svg" class="bg"/>
             </i>

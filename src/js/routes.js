@@ -445,6 +445,15 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      .state('tabs.setupfullnode', {
+        url: '/setupfullnode',
+        views: {
+          'tab-settings@tabs': {
+            controller: 'setupFullnodeController',
+            templateUrl: 'views/setupFullnode.html'
+          }
+        }
+      })
       .state('tabs.advanced', {
         url: '/advanced',
         views: {
