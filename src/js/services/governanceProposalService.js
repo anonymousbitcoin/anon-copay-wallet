@@ -70,6 +70,8 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 
 	root.bufferProposal = function(toBuffer){
 		var buffed = bwcService.getProposalBuffer();
+		console.log('buffed:');
+		console.log(buffed);
 		var bufferizedProposal = buffed.util.buffer.propBuffer(toBuffer);
 		// let newBuffer = buffed(toBuffer);
 		let result = bufferizedProposal.toString('hex');
@@ -78,19 +80,18 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 
 	root.getTxId = (address, cb) => {
 		fetch(
-				`http://45.79.13.202:3001/insight-api-anon/addr/${address}/utxo`, 
+				`http://localhost:5555/insight-api-anon/addr/${address}/utxo`, 
 				{ 
 					headers: { "Content-Type": "application/json; charset=utf-8" }
 				}
 			).then(res => res.json()).then(response => {
-		let utxo = response[0].txid;
-		console.log('UTXO HERE: ');
-		console.log(utxo);
+		let utxo = response[0];
+		console.log('RESPONSE TXID');
+		console.log(response);
 		console.log("--------------------------")
-		console.log(cb(null,utxo));
+		// console.log(cb(null,utxo));
 		return cb(null, utxo);
-    })
-    .catch(err => {
+    }).catch(err => {
 		console.log("sorry, there are no results for your search");
 	});
 	}
@@ -109,10 +110,9 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 	});
 	
 	
-  root.add = function(entry, cb) {
-	// var network = getNetwork(entry.address);
-	
-  };
+//   root.add = function(entry, cb) {
+// 	// var network = getNetwork(entry.address);
+//   };
 
     
     // profileService.getProposals(function(err, proposals) {
