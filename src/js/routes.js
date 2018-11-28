@@ -302,8 +302,27 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
             templateUrl: 'views/governance-proposals.html'
           }
         }
+	  })
+	  
+	  .state('tabs.createMasternode', {
+        url: '/governance/createMasternode',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'masternodeCreateController',
+            templateUrl: 'views/masternode-create.html'
+          }
+        }
       })
 
+	  .state('tabs.createGovernancePropsal', {
+        url: '/governance/governanceProposals/createGovernancePropsal',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'governanceProposalCreateController',
+            templateUrl: 'views/governance-proposal-create.html'
+          }
+        }
+      })
       /*
        *
        * Send

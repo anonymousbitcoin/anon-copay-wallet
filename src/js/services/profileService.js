@@ -1024,12 +1024,12 @@ angular.module('copayApp.services')
       console.log("WALLETCLIENT", walletClient)
       self = this;
       let httprequest = $http;
-      self.httprequest.get("http://127.0.0.1:3232/bws/api//v1/proposals/").success(function(res) {
+      self.httprequest.get("http://localhost:3232/bws/api/v1/proposals/").success(function(res) {
         console.log("I GOT A RESPONSE");
         console.log(res)
       });
         
-      // proposals = walletClient.request(get,"http://127.0.0.1:3232/bws/api//v1/proposals/").get("http://127.0.0.1:3232/bws/api//v1/proposals/", null, _checkProposalsInBlockchain);
+      // proposals = walletClient.request(get,"http://localhost:3232/bws/api//v1/proposals/").get("http://localhost:3232/bws/api//v1/proposals/", null, _checkProposalsInBlockchain);
       conosle.log("YEAH")
       let proposals = [{name:"Stuff"}]
       return cb(null, proposals);

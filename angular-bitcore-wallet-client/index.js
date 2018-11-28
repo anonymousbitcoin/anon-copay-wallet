@@ -1,13 +1,23 @@
 var bwcModule = angular.module('bwcModule', []);
 var Client = require('../node_modules/bitcore-wallet-client-anon');
+var Bitcore = require('../node_modules/bitcore-lib-anon');
 
 bwcModule.constant('MODULE_VERSION', '1.0.0');
 
 bwcModule.provider("bwcService", function() {
   var provider = {};
 
+
   provider.$get = function() {
     var service = {};
+
+	//KEV & LUIS BUFFEER STUFF
+
+	service.getProposalBuffer = function() {
+		console.log("Bitcore proposal here:");
+		console.log(Bitcore.util.buffer);
+		return Bitcore;
+	};
 
     service.getBitcoreAnon = function() {
       return Client.BitcoreAnon;
@@ -34,7 +44,7 @@ bwcModule.provider("bwcService", function() {
 
       //note opts use `bwsurl` all lowercase;
       var bwc = new Client({
-        baseUrl: opts.bwsurl || 'http://127.0.0.1:3232/bws/api',
+        baseUrl: opts.bwsurl || 'http://localhost:3232/bws/api',
         verbose: opts.verbose,
         timeout: 100000,
         transports: ['polling'],
