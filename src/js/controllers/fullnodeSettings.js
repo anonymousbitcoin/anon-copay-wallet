@@ -1,10 +1,21 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo) {
+angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
 
     var readConfig = function () {
     var config = configService.getSync();
     $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
+  };
+
+  var isAnonON = function () {
+    setupFullnode.checkIfAnonFullnodeONService(function(data, status){
+      $log.debug("data: ", data);
+      $log.debug("status: ", status);
+      if(status && status === 200)
+        $rootScope.isAnonCoreON = true;
+      else 
+        $rootScope.isAnonCoreON = false;
+    });
   };
 
   $scope.fullNodeChange = function () {
@@ -22,7 +33,7 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-    // checkIfAnonON();
+    isAnonON();
   });
 
 });
