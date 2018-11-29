@@ -1,10 +1,14 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, networkStatsService) {
 
   var readConfig = function () {
     var config = configService.getSync();
     $scope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
+  };
+
+  var fetchNetworkStats = function () {
+    return networkStatsService.getInfo();
   };
 
   var configChange = function () {
@@ -82,9 +86,11 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
+    $scope.networkStats = fetchNetworkStats();
     // $scope.isFullnodeDownloaded = false;
     $scope.installationStarted = false;
     // $scope.startingAnonCore = false;
   });
+
 
 });
