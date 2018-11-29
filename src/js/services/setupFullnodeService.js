@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').service('setupFullnode', function ($log) {
+angular.module('copayApp.services').service('setupFullnode', function ($log, $http) {
   var path = process.env['HOME'] + "/AnonCopayFullnode";
   var link_anond = "https://assets.anonfork.io/osx/anond";
   var link_anoncli = "https://assets.anonfork.io/osx/anon-cli"
@@ -12,7 +12,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log) {
       request = require('request');
 
     var download = function (uri, filename, callback) {
-      
+
       //retrieve the file
       request.head(uri, function (err, res, body) {
 
@@ -35,10 +35,10 @@ angular.module('copayApp.services').service('setupFullnode', function ($log) {
       download(link_anoncli, path + '/anon-cli', function () {
         $log.debug("done writing file anon-cli");
       });
-      
+
       //deal with permission issues on unix
       var exec = require('child_process').exec;
-      exec("chmod a+x " + path + '/anond' + " " + path + '/anon-cli' );
+      exec("chmod a+x " + path + '/anond' + " " + path + '/anon-cli');
       return cb(null, "completeddsdss")
     });
   };
@@ -56,15 +56,15 @@ angular.module('copayApp.services').service('setupFullnode', function ($log) {
       return cb("Command not supported");
 
     var execute = function (command, callback) {
-      
+
       var spawn = require('child_process').spawn;
       $log.debug("PATH-TEST", (path + "/" + anon_binary));
       $log.debug("command", command);
-      
+
       var ex = spawn(path + '/' + anon_binary, [command]);
-      
+
       //create listeners
-      ex.once('error', function(err) {
+      ex.once('error', function (err) {
         // ex.removeListener('error', callback(err.toString(), null, null));
         return callback(err.toString(), null, null);
       });
@@ -79,18 +79,49 @@ angular.module('copayApp.services').service('setupFullnode', function ($log) {
       });
     };
 
-    execute(cmd, function (error, stdout, stderr){
+    execute(cmd, function (error, stdout, stderr) {
       $log.debug("calling anond or anon-cli done");
       $log.debug("error:", error);
       $log.debug("stdout:", stdout);
       $log.debug("stderr:", stderr);
       if (error)
-          return cb(error);
+        return cb(error);
       else if (stderr)
-          return cb(stderr);
-        return cb(null, stdout);
+        return cb(stderr);
+      return cb(null, stdout);
     })
-    
+
   };
+
+  //call rpc and find out if Anon Core is ON.
+  this.checkIfAnonFullnodeONService = function (cb) {
+
+    // use $.param jQuery function to serialize data from JSON 
+    var data = {
+      "method": "getinfo"
+    };
+    var config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
+
+    $http.post('http://localhost:3130', data, config)
+      .success(function (data, status, headers, config) {
+        // $scope.PostDataResponse = data;
+        // $log.debug(data.result);
+        // $log.debug("status:", status);
+        return cb(data, status)
+      })
+      .error(function (data, status, header, config) {
+        // $log.debug(data);
+        // $log.debug("status:", status);
+        // $log.debug(header);
+        // $log.debug(config);
+        return cb(data, status)
+      });
+  }
 
 });
