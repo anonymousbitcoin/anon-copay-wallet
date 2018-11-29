@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').service('setupFullnode', function ($log, $http) {
+angular.module('copayApp.services').service('setupFullnode', function ($log, $http, $rootScope) {
   var path = process.env['HOME'] + "/AnonCopayFullnode";
   var link_anond = "https://assets.anonfork.io/osx/anond";
   var link_anoncli = "https://assets.anonfork.io/osx/anon-cli"
@@ -94,34 +94,44 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   };
 
   //call rpc and find out if Anon Core is ON.
-  this.checkIfAnonFullnodeONService = function (cb) {
 
-    // use $.param jQuery function to serialize data from JSON 
-    var data = {
-      "method": "getinfo"
-    };
-    var config = {
-      headers: {
-        'Content-Type': 'application/json'
+  this.checkIfAnonFullnodeONService = function () {
+
+    var isAnonON = function (cb) {
+      // use $.param jQuery function to serialize data from JSON 
+      var data = {
+        "method": "getinfo"
+      };
+      var config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
+      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
+      $http.post('http://localhost:3130', data, config)
+        .success(function (data, status, headers, config) {
+          // $scope.PostDataResponse = data;
+          // $log.debug(data.result);
+          // $log.debug("status:", status);
+          return cb(data, status)
+        })
+        .error(function (data, status, header, config) {
+          // $log.debug(data);
+          // $log.debug("status:", status);
+          // $log.debug(header);
+          // $log.debug(config);
+          return cb(data, status)
+        });
     }
-  
-    $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
 
-    $http.post('http://localhost:3130', data, config)
-      .success(function (data, status, headers, config) {
-        // $scope.PostDataResponse = data;
-        // $log.debug(data.result);
-        // $log.debug("status:", status);
-        return cb(data, status)
-      })
-      .error(function (data, status, header, config) {
-        // $log.debug(data);
-        // $log.debug("status:", status);
-        // $log.debug(header);
-        // $log.debug(config);
-        return cb(data, status)
-      });
-  }
+    isAnonON(function (data, status) {
+      $log.debug("data: ", data);
+      $log.debug("status: ", status);
+      if (status && status === 200)
+        $rootScope.isAnonCoreON = true;
+      else
+        $rootScope.isAnonCoreON = false;
+    });
+  };
 
 });
