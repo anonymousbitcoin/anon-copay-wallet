@@ -7,7 +7,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
 
-  var configChange = function () {
+  var UpdateConfig = function () {
     var opts = {
       wallet: {
         isFullnodeDownloaded: $scope.isFullnodeDownloaded
@@ -20,8 +20,8 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.downloadAnonCore = function () {
     $scope.installationStarted = true;
-    setupFullnode.downloadAnon(function (error, res) {
-      // $log.debug("left downloadAnon");
+    setupFullnode.downloadAnonService(function (error, res) {
+      // $log.debug("left downloadAnonService");
       // $log.debug("error:", error);
       // $log.debug("res:", res);
       if (error)
@@ -30,7 +30,8 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
         $scope.downloadanonlog = res;
         $scope.isFullnodeDownloaded = true;
       }
-      configChange();
+      UpdateConfig();
+      $scope.installationStarted = false;
       $scope.$apply();
     });
   }
@@ -67,13 +68,12 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug("err:")
       // $log.debug(err)
       if (err) {
-        $rootScope.isAnonCoreON = false;
         $scope.stoplog = "Coudn't stop the node, perhaps already stopped?";
       } else if(res) {
         $log.debug("Successfully stopped...")
         $scope.stoplog = "Successfully stopped..."
-        $rootScope.isAnonCoreON = false;
       }
+      $rootScope.isAnonCoreON = false;
       $scope.stoppingAnonCore = false;
       $scope.$apply();
     });
@@ -82,8 +82,8 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-    // $scope.isFullnodeDownloaded = false;
     $scope.installationStarted = false;
+    // $scope.isFullnodeDownloaded = false;
     // $scope.startingAnonCore = false;
   });
 

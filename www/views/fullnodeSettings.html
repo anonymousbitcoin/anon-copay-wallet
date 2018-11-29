@@ -4,20 +4,15 @@
       <ion-nav-back-button>
       </ion-nav-back-button>
     </ion-nav-bar>
-  
     <ion-content>
       <div class="settings-list list">
-  
         <ion-toggle class="has-comment" type="checkbox" ng-model="isFullnodeMode" toggle-class="toggle-balanced" ng-change="fullNodeChange()">
           <span class="toggle-label" translate>Enable Full Node Mode</span>
-          <!-- <tt>debug = {{isFullnodeMode}}</tt><br/> -->
         </ion-toggle>
         <div class="comment" translate>
           If enabled, you will be able to use private transactions (z), create/start a masternode and vote for proposals.
         </div>
-  
         <div class="item item-divider"></div>
-
         <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
             <i class="icon icon-svg">
               <img src="img/icon-setup.svg" class="bg"/>
@@ -25,10 +20,6 @@
             <span>{{'Setup full node' | translate}}</span>
             <i class="icon bp-arrow-right"></i>
           </a>
-
-        <!-- <ion-toggle ng-if="isFullnodeON" class="has-comment">
-          <span class="toggle-label" translate>Setup full node</span>
-        </ion-toggle> -->
       </div>
     </ion-content>
   </ion-view>

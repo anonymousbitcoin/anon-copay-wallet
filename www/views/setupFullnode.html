@@ -17,12 +17,12 @@
         </div>
     </ion-content>
     <ion-content ng-if="isFullnodeDownloaded && !isAnonCoreON" scroll="false" id="add-address">
-        <div class="zero-state">
-            <div class="zero-state-description" ng-bind="stoplog"></div>
+      <div class="zero-state">
+          <div class="zero-state-description" ng-bind="stoplog"></div>
           <button class="button button-standard button-primary" ng-disabled="startingAnonCore" ng-click="startAnonCore()" translate>{{ startingAnonCore ? "Starting" : "Start Full Node" }} </button>
         </div>
   </ion-content>
-  <ion-content ng-if="isAnonCoreON" scroll="false" id="add-address">
+  <ion-content ng-if="isAnonCoreON" scroll="false" >
       <div class="zero-state">
         <div class="zero-state-description" ng-bind="startlog"></div>
         <button class="button button-standard button-primary" ng-disabled="stopingAnonCore" ng-click="stopAnonCore()" translate>{{ stoppingAnonCore ? "Stopping" : "Stop Full Node" }} </button>
