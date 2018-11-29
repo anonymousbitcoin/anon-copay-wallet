@@ -7,7 +7,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   //download anond and anon-cli executables
   this.downloadAnonService = function (cb) {
-
+    var exec = require('child_process').exec;
     var fs = require('fs'),
       request = require('request');
 
@@ -30,16 +30,35 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       });
     };
 
+    //deal with permission issues on unix
+    var fixPermissions = function (callback) {
+      exec("chmod a+x " + path + '/anond' + " " + path + '/anon-cli', callback);
+    }
+
+    var fetchZcashParams = function (callback) {
+      $log.debug("Fetching Zcash Param Keys...")
+      exec("curl -s https://raw.githubusercontent.com/anonymousbitcoin/anon/master/anonutil/fetch-params.sh | bash", callback);
+    }
+
+    //TODO: ADD WINDOWS SUPPORT
+
+    //first download and save anond binary
     download(link_anond, path + '/anond', function () {
       $log.debug("done writing file anond");
+      //second download and save anon-cli binary
       download(link_anoncli, path + '/anon-cli', function () {
         $log.debug("done writing file anon-cli");
+        //third fetch zcash param keys (for now unix only)
+        fetchZcashParams(function (error, stdout, stderr) {
+          $log.debug("error:", error);
+          $log.debug("stdout:", stdout);
+          $log.debug("stderr:", stderr);
+          //forth fix permissions for these files (unix only) 
+          fixPermissions(function () {
+            return cb(null, "Anon full node executables have been succesfully downloaded")
+          })
+        })
       });
-
-      //deal with permission issues on unix
-      var exec = require('child_process').exec;
-      exec("chmod a+x " + path + '/anond' + " " + path + '/anon-cli');
-      return cb(null, "completeddsdss")
     });
   };
 
