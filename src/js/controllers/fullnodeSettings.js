@@ -7,19 +7,10 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
     $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
   };
 
-  var isAnonON = function () {
-    setupFullnode.checkIfAnonFullnodeONService(function(data, status){
-      $log.debug("data: ", data);
-      $log.debug("status: ", status);
-      if(status && status === 200)
-        $rootScope.isAnonCoreON = true;
-      else 
-        $rootScope.isAnonCoreON = false;
-    });
-  };
-
   $scope.fullNodeChange = function () {
     $rootScope.isFullnodeMode = $rootScope.isFullnodeMode ? false : true;
+    if($rootScope.isFullnodeMode)
+      setupFullnode.checkIfAnonFullnodeONService();
     var opts = {
       wallet: {
         isFullnodeMode: $rootScope.isFullnodeMode
@@ -33,7 +24,8 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-    isAnonON();
+    if($rootScope.isFullnodeMode)
+      setupFullnode.checkIfAnonFullnodeONService();
   });
 
 });
