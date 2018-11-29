@@ -7,8 +7,11 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
 
-  var fetchNetworkStats = function () {
-    return networkStatsService.getInfo();
+  var fetchNetworkStats = function (cb) {
+    // return cb(networkStatsService.getInfo());
+    networkStatsService.getInfo(function(data){
+      return cb(data)
+    });
   };
 
   var UpdateConfig = function () {
@@ -86,7 +89,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-    $scope.networkStats = fetchNetworkStats();
+     fetchNetworkStats(function(res){
+      $log.debug("Here is the networkStats from setupFullnode controller", res)
+      $scope.networkStats = res;
+    });
     // $scope.isFullnodeDownloaded = false;
     $scope.installationStarted = false;
     // $scope.isFullnodeDownloaded = false;

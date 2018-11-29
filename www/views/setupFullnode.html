@@ -7,13 +7,11 @@
   <ion-content>
       <div class="settings-list list">
         <div class="comment" translate>
-          Here is the network status
+          Network stats:
         </div>
-        <div class="comment" translate>
-            {{networkStats.blocks}}
+        <div class="comment" ng-bind="networkStats.info.blocks">
         </div>
-        <div class="zero-state-heading" translate>Tip of Blockchain {{networkStats.blocks}}</div>
-        <div class="item item-divider"></div>
+        <div class="comment">Height of Chain: {{networkStats.info.blocks}}</div>
       </div>
     </ion-content>
 
