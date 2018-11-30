@@ -14,6 +14,12 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     });
   };
 
+  var fetchLocalRPCInfo = function (cb) {
+    setupFullnode.localRPCGetinfo(function(data){
+      return cb(data)
+    });
+  }
+
   var UpdateConfig = function () {
     var opts = {
       wallet: {
@@ -59,6 +65,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
         $log.debug("Successfully started...")
         $scope.startlog = "Successfully started..."
         $rootScope.isAnonCoreON = true;
+        fetchLocalRPCInfo(function(res){
+          $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+          $scope.localRPCInfo = res;
+        });
       }
       $scope.startingAnonCore = false;
       $scope.$apply();
@@ -90,11 +100,11 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
      fetchNetworkStats(function(res){
-      $log.debug("Here is the networkStats from setupFullnode controller", res)
-      $scope.networkStats = res;
-    });
+        $scope.networkStats = res;
+      });
+
     // $scope.isFullnodeDownloaded = false;
-    $scope.installationStarted = false;
+    // $scope.installationStarted = false;
     // $scope.isFullnodeDownloaded = false;
     // $scope.startingAnonCore = false;
   });
