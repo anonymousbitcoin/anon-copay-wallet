@@ -4,13 +4,13 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   var readConfig = function () {
     var config = configService.getSync();
-    $scope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
+    $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
 
   var UpdateConfig = function () {
     var opts = {
       wallet: {
-        isFullnodeDownloaded: $scope.isFullnodeDownloaded
+        isFullnodeDownloaded: $rootScope.isFullnodeDownloaded
       }
     };
     configService.set(opts, function (err) {
@@ -25,12 +25,12 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug("error:", error);
       // $log.debug("res:", res);
       if (error)
-        $scope.isFullnodeDownloaded = false;
+        $rootScope.isFullnodeDownloaded = false;
       else {
         $scope.downloadanonlog = res;
-        $scope.isFullnodeDownloaded = true;
+        $rootScope.isFullnodeDownloaded = true;
       }
-      UpdateConfig();
+      // UpdateConfig();
       $scope.installationStarted = false;
       $scope.$apply();
     });
@@ -81,9 +81,9 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
-    readConfig();
+    // readConfig();
     $scope.installationStarted = false;
-    // $scope.isFullnodeDownloaded = false;
+    // $rootScope.isFullnodeDownloaded = false;
     // $scope.startingAnonCore = false;
   });
 

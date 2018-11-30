@@ -21,9 +21,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           return cb(err)
 
         //create folder if it doesn't exist
-        if (!fs.existsSync(path)) {
+        if (!fs.existsSync(path))
           fs.mkdirSync(path);
-        }
 
         //save the file
         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
@@ -113,7 +112,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   };
 
   //call rpc and find out if Anon Core is ON.
-
   this.checkIfAnonFullnodeONService = function () {
 
     var isAnonON = function (cb) {
@@ -153,4 +151,34 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     });
   };
 
+
+  //Check if the AnonCore files and Zcash Param keys exist in the default directory, and if they are readable.
+  this.checkIfAnonExecFilesExistService = function (cb) {
+    var fs = require('fs');
+
+    var isExist = function (file, callback) {
+      fs.access(file, fs.constants.F_OK | fs.constants.R_OK, callback);
+    }
+    //check if anond exists
+    isExist(path + "/anond", function (err) {
+      if (err)
+        return cb(err);
+      //check if anon-cli exists
+      isExist(path + "/anon-cli", function (err) {
+        if (err)
+          return cb(err);
+        //check if zcash proving key exists
+        isExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-proving.key", function (err) {
+          if (err)
+            return cb(err);
+          //check if zcash verifying key exists
+          isExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-verifying.key", function (err) {
+            if (err)
+              return cb(err);
+            return cb()
+          });
+        });
+      });
+    });
+  }
 });
