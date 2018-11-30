@@ -4,6 +4,18 @@
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
+  <ion-content>
+      <div class="settings-list list">
+        <div class="comment" translate>
+          Network stats:
+        </div>
+        <div class="comment" ng-bind="networkStats.info.blocks">
+        </div>
+        <div class="comment">Height of Chain: {{networkStats.info.blocks}}</div>
+        <div class="comment">Local Full Node Chain Height: {{localRPCInfo.result.blocks}}</div>
+      </div>
+    </ion-content>
+
   <ion-content ng-show="!isFullnodeDownloaded" scroll="false" id="add-address">
     <div class="zero-state">
       <i class="icon zero-state-icon icon-big-svg">

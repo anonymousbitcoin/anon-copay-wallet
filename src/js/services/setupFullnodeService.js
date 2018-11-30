@@ -124,7 +124,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
+      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
           // $scope.PostDataResponse = data;
@@ -133,7 +133,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           return cb(data, status)
         })
         .error(function (data, status, header, config) {
-          // $log.debug(data);
+          // $log.debug(data);'
           // $log.debug("status:", status);
           // $log.debug(header);
           // $log.debug(config);
@@ -149,6 +149,38 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       else
         $rootScope.isAnonCoreON = false;
     });
+  };
+
+  // Call rpc `getinfo` rpc method
+  this.localRPCGetinfo = function (cb) {
+
+    // var rpcGetInfo = function (cb) {
+      // use $.param jQuery function to serialize data from JSON 
+      var data = {
+        "method": "getinfo"
+      };
+      var config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
+      $http.post('http://localhost:3130', data, config)
+        .success(function (data, status, headers, config) {
+          console.log("From the local full node:", data)
+          return cb(data, status)
+        })
+        .error(function (data, status, header, config) {
+          return cb(data, status)
+        });
+      // }
+
+      // rpcGetInfo(function (data, status) {
+      //   $log.debug("data: ", data);
+      //   $log.debug("status: ", status);
+      //     console.log(data)
+      //     return data
+      // });
   };
 
 

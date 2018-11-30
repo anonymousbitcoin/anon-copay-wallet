@@ -1,11 +1,24 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, networkStatsService) {
 
   var readConfig = function () {
     var config = configService.getSync();
     $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
+
+  var fetchNetworkStats = function (cb) {
+    // return cb(networkStatsService.getInfo());
+    networkStatsService.getInfo(function(data){
+      return cb(data)
+    });
+  };
+
+  var fetchLocalRPCInfo = function (cb) {
+    setupFullnode.localRPCGetinfo(function(data){
+      return cb(data)
+    });
+  }
 
   var UpdateConfig = function () {
     var opts = {
@@ -52,6 +65,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
         $log.debug("Successfully started...")
         $scope.startlog = "Successfully started..."
         $rootScope.isAnonCoreON = true;
+        fetchLocalRPCInfo(function(res){
+          $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+          $scope.localRPCInfo = res;
+        });
       }
       $scope.startingAnonCore = false;
       $scope.$apply();
@@ -81,10 +98,16 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
-    // readConfig();
-    $scope.installationStarted = false;
-    // $rootScope.isFullnodeDownloaded = false;
+    readConfig();
+     fetchNetworkStats(function(res){
+        $scope.networkStats = res;
+      });
+      fetchLocalRPCInfo(function(res){
+        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+        $scope.localRPCInfo = res;
+      });
     // $scope.startingAnonCore = false;
   });
+
 
 });
