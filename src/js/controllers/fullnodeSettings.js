@@ -2,15 +2,30 @@
 
 angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
 
-    var readConfig = function () {
+  var readConfig = function () {
     var config = configService.getSync();
     $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
   };
 
+  var checkIfAnonExecFilesExist = function(){
+    setupFullnode.checkIfAnonExecFilesExistService(function (err) {
+      if (err) {
+        $rootScope.isFullnodeDownloaded = false;
+        $log.debug("Anon core doesn't exist = err: ", err)
+      }
+      else {
+        $rootScope.isFullnodeDownloaded = true;
+        $log.debug("Anon core has been located");
+      }
+    });
+  }
+
   $scope.fullNodeChange = function () {
     $rootScope.isFullnodeMode = $rootScope.isFullnodeMode ? false : true;
-    if($rootScope.isFullnodeMode)
+    if ($rootScope.isFullnodeMode){
       setupFullnode.checkIfAnonFullnodeONService();
+      checkIfAnonExecFilesExist(); 
+    }
     var opts = {
       wallet: {
         isFullnodeMode: $rootScope.isFullnodeMode
@@ -24,8 +39,11 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-    if($rootScope.isFullnodeMode)
+    
+    if ($rootScope.isFullnodeMode){
       setupFullnode.checkIfAnonFullnodeONService();
+      checkIfAnonExecFilesExist();    
+    }
   });
 
 });

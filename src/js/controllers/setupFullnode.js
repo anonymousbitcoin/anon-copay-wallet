@@ -4,7 +4,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   var readConfig = function () {
     var config = configService.getSync();
-    $scope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
+    $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
 
   var fetchNetworkStats = function (cb) {
@@ -23,7 +23,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   var UpdateConfig = function () {
     var opts = {
       wallet: {
-        isFullnodeDownloaded: $scope.isFullnodeDownloaded
+        isFullnodeDownloaded: $rootScope.isFullnodeDownloaded
       }
     };
     configService.set(opts, function (err) {
@@ -38,12 +38,12 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug("error:", error);
       // $log.debug("res:", res);
       if (error)
-        $scope.isFullnodeDownloaded = false;
+        $rootScope.isFullnodeDownloaded = false;
       else {
         $scope.downloadanonlog = res;
-        $scope.isFullnodeDownloaded = true;
+        $rootScope.isFullnodeDownloaded = true;
       }
-      UpdateConfig();
+      // UpdateConfig();
       $scope.installationStarted = false;
       $scope.$apply();
     });
@@ -106,10 +106,6 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
         $log.debug("Here is the local daemon stats from setupFullnode controller", res)
         $scope.localRPCInfo = res;
       });
-
-    // $scope.isFullnodeDownloaded = false;
-    // $scope.installationStarted = false;
-    // $scope.isFullnodeDownloaded = false;
     // $scope.startingAnonCore = false;
   });
 
