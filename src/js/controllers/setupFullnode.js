@@ -102,6 +102,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
      fetchNetworkStats(function(res){
         $scope.networkStats = res;
       });
+      fetchLocalRPCInfo(function(res){
+        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+        $scope.localRPCInfo = res;
+      });
 
     // $scope.isFullnodeDownloaded = false;
     // $scope.installationStarted = false;
