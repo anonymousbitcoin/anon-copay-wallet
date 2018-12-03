@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, networkStatsService) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, configService, platformInfo, setupFullnode, networkStatsService) {
 
-  var readConfig = function () {
-    var config = configService.getSync();
-    $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
-  };
+  // var readConfig = function () {
+  //   var config = configService.getSync();
+  //   $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
+  // };
 
   var fetchNetworkStats = function (cb) {
     // return cb(networkStatsService.getInfo());
@@ -14,9 +14,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     });
   };
 
-  var fetchLocalRPCInfo = function (cb) {
-    setupFullnode.localRPCGetinfo(function(data){
-      return cb(data)
+  var fetchLocalRPCInfo = function () {
+    setupFullnode.localRPCGetinfo(function(res){
+      $scope.localRPCInfo = res;
+      $log.debug("Here is the local daemon stats from setupFullnode controller", res)
     });
   }
 
@@ -60,18 +61,20 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug(err)
       if (err) {
         $rootScope.isAnonCoreON = false;
-        $scope.startlog = "Coudn't start the node, perhaps already running?";
+        $scope.startlog = err;
+        $scope.startingAnonCore = false;
+        $scope.$apply();
       } else if(res) {
         $log.debug("Successfully started...")
         $scope.startlog = "Successfully started..."
-        $rootScope.isAnonCoreON = true;
-        fetchLocalRPCInfo(function(res){
-          $log.debug("Here is the local daemon stats from setupFullnode controller", res)
-          $scope.localRPCInfo = res;
-        });
+        //delay a call to rpc after starting a fullnode because it may not be ready (3 sec)
+        $timeout(function(){
+          fetchLocalRPCInfo();
+          $rootScope.isAnonCoreON = true;
+          $scope.startingAnonCore = false;
+          $scope.$apply();
+        }, 3000);
       }
-      $scope.startingAnonCore = false;
-      $scope.$apply();
     });
   }
 
@@ -98,16 +101,15 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
-    readConfig();
+    
+    //find out from anon explorer what is the currrent block height in the network
      fetchNetworkStats(function(res){
         $scope.networkStats = res;
       });
-      fetchLocalRPCInfo(function(res){
-        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
-        $scope.localRPCInfo = res;
-      });
+    
+    //fetch only when local node is ON
+    if($rootScope.isAnonCoreON)
+      fetchLocalRPCInfo();
     // $scope.startingAnonCore = false;
   });
-
-
 });

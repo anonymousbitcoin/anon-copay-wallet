@@ -11,11 +11,20 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
     setupFullnode.checkIfAnonExecFilesExistService(function (err) {
       if (err) {
         $rootScope.isFullnodeDownloaded = false;
-        $log.debug("Anon core doesn't exist = err: ", err)
-      }
-      else {
+        $log.debug("Error: Anon core doesn't exist - ", err)
+      } else {
         $rootScope.isFullnodeDownloaded = true;
         $log.debug("Anon core has been located");
+      }
+    });
+  }
+
+  var setupAnonConf = function(){
+    setupFullnode.setupAnonConfService(function (err, res) {
+      if (err) {
+        $log.debug("Error: setupAnonConf - ", err)
+      } else {
+        $log.debug("Res: setupAnonConf - ", res)
       }
     });
   }
@@ -41,6 +50,7 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
     readConfig();
     
     if ($rootScope.isFullnodeMode){
+      setupAnonConf();
       setupFullnode.checkIfAnonFullnodeONService();
       checkIfAnonExecFilesExist();    
     }

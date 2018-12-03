@@ -3,7 +3,65 @@
 angular.module('copayApp.services').service('setupFullnode', function ($log, $http, $rootScope) {
   var path = process.env['HOME'] + "/AnonCopayFullnode";
   var link_anond = "https://assets.anonfork.io/osx/anond";
-  var link_anoncli = "https://assets.anonfork.io/osx/anon-cli"
+  var link_anoncli = "https://assets.anonfork.io/osx/anon-cli";
+
+  //stores a list of "must have" settings
+  var anon_conf_min_setup = {
+    "rpcuser": {
+      data: "username",
+      exist: false
+    },
+    "rpcpassword": {
+      data: "password",
+      exist: false
+    },
+    "rpcallowip": {
+      data: "127.0.0.1",
+      exist: false
+    },
+    "rpcport": {
+      data: "3130",
+      exist: false
+    },
+    "txindex": {
+      data: "1",
+      exist: false
+    }
+  }
+
+  //reset the list
+  var reset_anon_conf_min_setup = function (data, cb) {
+    data['rpcuser']['data'] = "username";
+    data['rpcpassword']['data'] = "password";
+
+    for (var x in data) {
+      data[x]['exist'] = false;
+    }
+  }
+  //checks if a file exist and can be read
+  var isFileExist = function (file, callback) {
+    var fs = require('fs');
+    fs.access(file, fs.constants.F_OK | fs.constants.R_OK, callback);
+  }
+
+  //create and write data to a file
+  var writeToFile = function (file, data, cb) {
+    var fs = require('fs');
+    fs.writeFile(file, data, function (err) {
+      if (err)
+        return cb(err);
+    });
+  }
+
+  //read a file
+  var readFile = function (file, cb) {
+    var fs = require('fs');
+    fs.readFile(file, 'utf8', function (err, contents) {
+      if (err)
+        return cb(err);
+      return cb(null, contents);
+    });
+  }
 
   //download anond and anon-cli executables
   this.downloadAnonService = function (cb) {
@@ -84,16 +142,16 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       //create listeners
       ex.once('error', function (err) {
         // ex.removeListener('error', callback(err.toString(), null, null));
-        return callback(err.toString(), null, null);
+        return callback(err.toString());
       });
       ex.stdout.once('data', function (stdout) {
         // ex.removeListener('data', callback(null, stdout.toString(), null));
-        return callback(null, stdout.toString(), null);
+        return callback(null, stdout.toString());
       });
 
-      ex.stderr.once('stderr', function (stderr) {
+      ex.stderr.once('data', function (stderr) {
         // ex.removeListener('stderr', callback(null, null, stderr.toString()));
-        return callback(null, null, stderr.toString());
+        return callback(stderr.toString());
       });
     };
 
@@ -124,7 +182,10 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
+
+      // $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
+      $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
           // $scope.PostDataResponse = data;
@@ -164,7 +225,9 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
+
+      $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
           console.log("From the local full node:", data)
@@ -186,25 +249,21 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   //Check if the AnonCore files and Zcash Param keys exist in the default directory, and if they are readable.
   this.checkIfAnonExecFilesExistService = function (cb) {
-    var fs = require('fs');
 
-    var isExist = function (file, callback) {
-      fs.access(file, fs.constants.F_OK | fs.constants.R_OK, callback);
-    }
     //check if anond exists
-    isExist(path + "/anond", function (err) {
+    isFileExist(path + "/anond", function (err) {
       if (err)
         return cb(err);
       //check if anon-cli exists
-      isExist(path + "/anon-cli", function (err) {
+      isFileExist(path + "/anon-cli", function (err) {
         if (err)
           return cb(err);
         //check if zcash proving key exists
-        isExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-proving.key", function (err) {
+        isFileExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-proving.key", function (err) {
           if (err)
             return cb(err);
           //check if zcash verifying key exists
-          isExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-verifying.key", function (err) {
+          isFileExist(process.env['HOME'] + "/Library/Application Support/ZcashParams/sprout-verifying.key", function (err) {
             if (err)
               return cb(err);
             return cb()
@@ -213,4 +272,70 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       });
     });
   }
+
+  //read anon.conf | return: (err,res)
+  this.getAnonConfService = function (cb) {
+
+    isFileExist(process.env['HOME'] + "/Library/Application Support/Anon/anon.conf", function (err) {
+      if (err)
+        return cb(err);
+      //if it is exist
+      readFile(process.env['HOME'] + "/Library/Application Support/Anon/anon.conf", function (err, res) {
+        if (err)
+          return cb(err);
+        return cb(null, res);
+      })
+    })
+  }
+
+  //read anon.conf | return: (err, res)
+  this.setupAnonConfService = function (cb) {
+
+    reset_anon_conf_min_setup(anon_conf_min_setup);
+    /* 
+      We need find out if anon.conf has all the necessary settings. If it doesn't then we have to write them.
+  
+      Function logic:
+      1. We loop through anon.conf and save all the settings it has.
+      2. Then we look at our anon_conf_min_setup which has all the "must have" settings and compare to anon.conf settings.
+        - If it's a match we mark it in anon_conf_min_setup as "exist=true". This way later we know which settings needs to be added to anon.conf.
+    */
+
+    this.getAnonConfService(function (err, res) {
+      if (err) {
+        $log.debug(err)
+        return cb(err)
+      }
+
+      //split anon conf data string into array
+      var anonConfData = res.split(/\r?\n|\r/g);
+
+      //regex to match new lines
+      ///\n/
+      ///\r?\n|\r/g - handles windows too
+
+      //loop throught each setting in anon.conf
+      for (let i = 0; i < anonConfData.length; i++) {
+
+        //loop throught each "must have "setting in anon_conf_min_setup
+        for (var command in anon_conf_min_setup) {
+
+          //threat commented out lines as if they doesn't exist
+          if (anonConfData[i].includes(command + "=") && anonConfData[i][0] !== "#") {
+            //mark it as "exist"
+            anon_conf_min_setup[command]['exist'] = true;
+
+            //if anon.conf has rpcuser or rpcpassword then we want to read username and password and store it somewhere
+            if (command.includes("rpcuser") || command.includes("rpcpassword")) {
+              anon_conf_min_setup[command]['data'] = anonConfData[i].split('=')[1];
+            }
+          }
+        }
+      }
+      // $log.debug("anon_conf_min_setup:", anon_conf_min_setup);
+      return cb(null, anon_conf_min_setup);
+    })
+  }
+
+  //end of service
 });
