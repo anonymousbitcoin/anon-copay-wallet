@@ -1,10 +1,6 @@
 'use strict';
 
-<<<<<<< HEAD
 angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, configService, platformInfo, setupFullnode, networkStatsService) {
-=======
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, networkStatsService) {
->>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
 
   var readConfig = function () {
     var config = configService.getSync();
@@ -18,16 +14,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     });
   };
 
-<<<<<<< HEAD
   var fetchLocalRPCInfo = function () {
     setupFullnode.localRPCGetinfo(function(res){
       $scope.localRPCInfo = res;
       $log.debug("Here is the local daemon stats from setupFullnode controller", res)
-=======
-  var fetchLocalRPCInfo = function (cb) {
-    setupFullnode.localRPCGetinfo(function(data){
-      return cb(data)
->>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
     });
   }
 
@@ -114,7 +104,6 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
-<<<<<<< HEAD
     
     //find out from anon explorer what is the currrent block height in the network
      fetchNetworkStats(function(res){
@@ -126,17 +115,4 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       fetchLocalRPCInfo();
     // $scope.startingAnonCore = false;
   });
-=======
-     fetchNetworkStats(function(res){
-        $scope.networkStats = res;
-      });
-      fetchLocalRPCInfo(function(res){
-        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
-        $scope.localRPCInfo = res;
-      });
-    // $scope.startingAnonCore = false;
-  });
-
-
->>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
 });
