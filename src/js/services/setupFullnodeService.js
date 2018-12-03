@@ -182,12 +182,10 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-<<<<<<< HEAD
+      
       // $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
       $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
-=======
-      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
->>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
+
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
           // $scope.PostDataResponse = data;
@@ -227,11 +225,9 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-<<<<<<< HEAD
+
       $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
-=======
-      $http.defaults.headers.common.Authorization = 'Basic ' + btoa('chris:F2778D501E76A9F42EBAA7EE1D87616BFCAF7F6CAC26D086E1B2C01F4ECD874D');
->>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
+
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
           console.log("From the local full node:", data)
