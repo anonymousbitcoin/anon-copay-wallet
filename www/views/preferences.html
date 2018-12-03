@@ -11,26 +11,26 @@
 
       <div ng-include="'views/includes/walletItem.html'"></div>
 
-      <a class="item item-icon-right" ui-sref="tabs.preferences.preferencesAlias">
+      <a class="item item-icon-right" ui-sref="tabs.preferences.preferencesAlias" ng-hide="zWallet">
         <span translate>Name</span>
         <span class="item-note ellipsis">
           {{wallet.name}}
         </span>
         <i class="icon bp-arrow-right"></i>
       </a>
-      <a ng-if="!isWindowsPhoneApp" class="item item-icon-right" ui-sref="tabs.preferences.preferencesColor">
+      <a ng-if="!isWindowsPhoneApp" class="item item-icon-right" ui-sref="tabs.preferences.preferencesColor" ng-hide="zWallet">
         <span translate>Color</span>
         <i class="icon bp-arrow-right"></i>
       </a>
 
-      <ion-toggle ng-model="hiddenBalance.value" toggle-class="toggle-balanced" ng-change="hiddenBalanceChange()">
+      <ion-toggle ng-model="hiddenBalance.value" toggle-class="toggle-balanced" ng-change="hiddenBalanceChange()" ng-hide="zWallet">
         <span class="toggle-label" translate>Hide Balance</span>
       </ion-toggle>
 
       <div class="item item-divider" ng-hide="wallet.isPrivKeyExternal() || !wallet.canSign()" translate>
         Security
       </div>
-      <a class="item item-icon-right" ui-sref="tabs.preferences.backupWarning({from: 'tabs.preferences'})" ng-hide="wallet.isPrivKeyExternal()">
+      <a class="item item-icon-right" ui-sref="tabs.preferences.backupWarning({from: 'tabs.preferences'})" ng-hide="zWallet">
         <span translate>Backup</span>
         <span class="right text-light assertive" ng-show="wallet.needsBackup">
           {{'Backup needed' | translate}}
@@ -57,10 +57,21 @@
         </ion-toggle>
       </div>
       <div class="item item-divider"></div>
-      <a class="item item-icon-right" ui-sref="tabs.preferences.preferencesAdvanced">
+      <a class="item item-icon-right" ui-sref="tabs.preferences.preferencesAdvanced" ng-hide="zWallet">
         <span translate>More Options</span>
         <i class="icon bp-arrow-right"></i>
       </a>
+
+      <div  ng-if="zWallet">
+        <div class="item" translate>
+         Z Addresses With Balance
+        </div>
+
+        <div class="item" ng-repeat="w in zAddresses" copy-to-clipboard="w.address">
+          {{w.address}}
+          <div class="addr-balance">{{w.balance}} ANON</div>
+        </div>
+      </div>
     </div>
   </ion-content>
 </ion-view>

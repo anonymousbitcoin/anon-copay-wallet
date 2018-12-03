@@ -26,6 +26,10 @@ angular.module('copayApp.controllers').controller('amountController', function($
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
     var config = configService.getSync().wallet.settings;
 
+    console.log("MOONSHAKE", data.stateParams);
+
+    $scope.testnet = data.stateParams.testnet;
+    $scope.zWallet = data.stateParams.zWallet;
     function setAvailableUnits() {
 
       availableUnits = [];
@@ -43,7 +47,6 @@ angular.module('copayApp.controllers').controller('amountController', function($
       }
 
       unitIndex = 0;
-
       if (data.stateParams.coin) {
         var coins = data.stateParams.coin.split(',');
         var newAvailableUnits = [];
@@ -378,7 +381,9 @@ angular.module('copayApp.controllers').controller('amountController', function($
         toEmail: $scope.toEmail,
         toColor: $scope.toColor,
         coin: coin,
-        useSendMax: $scope.useSendMax
+        useSendMax: $scope.useSendMax,
+        zWallet: $scope.zWallet,
+        testnet: $scope.testnet
       });
     }
     $scope.useSendMax = null;

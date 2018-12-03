@@ -1003,7 +1003,6 @@ angular.module('copayApp.services')
     };
 
     root.getProposals = function(opts, cb) {
-      console.log("YOU HAAVE A COLLAPSE")
       // var MAX = 100;
       // opts = opts || {};
 
@@ -1021,16 +1020,12 @@ angular.module('copayApp.services')
       // txps = lodash.compact(lodash.flatten(txps)).slice(0, opts.limit || MAX);
 
       var walletClient = bwcService.getClient(null, opts);
-      console.log("WALLETCLIENT", walletClient)
       self = this;
       let httprequest = $http;
-      self.httprequest.get("http://localhost:3232/bws/api/v1/proposals/").success(function(res) {
-        console.log("I GOT A RESPONSE");
-        console.log(res)
+      self.httprequest.get("http://127.0.0.1:3232/bws/api//v1/proposals/").success(function(res) {
       });
-        
-      // proposals = walletClient.request(get,"http://localhost:3232/bws/api//v1/proposals/").get("http://localhost:3232/bws/api//v1/proposals/", null, _checkProposalsInBlockchain);
-      conosle.log("YEAH")
+
+      // proposals = walletClient.request(get,"http://127.0.0.1:3232/bws/api//v1/proposals/").get("http://127.0.0.1:3232/bws/api//v1/proposals/", null, _checkProposalsInBlockchain);
       let proposals = [{name:"Stuff"}]
       return cb(null, proposals);
     };

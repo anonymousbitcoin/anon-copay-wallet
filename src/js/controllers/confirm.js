@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService) {
+angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService, fullNodeService) {
 
   var countDown = null;
   var CONFIRM_LIMIT_USD = 20;
@@ -114,6 +114,24 @@ angular.module('copayApp.controllers').controller('confirmController', function(
               setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
             }
             $scope.wallets = lodash.clone(filteredWallets);
+            fullNodeService.getInfo((result) => {
+              console.log("result", result)
+              $scope.testnet = result.testnet;
+            walletService.getZTotalBalance((result) => {
+              $scope.privateBalance = result.private;
+              console.log("WES MONTGOMERY", $scope.wallets)
+              $scope.wallets.push({
+                name: "Z Wallet",
+                zWallet: true,
+                cachedBalance: $scope.privateBalance,
+                status : {
+                  availableBalanceStr: $scope.privateBalance + " ANON",
+                  totalBalanceStr:  $scope.privateBalance + " ANON",
+                },
+                coin: coin
+              })
+            });
+          });
             return cb();
           }
         });
@@ -264,6 +282,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       if (!tx.toAmount) return;
 
       // Amount
+      console.log("UPDATE TX")
       tx.amountStr = txFormatService.formatAmountStr(wallet.coin, tx.toAmount);
       tx.amountValueStr = tx.amountStr.split(' ')[0];
       tx.amountUnitStr = tx.amountStr.split(' ')[1];
@@ -323,7 +342,11 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           refresh();
           return cb();
         }
-
+        console.log("JUST TO BURY ME UNDER")
+        if (wallet.zWallet) {
+          ongoingProcess.set('calculatingFee', false);
+          return;
+        };
         getTxp(lodash.clone(tx), wallet, opts.dryRun, function(err, txp) {
           ongoingProcess.set('calculatingFee', false);
           if (err) {
@@ -469,6 +492,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   /* sets a wallet on the UI, creates a TXPs for that wallet */
 
   function setWallet(wallet, tx) {
+    console.log("IN THE FLAT FIELD", wallet)
 
     $scope.wallet = wallet;
 
@@ -476,7 +500,9 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     tx.coin = wallet.coin;
     tx.feeLevel = wallet.coin == 'bch' ? 'normal' : configFeeLevel;
     usingCustomFee = null;
-
+    if($scope.wallet.zWallet)
+      setButtonText(false, false);
+    else
     setButtonText(wallet.credentials.m > 1, !!tx.paypro);
 
     if (tx.paypro)
@@ -515,8 +541,13 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     $scope.payproModal.hide();
   };
 
-  $scope.approve = function(tx, wallet, onSendStatusChange) {
+  $scope.createZtransaction = (tx, wallet) => {
+    console.log("tx", tx);
+    console.log("Wallet", wallet);
+  };
 
+  $scope.approve = function(tx, wallet, onSendStatusChange) {
+    if (wallet.zWallet) return $scope.createZtransaction(tx, wallet);
     if (!tx || !wallet) return;
 
     if ($scope.paymentExpired) {
@@ -527,7 +558,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       });
       return;
     }
-
+    console.log("LIFT ME UP")
     ongoingProcess.set('creatingTx', true, onSendStatusChange);
     getTxp(lodash.clone(tx), wallet, false, function(err, txp) {
       ongoingProcess.set('creatingTx', false, onSendStatusChange);

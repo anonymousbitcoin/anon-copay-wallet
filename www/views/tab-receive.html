@@ -16,7 +16,7 @@
       <span translate>No Wallet</span>
     </article>
     <article class="address" ng-if="wallets[0]">
-      <div class="address-info" class="text-center" ng-if="wallet && !wallet.isComplete()">
+      <div class="address-info" class="text-center" ng-if="wallet && !wallet.isComplete() && !wallet.zWallet">
         <div class="incomplete">
           <div class="title">
             <span translate>Incomplete wallet</span>
@@ -27,7 +27,7 @@
           <button class="button button-standard button-primary" ng-click="goCopayers()" translate>Open wallet</button>
         </div>
       </div>
-      <div class="address-info" ng-if="wallet && wallet.isComplete()">
+      <div class="address-info" ng-if="wallet && wallet.isComplete() || wallet.zWallet">
         <div copy-to-clipboard="addr">
           <span ng-show="shouldShowReceiveAddressFromHardware()">
             <button class="button button-standard button-primary" ng-click="showReceiveAddressFromHardware()">
@@ -46,15 +46,25 @@
             <i class="icon ion-ios-arrow-right"></i>
           </button>
         </div>
-        <div>
+        <div ng-show="wallet.zWallet" ng-click="showAddressSelector()">
+          <button ng-show="addr" class="button-request">
+            <span translate>Select A Z Address</span>
+          </button>
+        </div>
+        <div ng-if="!wallet.zWallet">
           <button ng-show="addr" class="button-address" ng-click="setAddress(true)">
             <span translate>Generate new address</span>
+          </button>
+        </div>
+        <div ng-if="wallet.zWallet">
+          <button ng-show="addr" class="button-address" ng-click="generateZNewAddress()">
+            <span translate>Generate Z new address</span>
           </button>
         </div>
       </div>
     </article>
 
-    <div class="backup" ng-if="wallets[0] && wallet && wallet.isComplete() && wallet.needsBackup" ng-click="openBackupNeededModal()">
+    <div class="backup" ng-if="wallets[0] && wallet && wallet.isComplete() && wallet.needsBackup && !wallet.zWallet" ng-click="openBackupNeededModal()">
       <i class="icon ion-alert"></i>
       <span translate>Wallet not backed up</span>
       <i class="icon ion-ios-arrow-thin-right"></i>
@@ -88,4 +98,12 @@
     wallet-selector-show="showWallets"
     wallet-selector-on-select="onWalletSelect">
   </wallet-selector>
+  
+  <address-selector
+    address-selector-title="addressSelectorTitle"
+    address-selector-addresses="zAddresses"
+    address-selector-selected-address="address"
+    address-selector-show="showAddresses"
+    address-selector-on-select="onAddressSelect">
+  </address-selector>
 </ion-view>

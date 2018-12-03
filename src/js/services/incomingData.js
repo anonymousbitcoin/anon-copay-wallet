@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog) {
+angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog, fullNodeService, walletService) {
 
   var root = {};
 
@@ -197,12 +197,26 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       'reload': true,
       'notify': $state.current.name == 'tabs.send' ? false : true
     });
-    $timeout(function() {
-      $state.transitionTo('tabs.send.amount', {
-        toAddress: toAddress,
-        coin: coin,
-      });
-    }, 100);
+    let testnet;
+    let zWallet;
+    fullNodeService.getInfo((result) => {
+      console.log("result", result)
+      testnet = result.testnet;
+      
+      walletService.getZTotalBalance((result) => {
+        console.log("AUBURN AND IVORY", result)
+        zWallet = result.private ? true : false;
+  
+        $timeout(function() {
+          $state.transitionTo('tabs.send.amount', {
+            toAddress: toAddress,
+            coin: coin,
+            zWallet,
+            testnet
+          });
+        }, 100);
+      })
+    });
   }
 
   function handlePayPro(payProDetails, coin) {

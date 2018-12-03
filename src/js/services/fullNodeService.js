@@ -18,8 +18,8 @@ angular.module('copayApp.services').factory('fullNodeService', function($window,
 
          }
      }
-    //  $http.defaults.headers.common.Authorization = 'nick1 sbibw234ibasfisifj';
-    $http.defaults.headers.common.Authorization = 'Basic bHVpczpwYXNzd29yZA==';
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
      
      $http.post('http://localhost:1337/localhost:3005', data, config)
      .success(function (data, status, headers, config) {

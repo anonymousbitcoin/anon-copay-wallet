@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('tabSettingsController', function($rootScope, $timeout, $scope, appConfigService, $ionicModal, $log, lodash, uxLanguage, platformInfo, profileService, feeService, configService, externalLinkService, storageService, gettextCatalog, buyAndSellService) {
+angular.module('copayApp.controllers').controller('tabSettingsController', function($rootScope, $timeout, $scope, appConfigService, $ionicModal, $log, lodash, uxLanguage, platformInfo, profileService, feeService, configService, externalLinkService, storageService, gettextCatalog, buyAndSellService, fullNodeService) {
 
   var updateConfig = function() {
     $scope.currentLanguageName = uxLanguage.getCurrentLanguageName();
@@ -33,6 +33,11 @@ angular.module('copayApp.controllers').controller('tabSettingsController', funct
   };
 
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
+
+    fullNodeService.getInfo(result => {
+      $scope.mainnet = !result.testnet
+      $scope.testnet = result.testnet
+    })
     $scope.isCordova = platformInfo.isCordova;
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     $scope.isDevel = platformInfo.isDevel;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('tabHomeController',
-  function($rootScope, $timeout, $scope, $state, $stateParams, $ionicModal, $ionicScrollDelegate, $window, gettextCatalog, lodash, popupService, ongoingProcess, externalLinkService, latestReleaseService, profileService, walletService, configService, $log, platformInfo, storageService, txpModalService, appConfigService, startupService, addressbookService, feedbackService, bwcError, nextStepsService, buyAndSellService, homeIntegrationsService, pushNotificationsService, timeService) {
+  function($rootScope, $timeout, $scope, $state, $stateParams, $ionicModal, $ionicScrollDelegate, $window, gettextCatalog, lodash, popupService, ongoingProcess, externalLinkService, latestReleaseService, profileService, walletService, configService, $log, platformInfo, storageService, txpModalService, appConfigService, startupService, addressbookService, feedbackService, bwcError, nextStepsService, buyAndSellService, homeIntegrationsService, pushNotificationsService, timeService, fullNodeService) {
     var wallet;
     var listeners = [];
     var notifications = [];
@@ -21,6 +21,14 @@ angular.module('copayApp.controllers').controller('tabHomeController',
     });
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
+      fullNodeService.getInfo(result => {
+        $scope.mainnet = !result.testnet
+        $scope.testnet = result.testnet
+      })
+
+      walletService.getZTotalBalance((result) => {
+        $scope.privateBalance = result.private;
+      });
       if (!$scope.homeTip) {
         storageService.getHomeTipAccepted(function(error, value) {
           $scope.homeTip = (value == 'accepted') ? false : true;
@@ -177,13 +185,20 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
     $scope.openWallet = function(wallet) {
       if (!wallet.isComplete()) {
+        
         return $state.go('tabs.copayers', {
           walletId: wallet.credentials.walletId
         });
       }
-
+     
       $state.go('tabs.wallet', {
         walletId: wallet.credentials.walletId
+      });
+    };
+
+    $scope.openZWallet = function() {
+      $state.go('tabs.zWallet', {
+        walletName: "Mainnet Z Wallet"
       });
     };
 

@@ -1,5 +1,30 @@
 .settings {
   @extend .deflash-blue;
+  .addr {
+    &-explanation, &-button-group {
+      padding: 0 1rem;
+      margin: 1rem 0;
+    }
+    &-description {
+      text-align: center;
+      font-size: 0.9em;
+      color: $v-mid-gray;
+      margin: 1rem 0;
+      a {
+        font-weight: bold;
+        cursor: pointer;
+        cursor: hand;
+      }
+    }
+    &-balance {
+      margin-top: 4px;
+      color: #5DD263;
+    }
+    &-path {
+      margin-top: 4px;
+      color: #B8B8B8;
+    }
+  }
   .icon-bitpay {
     background-image: url("../img/icon-bitpay.svg");
   }
