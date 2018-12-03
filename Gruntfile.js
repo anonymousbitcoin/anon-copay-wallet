@@ -92,7 +92,8 @@ module.exports = function(grunt) {
           'src/js/routes.js',
           'src/js/services/*.js',
           'src/js/models/*.js',
-          'src/js/controllers/**/*.js'
+          'src/js/controllers/**/*.js',
+          'www/views/*.html'
         ],
         tasks: ['concat:js']
       },

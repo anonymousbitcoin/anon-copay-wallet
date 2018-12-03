@@ -1,11 +1,35 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
+<<<<<<< HEAD
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, configService, platformInfo, setupFullnode, networkStatsService) {
+=======
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, networkStatsService) {
+>>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
 
   var readConfig = function () {
     var config = configService.getSync();
     $rootScope.isFullnodeDownloaded = config.wallet.isFullnodeDownloaded;
   };
+
+  var fetchNetworkStats = function (cb) {
+    // return cb(networkStatsService.getInfo());
+    networkStatsService.getInfo(function(data){
+      return cb(data)
+    });
+  };
+
+<<<<<<< HEAD
+  var fetchLocalRPCInfo = function () {
+    setupFullnode.localRPCGetinfo(function(res){
+      $scope.localRPCInfo = res;
+      $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+=======
+  var fetchLocalRPCInfo = function (cb) {
+    setupFullnode.localRPCGetinfo(function(data){
+      return cb(data)
+>>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
+    });
+  }
 
   var UpdateConfig = function () {
     var opts = {
@@ -51,7 +75,15 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       } else if(res) {
         $log.debug("Successfully started...")
         $scope.startlog = "Successfully started..."
+        //delay a call to rpc after starting a fullnode because it may not be ready (3 sec)
+        $timeout(function(){
+          fetchLocalRPCInfo();
+        }, 3000);
         $rootScope.isAnonCoreON = true;
+        fetchLocalRPCInfo(function(res){
+          $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+          $scope.localRPCInfo = res;
+        });
       }
       $scope.startingAnonCore = false;
       $scope.$apply();
@@ -81,10 +113,30 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
-    // readConfig();
-    $scope.installationStarted = false;
-    // $rootScope.isFullnodeDownloaded = false;
+    readConfig();
+<<<<<<< HEAD
+    
+    //find out from anon explorer what is the currrent block height in the network
+     fetchNetworkStats(function(res){
+        $scope.networkStats = res;
+      });
+    
+    //fetch only when local node is ON
+    if($rootScope.isAnonCoreON)
+      fetchLocalRPCInfo();
+    // $scope.startingAnonCore = false;
+  });
+=======
+     fetchNetworkStats(function(res){
+        $scope.networkStats = res;
+      });
+      fetchLocalRPCInfo(function(res){
+        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+        $scope.localRPCInfo = res;
+      });
     // $scope.startingAnonCore = false;
   });
 
+
+>>>>>>> 03be316715c2b9ee7f693547418b2cd9f24c2ca6
 });
