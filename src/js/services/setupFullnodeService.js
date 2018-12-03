@@ -142,16 +142,16 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       //create listeners
       ex.once('error', function (err) {
         // ex.removeListener('error', callback(err.toString(), null, null));
-        return callback(err.toString(), null, null);
+        return callback(err.toString());
       });
       ex.stdout.once('data', function (stdout) {
         // ex.removeListener('data', callback(null, stdout.toString(), null));
-        return callback(null, stdout.toString(), null);
+        return callback(null, stdout.toString());
       });
 
-      ex.stderr.once('stderr', function (stderr) {
+      ex.stderr.once('data', function (stderr) {
         // ex.removeListener('stderr', callback(null, null, stderr.toString()));
-        return callback(null, null, stderr.toString());
+        return callback(stderr.toString());
       });
     };
 
@@ -182,7 +182,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           'Content-Type': 'application/json'
         }
       }
-      
+
       // $http.defaults.headers.common.Authorization = 'Basic ' + btoa('user:password');
       $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
 
