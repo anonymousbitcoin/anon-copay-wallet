@@ -42,7 +42,7 @@ angular.module('copayApp.controllers').controller('tabGovernanceController', fun
            }
        }
       //  
-      $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
+      $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
        
        $http.post('http://localhost:1337/localhost:3005', data, config)
        .success(function (data, status, headers, config) {

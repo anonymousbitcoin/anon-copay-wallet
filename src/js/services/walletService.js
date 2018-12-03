@@ -575,7 +575,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
          }
      };
     //  
-    $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
+    $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
      for(let i = 0; i < addresses.length; i++) {
       let data = {
         "method": "z_getbalance",
@@ -614,7 +614,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
          }
      }
     //  
-    $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
+    $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
      
      $http.post('http://localhost:1337/localhost:3005', data, config)
      .success(function (data, status, headers, config) {
@@ -646,7 +646,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
        }
    }
   //  
-  $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
+  $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
    
    $http.post('http://localhost:1337/localhost:3005', data, config)
    .success(function (data, status, headers, config) {
@@ -680,7 +680,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
        }
    }
   //  
-  $http.defaults.headers.common.Authorization = 'Basic rpcuser:rpcpassword==';
+  $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
    
    $http.post('http://localhost:1337/localhost:3005', data, config)
    .success(function (data, status, headers, config) {

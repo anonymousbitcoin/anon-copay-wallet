@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('tabHomeController',
-  function($rootScope, $timeout, $scope, $state, $stateParams, $ionicModal, $ionicScrollDelegate, $window, gettextCatalog, lodash, popupService, ongoingProcess, externalLinkService, latestReleaseService, profileService, walletService, configService, $log, platformInfo, storageService, txpModalService, appConfigService, startupService, addressbookService, feedbackService, bwcError, nextStepsService, buyAndSellService, homeIntegrationsService, pushNotificationsService, timeService, fullNodeService) {
+  function($rootScope, $timeout, $scope, $state, $stateParams, $ionicModal, $ionicScrollDelegate, $window, gettextCatalog, lodash, popupService, ongoingProcess, externalLinkService, latestReleaseService, profileService, walletService, configService, $log, platformInfo, storageService, txpModalService, appConfigService, startupService, addressbookService, feedbackService, bwcError, nextStepsService, buyAndSellService, homeIntegrationsService, pushNotificationsService, timeService, setupFullnode) {
     var wallet;
     var listeners = [];
     var notifications = [];
@@ -21,14 +21,10 @@ angular.module('copayApp.controllers').controller('tabHomeController',
     });
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
-      fullNodeService.getInfo(result => {
-        $scope.mainnet = !result.testnet
-        $scope.testnet = result.testnet
-      })
+      //load config regarding fullnode
+      var config = configService.getSync();
+      $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
 
-      walletService.getZTotalBalance((result) => {
-        $scope.privateBalance = result.private;
-      });
       if (!$scope.homeTip) {
         storageService.getHomeTipAccepted(function(error, value) {
           $scope.homeTip = (value == 'accepted') ? false : true;
@@ -36,6 +32,10 @@ angular.module('copayApp.controllers').controller('tabHomeController',
       }
 
       if ($scope.isNW) {
+        //if fullnode mode is activated check if Anon fullnode already running
+        if($rootScope.isFullnodeMode)
+          setupFullnode.checkIfAnonFullnodeONService();
+
         latestReleaseService.checkLatestRelease(function(err, newRelease) {
           if (err) {
             $log.warn(err);
@@ -185,12 +185,12 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
     $scope.openWallet = function(wallet) {
       if (!wallet.isComplete()) {
-        
+
         return $state.go('tabs.copayers', {
           walletId: wallet.credentials.walletId
         });
       }
-     
+
       $state.go('tabs.wallet', {
         walletId: wallet.credentials.walletId
       });

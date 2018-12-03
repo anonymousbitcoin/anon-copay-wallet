@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('tabSendController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService, fullNodeService) {
+angular.module('copayApp.controllers').controller('tabSendController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService, networkStatsService) {
 
   var originalList;
   var CONTACTS_SHOW_LIMIT;
@@ -182,7 +182,7 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
 
   $scope.goToAmount = function(item) {
     console.log("ONE TWO THREE FOUR")
-    fullNodeService.getInfo((result) => {
+    networkStatsService.getInfo((result) => {
       console.log("result", result)
       $scope.testnet = result.testnet;
       

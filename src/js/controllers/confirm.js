@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService, fullNodeService) {
+angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService, networkStatsService) {
 
   var countDown = null;
   var CONFIRM_LIMIT_USD = 20;
@@ -114,7 +114,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
               setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
             }
             $scope.wallets = lodash.clone(filteredWallets);
-            fullNodeService.getInfo((result) => {
+            networkStatsService.getInfo((result) => {
               console.log("result", result)
               $scope.testnet = result.testnet;
             walletService.getZTotalBalance((result) => {

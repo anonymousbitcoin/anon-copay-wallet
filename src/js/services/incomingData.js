@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog, fullNodeService, walletService) {
+angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog, networkStatsService, walletService) {
 
   var root = {};
 
@@ -199,7 +199,7 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
     });
     let testnet;
     let zWallet;
-    fullNodeService.getInfo((result) => {
+    networkStatsService.getInfo((result) => {
       console.log("result", result)
       testnet = result.testnet;
       
