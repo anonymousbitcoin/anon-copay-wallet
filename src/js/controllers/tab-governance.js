@@ -44,7 +44,7 @@ angular.module('copayApp.controllers').controller('tabGovernanceController', fun
       //  
       $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
        
-       $http.post('http://localhost:1337/localhost:3005', data, config)
+       $http.post('http://localhost:3130', data, config)
        .success(function (data, status, headers, config) {
            $scope.PostDataResponse = data;
        })

@@ -575,13 +575,15 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
          }
      };
     //  
-    $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
+    console.log("BLACK CAR", 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword));
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
      for(let i = 0; i < addresses.length; i++) {
       let data = {
         "method": "z_getbalance",
         "params": [addresses[i]]
       };
-      $http.post('http://localhost:1337/localhost:3005', data, config)
+      $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
          //  $scope.PostDataResponse = data;
           addressesWithBalances.push({address: addresses[i], balance: data.result})
@@ -614,9 +616,10 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
          }
      }
     //  
-    $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
      
-     $http.post('http://localhost:1337/localhost:3005', data, config)
+     $http.post('http://localhost:3130', data, config)
      .success(function (data, status, headers, config) {
         //  $scope.PostDataResponse = data;
           return root.getZAddressesBalances(cb, data.result);
@@ -646,9 +649,10 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
        }
    }
   //  
-  $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
+  $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
    
-   $http.post('http://localhost:1337/localhost:3005', data, config)
+   $http.post('http://localhost:3130', data, config)
    .success(function (data, status, headers, config) {
       //  $scope.PostDataResponse = data;
       console.log("I HAVE RETURNED DATA")
@@ -665,8 +669,9 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
    });
 };
 
- root.getZTotalBalance = cb => {
-  // use $.param jQuery function to serialize data from JSON 
+ root.getZTotalBalance = (cb) => {
+  // use $.param jQuery function to serialize data from JSON '
+  console.log("YOU CAN'T GET YOURS OFF THE HOSTESS")
    let data = {
        "method": "z_gettotalbalance"
    };
@@ -680,11 +685,13 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
        }
    }
   //  
-  $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
+  $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
    
-   $http.post('http://localhost:1337/localhost:3005', data, config)
+   $http.post('http://localhost:3130', data, config)
    .success(function (data, status, headers, config) {
       //  $scope.PostDataResponse = data;
+      console.log("OOOOOOOHHHHH", data)
         return cb(data.result);
    })
    .error(function (data, status, header, config) {

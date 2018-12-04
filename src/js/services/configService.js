@@ -79,7 +79,7 @@ angular.module('copayApp.services').factory('configService', function(storageSer
     },
 
     release: {
-      url: 'https://api.github.com/repos/anonymousbitcoin/anon-copay-wallet/releases/latest'
+      // url: 'https://api.github.com/repos/anonymousbitcoin/anon-copay-wallet/releases/latest'
     },
 
     pushNotificationsEnabled: true,

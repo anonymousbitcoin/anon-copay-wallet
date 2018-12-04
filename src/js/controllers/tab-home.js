@@ -17,11 +17,13 @@ angular.module('copayApp.controllers').controller('tabHomeController',
     $scope.showRateCard = {};
 
     $scope.$on("$ionicView.afterEnter", function() {
+      console.log("WHY AM I NOT HERE")
       startupService.ready();
     });
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
       //load config regarding fullnode
+      console.log("THIS HOUSE")
       var config = configService.getSync();
       $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
 
@@ -31,16 +33,31 @@ angular.module('copayApp.controllers').controller('tabHomeController',
         });
       }
 
+      console.log("PULLS TO THE RIGHT");
       if ($scope.isNW) {
+        console.log("TIL DEATH");
         //if fullnode mode is activated check if Anon fullnode already running
         if($rootScope.isFullnodeMode){
+          console.log("BOOLEAN")
           setupFullnode.setupAnonConfService(function(err,res){
             if(err)
               $log.debug("Error: tabHomeController->setupAnonConfService - ", err)
             else {
             $rootScope.RPCusername = res.rpcuser.data;
             $rootScope.RPCpassword = res.rpcpassword.data;
+            console.log("LOSE YOUR SMILE", $rootScope)
             setupFullnode.checkIfAnonFullnodeONService();
+            $scope.mainnet = !$rootScope.testnet
+            $scope.testnet = $rootScope.testnet
+            walletService.getZTotalBalance((result) => {
+              console.log("Z GET TOTAL BALANCE", result)
+              $scope.privateBalance = result.private;
+            });
+            checkIfAnonFullnodeONService.localRPCGetinfo(result => {
+              console.log("RESULT", result)
+              $scope.mainnet = !result.testnet
+              $scope.testnet = result.testnet
+            })
           }
 
           });
@@ -59,7 +76,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
           }
         });
       }
-
+      
       storageService.getFeedbackInfo(function(error, info) {
 
         if ($scope.isWindowsPhoneApp) {
