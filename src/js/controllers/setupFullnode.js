@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, configService, platformInfo, setupFullnode, networkStatsService) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, rpcService, configService, platformInfo, setupFullnode, networkStatsService) {
 
   // var readConfig = function () {
   //   var config = configService.getSync();
