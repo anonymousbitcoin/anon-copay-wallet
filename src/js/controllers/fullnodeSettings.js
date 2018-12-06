@@ -48,6 +48,7 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     readConfig();
+    $log.debug("which OS: ", platformInfo.OS);
     
     if ($rootScope.isFullnodeMode){
       setupAnonConf();

@@ -12,6 +12,15 @@ angular.module('copayApp.services').factory('platformInfo', function($window) {
   // Fixes IOS WebKit UA
   ua = ua.replace(/\(\d+\)$/, '');
 
+  var whichOS = function() {
+    if(navigator.platform.indexOf('Win') > -1)
+      return "Win";
+    else if (navigator.platform.indexOf('Mac') > -1)
+      return "Mac";
+    else 
+      return "Unsupported";
+  };
+
   var isNodeWebkit = function() {
     var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
     if (isNode) {
@@ -54,6 +63,7 @@ angular.module('copayApp.services').factory('platformInfo', function($window) {
     ua: ua,
     isCordova: !!$window.cordova,
     isNW: isNodeWebkit(),
+    OS: whichOS()
   };
 
   ret.isMobile = ret.isAndroid || ret.isIOS || ret.isWP;

@@ -34,12 +34,14 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.downloadAnonCore = function () {
     $scope.installationStarted = true;
-    setupFullnode.downloadAnonService(function (error, res) {
+    setupFullnode.downloadAnonService(function (err, res) {
       // $log.debug("left downloadAnonService");
       // $log.debug("error:", error);
       // $log.debug("res:", res);
-      if (error)
+      if (err){
+        $log.debug("Error: setupFullnode->downloadAnonCore - ", err)
         $rootScope.isFullnodeDownloaded = false;
+      }
       else {
         $scope.downloadanonlog = res;
         $rootScope.isFullnodeDownloaded = true;
