@@ -5,8 +5,6 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
     $scope.$on("$ionicView.enter", function(event, data) {
 		$scope.governanceProposal;
 		$scope.createGovernanceProposal = (governanceProposal) => {
-			console.log(governanceProposal);
-			console.log("governanceProposal.conf will look like this:");
 		};
     });
 
@@ -26,17 +24,6 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 
 
   $scope.add = function(governanceProposal) {
-    // $timeout(function() {
-	// 	governanceProposalCreateService.add(governanceProposal, function(err, mn) {
-	// 	console.log("ALL MASTERNODES: ", mn)
-	// 	if (err) {
-    //       popupService.showAlert(gettextCatalog.getString('Error'), err);
-    //       return;
-    //     }
-    //     if ($scope.fromSendTab) $scope.goHome();
-	// 	else $ionicHistory.goBack();
-    //   });
-	// }, 100)
 	governanceProposal.payment_amount = 5;
 	governanceProposal.start_epoch = new Date();
 	governanceProposal.start_epoch = Math.floor(governanceProposal.start_epoch.setDate(governanceProposal.start_epoch.getDate()) / 1000);
@@ -46,64 +33,44 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 
 
 	let formattedProposal = [["proposal", governanceProposal]];
-	// console.log("FORMATTED OBJECT:");
-	// console.log(formattedProposal);
 
 	let serialized = governanceProposalService.serialize(formattedProposal);
-	// console.log("Serialized:");
-	// console.log(serialized);
 
 	// var newBuffer = serialized.toBuffer().toString('hex');
 	// var newBuffer = Buffer(serialized);
 	var newBuffer = governanceProposalService.bufferProposal(serialized);
-	// console.log("The hex???::::");
-	// console.log(newBuffer);
 
 
 	var prepareProposal = ("gobject prepare 0 1 " + governanceProposal.start_epoch + " " + newBuffer);
 	
-	console.log("Prepare gobject:");
-	console.log(prepareProposal);
-	// console.log("THIS IS THE SELECTED WALLET")
-	// console.log($scope.wallet);
 
 	var avaliableBalances = $scope.wallet.cachedStatus.balanceByAddress;
-	// console.log("addresses with avaliable balances:");
-	// console.log(avaliableBalances);
 	var validAddress;
 
 	for (let i = 0; i < avaliableBalances.length; i++){
 		if(avaliableBalances[i].amount > 500000001){
 			validAddress = avaliableBalances[i];
-			console.log("Found address with 5+ anon: ", validAddress);
 			break;
 		} else {
-			console.log("NO ADDRESSES WITH ENOUGH FUNDS! THIS SHOULD NOT BE SEEN");
 		}
 	}
 
 	walletService.getMainAddresses($scope.wallet, null, (err, result) => {
-		// console.log("HERE I AM IN THE RESULT", result);
 		let numAddresses = result.length;
-		// console.log("number of addresses within object:", numAddresses);
 		let address;
 
 		for (let i = 0; i < numAddresses; i++) { 
 			if(result[i].address == validAddress.address){
 				address = result[i].address;
-				console.log("ADDRESS: ", address)
 				break;
 			}
 			
 		}
-		console.log("ADDRESS: ", address)
 		let addy = address;
 		// if (address != avaliableBalances){
 		// 	address = result[1].address;
 		// }
 		governanceProposalService.getTxId(addy, function(err, result){
-			// console.log("result:");
-			// console.log(result);
 			return result;
 		});
 	});
@@ -120,8 +87,6 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 		
 	  var allWallets = profileService.getWallets(opts);
   
-	  console.log('allwallets:');
-	  console.log(allWallets);
 	}
 //   $scope.openGovernanceProposalModal = function(proposal) {
 //     $ionicModal.fromTemplateUrl('views/modals/governance-proposal-info.html', {
@@ -191,9 +156,6 @@ opts.minAmount = 500000100;
 		
 var allWallets = profileService.getWallets(opts);
 
-console.log('allwallets:');
-console.log(allWallets);
-
 $scope.wallets = allWallets;
 $scope.walletSelectorTitle = "All The Wallets"
 // $scope.showWallets = false;
@@ -207,7 +169,6 @@ $scope.walletSelectorTitle = "All The Wallets"
 
   $scope.makeVisible = function() {
 	$scope.showModal = true;
-	console.log('makeVisible Clicked');
   };
 
   $scope.showWalletSelector = function() {
@@ -215,11 +176,6 @@ $scope.walletSelectorTitle = "All The Wallets"
     $scope.walletSelectorTitle = gettextCatalog.getString('Select a wallet');
 	$scope.showWallets = true;
 	$scope.showModal = true;
-	console.log('showwalletselector clicked');
 
   };
-
-
-
-
 });

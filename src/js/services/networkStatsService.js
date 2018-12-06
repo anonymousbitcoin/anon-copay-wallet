@@ -22,9 +22,6 @@ angular.module('copayApp.services').service('networkStatsService', function($htt
     this.getInfo = function(cb) {
         $http.get('https://explorer.anonfork.io/insight-api-anon/status?q=getinfo')
         .success(function(data, status) {
-            console.log(data)
-            console.log("network blocks", data.info.blocks)
-            console.log("Success status getinfo", status)
             return cb(data);
         })
         .error(function (data, status, header, config) {

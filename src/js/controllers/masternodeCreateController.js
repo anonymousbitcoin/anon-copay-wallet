@@ -27,8 +27,6 @@ angular.module('copayApp.controllers').controller('masternodeCreateController', 
     $scope.$on("$ionicView.enter", function(event, data) {
 		$scope.masternode;
 		$scope.createMasternode = (masternode) => {
-			console.log(masternode);
-			console.log("masternode.conf will look like this:");
 		};
     });
 
@@ -50,7 +48,6 @@ angular.module('copayApp.controllers').controller('masternodeCreateController', 
   $scope.add = function(masternode) {
     $timeout(function() {
 		masternodeCreateService.add(masternode, function(err, mn) {
-		console.log("ALL MASTERNODES: ", mn)
 		if (err) {
           popupService.showAlert(gettextCatalog.getString('Error'), err);
           return;

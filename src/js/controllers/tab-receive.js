@@ -14,18 +14,15 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
   };
 
   $scope.setAddress = function(newAddr) {
-    console.log("I AM THE SCOPE", $scope)
     $scope.addr = null;
-    console.log("!$scope.wallet || $scope.generatingAddress", !$scope.wallet || $scope.generatingAddress)
+
     if (!$scope.wallet || $scope.generatingAddress) return;
     
     if ($scope.wallet.zWallet){
       $scope.generateZAddress();
-      console.log("I HAVE GENERatED A NEW Z ADDRESS")
       return;
     } 
     $scope.generatingAddress = true;
-    console.log("DO I M AKE IT HERe?")
     walletService.getAddress($scope.wallet, newAddr, function(err, addr) {
       $scope.generatingAddress = false;
 
@@ -35,7 +32,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
       }
 
       $scope.addr = addr;
-      console.log("I AM THE NEW Z ADDRESS", $scope.addr)
       $timeout(function() {
         $scope.$apply();
       }, 10);
@@ -56,7 +52,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
       $scope.addr = largestAddress.address
       $scope.address = largestAddress.address
-      console.log($scope.addr)
       $scope.zAddresses = zAddresses;
     });
   }
@@ -66,7 +61,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
       $scope.addr = address
       $scope.address = address
-      console.log("DAFGHDFGADGHSARGASDFG", $scope.addr)
     });
   }
 
@@ -139,7 +133,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
     walletService.getZTotalBalance((result) => {
       $scope.privateBalance = result.private;
-      console.log("WES MONTGOMERY", $scope.wallets)
       $scope.wallets.push({
         name: "Z Wallet",
         zWallet: true,
@@ -151,7 +144,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
       })
     });
 
-    console.log($scope.wallets);
     $scope.singleWallet = $scope.wallets.length == 1;
 
     if (!$scope.wallets[0]) return;
@@ -190,7 +182,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
   }
 
   $scope.onWalletSelect = function(wallet) {
-    console.log("ON WALLET SELECT SELECTED")
     $scope.wallet = wallet;
     setProtocolHandler();
     $scope.setAddress();
@@ -203,7 +194,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
   };
 
   $scope.onAddressSelect = function(address) {
-    console.log("HEY HEY HEY HEY HEYUH")
     $scope.address = address;
     $scope.addr = address.address;
     // setProtocolHandler();
@@ -211,12 +201,9 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
   };
 
   $scope.showAddressSelector = function() {
-    console.log("I HAVE BEEN SELECTED")
     if ($scope.singleAddress) return;
     $scope.addressSelectorTitle = gettextCatalog.getString('Select a address');
     $scope.showAddresses = true;
-    console.log("VItAMin c", $scope.zAddresses)
-    console.log("WE WAX AND WANE")
   };
 
   $scope.shareAddress = function() {

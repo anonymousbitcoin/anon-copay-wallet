@@ -90,6 +90,13 @@
 
           <i ng-if="wallet.coin == 'anon'" class="icon bp-arrow-right"></i>
         </div>
+        <a class="item item-icon-right" ng-if="wallet.zWallet" ng-click="showAddressSelector()">
+          <span class="label" translate>Select a Z Address</span>
+          <span class="item-note m10l">
+            {{selectedZAddress}} {{selectedZAddressBalance}}
+          </span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
         <a class="item item-icon-right" ng-if="wallet" ng-click="showDescriptionPopup(tx)">
           <span class="label" translate>Add Memo</span>
           <span class="item-note m10l">
@@ -133,5 +140,12 @@
     wallet-selector-show="walletSelector"
     wallet-selector-on-select="onWalletSelect">
   </wallet-selector>
+  <address-selector
+    address-selector-title="addressSelectorTitle"
+    address-selector-addresses="zAddresses"
+    address-selector-selected-address="address"
+    address-selector-show="showAddresses"
+    address-selector-on-select="onAddressSelect">
+  </address-selector>
 
 </ion-view>

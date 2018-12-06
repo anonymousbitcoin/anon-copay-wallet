@@ -84,10 +84,6 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 				}
 			).then(res => res.json()).then(response => {
 		let utxo = response[0].txid;
-		console.log('UTXO HERE: ');
-		console.log(utxo);
-		console.log("--------------------------")
-		console.log(cb(null,utxo));
 		return cb(null, utxo);
     })
     .catch(err => {

@@ -159,7 +159,6 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
   };
 
   $scope.findContact = function(search) {
-
     if (incomingData.redir(search)) {
       return;
     }
@@ -181,13 +180,10 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
   };
 
   $scope.goToAmount = function(item) {
-    console.log("ONE TWO THREE FOUR")
     networkStatsService.getInfo((result) => {
-      console.log("result", result)
       $scope.testnet = result.testnet;
       
       walletService.getZTotalBalance((result) => {
-        console.log("AUBURN AND IVORY", result)
         $scope.zWallet = result.private ? true : false;
   
         $timeout(function() {

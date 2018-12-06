@@ -71,7 +71,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
 
     function setWalletSelector(coin, network, minAmount, cb) {
-
       // no min amount? (sendMax) => look for no empty wallets
       minAmount = minAmount || 1;
 
@@ -81,7 +80,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
         coin: coin
       });
 
-      if (!$scope.wallets || !$scope.wallets.length) {
+      if ((!$scope.wallets || !$scope.wallets.length) && $scope.selectedZAddressBalance === 0) {
         setNoWallet(gettextCatalog.getString('No wallets available'), true);
         return cb();
       }
@@ -89,7 +88,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       var filteredWallets = [];
       var index = 0;
       var walletsUpdated = 0;
-
       lodash.each($scope.wallets, function(w) {
         walletService.getStatus(w, {}, function(err, status) {
           if (err || !status) {
@@ -100,40 +98,43 @@ angular.module('copayApp.controllers').controller('confirmController', function(
 
             if (!status.availableBalanceSat)
               $log.debug('No balance available in: ' + w.name);
-
             if (status.availableBalanceSat > minAmount) {
               filteredWallets.push(w);
             }
+            
           }
 
           if (++index == $scope.wallets.length) {
             if (!walletsUpdated)
               return cb('Could not update any wallet');
 
-            if (lodash.isEmpty(filteredWallets)) {
-              setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
-            }
             $scope.wallets = lodash.clone(filteredWallets);
-            networkStatsService.getInfo((result) => {
-              console.log("result", result)
-              $scope.testnet = result.testnet;
-            walletService.getZTotalBalance((result) => {
-              $scope.privateBalance = result.private;
-              console.log("WES MONTGOMERY", $scope.wallets)
-              $scope.wallets.push({
-                name: "Z Wallet",
-                zWallet: true,
-                cachedBalance: $scope.privateBalance,
-                status : {
-                  availableBalanceStr: $scope.privateBalance + " ANON",
-                  totalBalanceStr:  $scope.privateBalance + " ANON",
-                },
-                coin: coin
-              })
-            });
-          });
-            return cb();
+
           }
+        });
+      });
+      networkStatsService.getInfo((result) => {
+        $scope.testnet = result.testnet;
+        
+        walletService.getZTotalBalance((result) => {
+          $scope.privateBalance = result.private;
+          // if($scope.selectedZAddressBalance > minAmount) {
+          //   filteredWallets.push($scope.wallets)
+          // }
+          $scope.wallets.push({
+            name: "Z Wallet",
+            zWallet: true,
+            cachedBalance: $scope.privateBalance,
+            status : {
+              availableBalanceStr: $scope.privateBalance + " ANON",
+              totalBalanceStr:  $scope.privateBalance + " ANON",
+            },
+            coin: coin
+          })
+          if (lodash.isEmpty($scope.wallets)) {
+            setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
+          }
+          return cb();
         });
       });
     };
@@ -142,26 +143,28 @@ angular.module('copayApp.controllers').controller('confirmController', function(
 
     var B = bitcoreAnon;
     var networkName;
-    try {
-      networkName = (new B.Address(data.stateParams.toAddress)).network.name;
-    } catch(e) {
-      var message = gettextCatalog.getString('Copay only supports Anon Cash using new version numbers addresses');
-      var backText = gettextCatalog.getString('Go back');
-      var learnText = gettextCatalog.getString('Learn more');
-      popupService.showConfirm(null, message, backText, learnText, function(back) {
-        $ionicHistory.nextViewOptions({
-          disableAnimate: true,
-          historyRoot: true
+    if(!data.stateParams.toAddress.startsWith("zt") && !data.stateParams.toAddress.startsWith("zc")){
+      try {
+        networkName = (new B.Address(data.stateParams.toAddress)).network.name;
+      } catch(e) {
+        var message = gettextCatalog.getString('Copay only supports Anon Cash using new version numbers addresses');
+        var backText = gettextCatalog.getString('Go back');
+        var learnText = gettextCatalog.getString('Learn more');
+        popupService.showConfirm(null, message, backText, learnText, function(back) {
+          $ionicHistory.nextViewOptions({
+            disableAnimate: true,
+            historyRoot: true
+          });
+          $state.go('tabs.send').then(function() {
+            $ionicHistory.clearHistory();
+            if (!back) {
+              var url = 'https://support.bitpay.com/hc/en-us/articles/115004671663';
+              externalLinkService.open(url);
+            }
+          });
         });
-        $state.go('tabs.send').then(function() {
-          $ionicHistory.clearHistory();
-          if (!back) {
-            var url = 'https://support.bitpay.com/hc/en-us/articles/115004671663';
-            externalLinkService.open(url);
-          }
-        });
-      });
-      return;
+        return;
+      }
     }
 
     // Grab stateParams
@@ -206,6 +209,8 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       }
     });
 
+    $scope.generateZAddress();
+
   });
 
 
@@ -222,7 +227,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
 
 
   function getTxp(tx, wallet, dryRun, cb) {
-
     // ToDo: use a credential's (or fc's) function for this
     if (tx.description && !wallet.credentials.sharedEncryptingKey) {
       var msg = gettextCatalog.getString('Could not add message to imported wallet without shared encrypting key');
@@ -282,7 +286,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       if (!tx.toAmount) return;
 
       // Amount
-      console.log("UPDATE TX")
       tx.amountStr = txFormatService.formatAmountStr(wallet.coin, tx.toAmount);
       tx.amountValueStr = tx.amountStr.split(' ')[0];
       tx.amountUnitStr = tx.amountStr.split(' ')[1];
@@ -342,8 +345,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           refresh();
           return cb();
         }
-        console.log("JUST TO BURY ME UNDER")
-        if (wallet.zWallet) {
+        if (wallet.zWallet || tx.toAddress.startsWith("zt") || tx.toAddress.startsWith("zc")) {
           ongoingProcess.set('calculatingFee', false);
           return;
         };
@@ -492,7 +494,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   /* sets a wallet on the UI, creates a TXPs for that wallet */
 
   function setWallet(wallet, tx) {
-    console.log("IN THE FLAT FIELD", wallet)
 
     $scope.wallet = wallet;
 
@@ -540,14 +541,47 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   $scope.cancel = function() {
     $scope.payproModal.hide();
   };
+  $scope.generateZAddress = () => {
+    walletService.getZTransactions((addresses) => {
+      let zAddresses = []
+      let largestAddress = {
+        balance: 0
+      };
+      addresses.forEach((val, ix) => {
+        if (val.balance  !== 0 && val.balance > largestAddress.balance)
+        largestAddress = val;
+        zAddresses.push(val) 
+      })
+
+      $scope.selectedZAddress = largestAddress.address
+      $scope.selectedZAddressBalance = largestAddress.balance;
+      $scope.zAddresses = zAddresses;
+    });
+  }
+  
+  $scope.onAddressSelect = function(address) {
+    $scope.selectedZAddress = address.address;
+    $scope.selectedZAddressBalance = address.balance;
+    // setProtocolHandler();
+    // $scope.setAddress();
+  };
+
+  $scope.showAddressSelector = function() {
+    if ($scope.singleAddress) return;
+    $scope.addressSelectorTitle = gettextCatalog.getString('Select a address');
+    $scope.showAddresses = true;
+  };
 
   $scope.createZtransaction = (tx, wallet) => {
-    console.log("tx", tx);
-    console.log("Wallet", wallet);
+    walletService.sendZtransaction($scope.selectedZAddress, tx.toAddress, tx.toAmount/100000000, (result) => {
+      if(result.startsWith("opid")){
+        $scope.sendStatus = 'success';
+      }
+    })
   };
 
   $scope.approve = function(tx, wallet, onSendStatusChange) {
-    if (wallet.zWallet) return $scope.createZtransaction(tx, wallet);
+    if (wallet.zWallet || tx.toAddress.startsWith("zt") || tx.toAddress.startsWith("zc")) return $scope.createZtransaction(tx, wallet);
     if (!tx || !wallet) return;
 
     if ($scope.paymentExpired) {
@@ -558,7 +592,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       });
       return;
     }
-    console.log("LIFT ME UP")
     ongoingProcess.set('creatingTx', true, onSendStatusChange);
     getTxp(lodash.clone(tx), wallet, false, function(err, txp) {
       ongoingProcess.set('creatingTx', false, onSendStatusChange);

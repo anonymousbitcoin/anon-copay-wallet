@@ -575,7 +575,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
          }
      };
     //  
-    console.log("BLACK CAR", 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword));
     $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
 
      for(let i = 0; i < addresses.length; i++) {
@@ -655,7 +654,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
    $http.post('http://localhost:3130', data, config)
    .success(function (data, status, headers, config) {
       //  $scope.PostDataResponse = data;
-      console.log("I HAVE RETURNED DATA")
         return cb(data.result);
    })
    .error(function (data, status, header, config) {
@@ -671,7 +669,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
 
  root.getZTotalBalance = (cb) => {
   // use $.param jQuery function to serialize data from JSON '
-  console.log("YOU CAN'T GET YOURS OFF THE HOSTESS")
    let data = {
        "method": "z_gettotalbalance"
    };
@@ -691,7 +688,40 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
    $http.post('http://localhost:3130', data, config)
    .success(function (data, status, headers, config) {
       //  $scope.PostDataResponse = data;
-      console.log("OOOOOOOHHHHH", data)
+        return cb(data.result);
+   })
+   .error(function (data, status, header, config) {
+
+      return cb(["Error", data]);
+      //  $scope.ResponseDetails = "Data: " + data +
+      //      "<hr />status: " + status +
+      //      "<hr />headers: " + header +
+      //      "<hr />config: " + config;
+   });
+};
+
+root.sendZtransaction = (zAddress, tAddress, amount, cb) => {
+  // use $.param jQuery function to serialize data from JSON '
+   let data = {
+       "method": "z_sendmany",
+       "params": [zAddress, [{"address": tAddress,"amount": amount}]]
+   };
+   //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
+  //  test.writeToClipboard("some  daata");
+  //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+  // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+   let config = {
+       headers : {
+           'Content-Type': 'application/json'
+
+       }
+   }
+  //  
+  $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+   $http.post('http://localhost:3130', data, config)
+   .success(function (data, status, headers, config) {
+      //  $scope.PostDataResponse = data;
         return cb(data.result);
    })
    .error(function (data, status, header, config) {
@@ -802,7 +832,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
   root.createTx = function(wallet, txp, cb) {
     if (lodash.isEmpty(txp) || lodash.isEmpty(wallet))
       return cb('MISSING_PARAMETER');
-
     wallet.createTxProposal(txp, function(err, createdTxp) {
       if (err) return cb(err);
       else {

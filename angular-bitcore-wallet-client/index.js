@@ -14,8 +14,6 @@ bwcModule.provider("bwcService", function() {
 	//KEV & LUIS BUFFEER STUFF
 
 	service.getProposalBuffer = function() {
-		console.log("Bitcore proposal here:");
-		console.log(Bitcore.util.buffer);
 		return Bitcore;
 	};
 

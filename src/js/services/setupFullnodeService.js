@@ -213,7 +213,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   this.checkIfAnonFullnodeONService = function () {
 
     var isAnonON = function (cb) {
-      console.log("IS ANON ON")
       // use $.param jQuery function to serialize data from JSON
       var data = {
         "method": "getinfo"
@@ -229,7 +228,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
       $http.post('http://localhost:3130', data, config)
         .success(function (data, status, headers, config) {
-          console.log("DATA => ", data)
           // $scope.PostDataResponse = data;
           // $log.debug(data.result);
           // $log.debug("status:", status);
@@ -258,7 +256,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   // Call rpc `getinfo` rpc method
   this.localRPCGetinfo = function (cb) {
-console.log("I MAKE IT HERE AYYYY")
     // var rpcGetInfo = function (cb) {
     // use $.param jQuery function to serialize data from JSON
     var data = {
@@ -274,7 +271,6 @@ console.log("I MAKE IT HERE AYYYY")
 
     $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
-        console.log("From the local full node:", data)
         return cb(data, status)
       })
       .error(function (data, status, header, config) {
@@ -285,7 +281,6 @@ console.log("I MAKE IT HERE AYYYY")
     // rpcGetInfo(function (data, status) {
     //   $log.debug("data: ", data);
     //   $log.debug("status: ", status);
-    //     console.log(data)
     //     return data
     // });
   };
@@ -294,7 +289,6 @@ console.log("I MAKE IT HERE AYYYY")
   //Check if the AnonCore files and Zcash Param keys exist in the default directory, and if they are readable.
   this.checkIfAnonExecFilesExistService = function (cb) {
 
-    console.log("WE'rE GOING TO LOOK FOR IT")
     //check if anond exists
     isFileExist(path_mac_executables + "/anond", function (err) {
       if (err)

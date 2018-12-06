@@ -26,7 +26,6 @@ angular.module('copayApp.controllers').controller('amountController', function($
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
     var config = configService.getSync().wallet.settings;
 
-    console.log("MOONSHAKE", data.stateParams);
 
     $scope.testnet = data.stateParams.testnet;
     $scope.zWallet = data.stateParams.zWallet;
