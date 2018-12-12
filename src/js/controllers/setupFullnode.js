@@ -37,7 +37,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   // guarantee the stopping of any intervals, you must
   // be responsible for stopping it when the scope is
   // is destroyed.
-  $scope.$on('$destroy', function () {
+  $scope.$on("$ionicView.beforeLeave", function () {
     $scope.stopRPCInterval();
   });
 
@@ -59,8 +59,15 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     //only run when we know that anon core is ON
     if ($scope.isAnonCoreON) {
       setupFullnode.localRPCGetinfo(function (res) {
+        if(res.error){
+          $scope.anonCoreErrorMessage = res.error.message
+          $scope.isAnonCoreReady = false
+        } else {
+        // $scope.anonCoreErrorMessage = res.error.message
+        $scope.isAnonCoreReady = true;
         $scope.localRPCInfo = res;
         $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+        }
       });
     }
   }
@@ -148,12 +155,13 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
-
+    $scope.anonCoreErrorMessage = "Loading..."
     //find out from anon explorer what is the currrent block height in the network
     
     //fetch only when local node is ON
     if ($rootScope.isAnonCoreON){
       fetchNetworkStats();
+      fetchLocalRPCInfo();
       $scope.startRPCInterval();
     }
     // $scope.startingAnonCore = false;
