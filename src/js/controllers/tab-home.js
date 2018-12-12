@@ -24,6 +24,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
       //load config regarding fullnode
       var config = configService.getSync();
       $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
+      $scope.isFullnodeMode = $rootScope.isFullnodeMode;
 
       if (!$scope.homeTip) {
         storageService.getHomeTipAccepted(function(error, value) {
@@ -217,7 +218,8 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
     $scope.openZWallet = function() {
       $state.go('tabs.zWallet', {
-        walletName: "Mainnet Z Wallet"
+        walletName: "Mainnet Z Wallet",
+        totalBalance: $scope.privateBalance,
       });
     };
 

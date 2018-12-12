@@ -112,7 +112,8 @@
       </a>
 
       <a class="item item-icon-left item-icon-right" href
-           ui-sref="tabs.preferences({'walletId': wallet.id, 'zWallet': true})">
+           ui-sref="tabs.preferences({'walletId': wallet.id, 'zWallet': true})"
+           ng-if="isFullnodeMode">
         <i class="icon big-icon-svg circle" ng-include="'views/includes/walletIcon.html'"></i>
         <span>
           <span ng-if="testnet">Testnet</span><span ng-if="mainnet">Mainnet</span> Z Wallet

@@ -91,10 +91,8 @@
             Incomplete
           </span>
           <span ng-if="wallet.isComplete()">
-            <span ng-if="!wallet.balanceHidden  && !wallet.scanning">Transparent Balance: {{wallet.status.totalBalanceStr ? wallet.status.totalBalanceStr : ( wallet.cachedBalance ? wallet.cachedBalance   + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn  * 1000 | amTimeAgo) : '') : ''  ) }} </span>
-            <span><br>Local Private Balance: {{privateBalance}} ANON</span>
+            <span ng-if="!wallet.balanceHidden  && !wallet.scanning">{{wallet.status.totalBalanceStr ? wallet.status.totalBalanceStr : ( wallet.cachedBalance ? wallet.cachedBalance   + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn  * 1000 | amTimeAgo) : '') : ''  ) }} </span>
             <span ng-if="wallet.scanning" translate> Scanning funds... </span>
-
             <span ng-if="wallet.balanceHidden && !wallet.scanning" translate>[Balance Hidden]</span>
             <span class="tab-home__wallet__multisig-number" ng-if="wallet.n > 1">
               {{wallet.m}}-of-{{wallet.n}}
@@ -110,11 +108,7 @@
     </div>
 
     <!-- Z Wallets -->
-    <div class="list card">
-      <div class="item item-icon-right item-heading">
-        <span translate>Z Wallets</span>
-        <a ui-sref="tabs.add" ng-if="wallets[0]"><i class="icon ion-ios-plus-empty list-add-button"></i></a>
-      </div>
+    <div class="list card" ng-if="isFullnodeMode">
       <div>
         <a ng-if="!wallets[0]" ui-sref="tabs.add" class="item item-icon-left item-big-icon-left item-icon-right next-step">
          <i class="icon big-icon-svg">
@@ -135,7 +129,7 @@
           </span> -->
           <span>
             
-            <span>Local Private Balance: {{privateBalance}} ANON</span>
+            <span>{{privateBalance}} ANON</span>
             <span ng-if="wallet.scanning" translate> Scanning funds... </span>
 
             <span ng-if="wallet.balanceHidden && !wallet.scanning" translate>[Balance Hidden]</span>

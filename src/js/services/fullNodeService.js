@@ -19,7 +19,7 @@ angular.module('copayApp.services').factory('networkStatsService', function($win
          }
      }
     //  
-    $http.defaults.headers.common.Authorization = 'Basic rpcusername:rpcpassword==';
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
      
      $http.post('http://localhost:3130', data, config)
      .success(function (data, status, headers, config) {

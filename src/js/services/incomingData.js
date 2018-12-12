@@ -129,20 +129,23 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       }
 
       // BitPayCard Authentication
-    } else if (data.startsWith("zt") || data.startsWith("zc")) {
+    } else if ((data.startsWith("zt") || data.startsWith("zc")) && $rootScope.isFullnodeMode) {
       // if (data.startsWith("zt"))
         // data.network.name = "testnet"
       // else if (data.startsWith("zc"))
-        // data.network.nam/e = "livenet"  
-      if ($state.includes('tabs.scan')) {
-        root.showMenu({
-          data: data,
-          type: 'anonAddress'
-        });
-      } else {
-        goToAmountPage(data);
-      }
-
+        // data.network.nam/e = "livenet"
+        walletService.validateZAddress(data, (result) => {
+          if (result.isvalid) {
+            if ($state.includes('tabs.scan')) {
+              root.showMenu({
+                data: data,
+                type: 'anonAddress'
+              });
+            } else {
+              goToAmountPage(data);
+            }
+          }
+        })  
       // BitPayCard Authentication
     } else if (data && data.indexOf(appConfigService.name + '://') === 0) {
 

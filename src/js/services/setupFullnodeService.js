@@ -231,8 +231,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           // $scope.PostDataResponse = data;
           // $log.debug(data.result);
           // $log.debug("status:", status);
-          $rootScope.testnet = data.testnet;
-          $rootScope.mainnet = !data.testnet;
+          $rootScope.testnet = data.result.testnet;
+          $rootScope.mainnet = !data.result.testnet;
           return cb(data, status)
         })
         .error(function (data, status, header, config) {

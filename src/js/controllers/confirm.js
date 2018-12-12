@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService, networkStatsService) {
+angular.module('copayApp.controllers').controller('confirmController', function($rootScope, $scope, $interval, $filter, $timeout, $ionicScrollDelegate, gettextCatalog, walletService, platformInfo, lodash, configService, $stateParams, $window, $state, $log, profileService, bitcoreAnon, txFormatService, ongoingProcess, $ionicModal, popupService, $ionicHistory, $ionicConfig, payproService, feeService, bwcError, txConfirmNotification, externalLinkService, setupFullnode) {
 
   var countDown = null;
   var CONFIRM_LIMIT_USD = 20;
@@ -71,6 +71,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
 
     function setWalletSelector(coin, network, minAmount, cb) {
+      let testnet = $rootScope.testnet
       // no min amount? (sendMax) => look for no empty wallets
       minAmount = minAmount || 1;
 
@@ -98,12 +99,18 @@ angular.module('copayApp.controllers').controller('confirmController', function(
 
             if (!status.availableBalanceSat)
               $log.debug('No balance available in: ' + w.name);
-            if (status.availableBalanceSat > minAmount) {
+            
+            if ( (status.availableBalanceSat > minAmount) 
+            && ( ( (testnet 
+              && (data.stateParams.toAddress.startsWith("zt") 
+              || data.stateParams.toAddress.startsWith("tA") ) ) 
+              || (!testnet &&  (data.stateParams.toAddress.startsWith("zc")  
+              || data.stateParams.toAddress.startsWith("An") ) ) ) 
+              || testnet === undefined) ) {
               filteredWallets.push(w);
             }
             
           }
-
           if (++index == $scope.wallets.length) {
             if (!walletsUpdated)
               return cb('Could not update any wallet');
@@ -113,30 +120,44 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           }
         });
       });
-      networkStatsService.getInfo((result) => {
-        $scope.testnet = result.testnet;
-        
-        walletService.getZTotalBalance((result) => {
-          $scope.privateBalance = result.private;
-          // if($scope.selectedZAddressBalance > minAmount) {
-          //   filteredWallets.push($scope.wallets)
-          // }
-          $scope.wallets.push({
-            name: "Z Wallet",
-            zWallet: true,
-            cachedBalance: $scope.privateBalance,
-            status : {
-              availableBalanceStr: $scope.privateBalance + " ANON",
-              totalBalanceStr:  $scope.privateBalance + " ANON",
-            },
-            coin: coin
-          })
-          if (lodash.isEmpty($scope.wallets)) {
-            setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
+      if($rootScope.isFullnodeMode) {
+          if(( (testnet 
+            && (data.stateParams.toAddress.startsWith("zt") 
+            || data.stateParams.toAddress.startsWith("tA") ) ) 
+            || (!testnet &&  (data.stateParams.toAddress.startsWith("zc")  
+            || data.stateParams.toAddress.startsWith("An") ) ) ) ) {
+            walletService.getZTotalBalance((result) => {
+              $scope.privateBalance = result.private;
+              // if($scope.selectedZAddressBalance > minAmount) {
+              //   filteredWallets.push($scope.wallets)
+              // }
+              if($scope.privateBalance > minAmount /100000000.0) {
+                $scope.wallets.push({
+                  name: "Z Wallet",
+                  zWallet: true,
+                  cachedBalance: $scope.privateBalance,
+                  status : {
+                    availableBalanceStr: $scope.privateBalance + " ANON",
+                    totalBalanceStr:  $scope.privateBalance + " ANON",
+                  },
+                  coin: coin
+                })
+              }
+              if (lodash.isEmpty($scope.wallets)) {
+                setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
+              }
+              return cb();
+            });
+          } else {
+            // setNoWallet(gettextCatalog.getString('No wallets available'), true);
+            return cb();
           }
-          return cb();
-        });
-      });
+      } else {
+        // if (lodash.isEmpty($scope.wallets)) {
+        //   setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
+        // } 
+        return cb();
+      }
     };
 
     // Setup $scope
@@ -196,7 +217,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     $scope.showAddress = false;
 
     $scope.walletSelectorTitle = gettextCatalog.getString('Send from');
-
     setWalletSelector(tx.coin, tx.network, tx.toAmount, function(err) {
       if (err) {
         return exitWithError('Could not update wallets');
@@ -575,7 +595,30 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   $scope.createZtransaction = (tx, wallet) => {
     walletService.sendZtransaction($scope.selectedZAddress, tx.toAddress, tx.toAmount/100000000, (result) => {
       if(result.startsWith("opid")){
-        $scope.sendStatus = 'success';
+        $scope.buttonText = "Please wait for the Z transaction to complete"
+        $scope.disableButton = true;
+        let countdown = $interval(function() {
+          // Do something every 5 seconds
+          walletService.zGetOperationStatus(result, (resultArray) => {
+            resultArray.forEach((val, ix) => {
+              if (val.id === result && val.status === "success") {
+                $scope.sendStatus = 'success';
+                $interval.cancel(countdown);
+                $scope.disableButton = false;
+              } else if (val.id === result && val.status === "failed") {
+                $scope.sendStatus = 'failed';
+                $interval.cancel(countdown);
+                $scope.disableButton = false;
+                $scope.buttonText = "Transaction failed. Try again?"
+              } else if (val.id === result && val.status === "cancelled") {
+                $scope.sendStatus = 'cancelled';
+                $interval.cancel(countdown);
+                $scope.disableButton = false;
+                $scope.buttonText = "Transaction cancelled. Try again?"
+              }
+            })
+          })
+        }, 30000);
       }
     })
   };

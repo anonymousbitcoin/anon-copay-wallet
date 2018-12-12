@@ -18,7 +18,7 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
     if (!$scope.wallet || $scope.generatingAddress) return;
     
-    if ($scope.wallet.zWallet){
+    if ($rootScope.isFullnodeMode && $scope.wallet.zWallet){
       $scope.generateZAddress();
       return;
     } 
@@ -130,19 +130,20 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
       // return cb();
     // });
     $scope.wallets = profileService.getWallets();
-
-    walletService.getZTotalBalance((result) => {
-      $scope.privateBalance = result.private;
-      $scope.wallets.push({
-        name: "Z Wallet",
-        zWallet: true,
-        cachedBalance: $scope.privateBalance,
-        status : {
-          availableBalanceStr: $scope.privateBalance + " ANON",
-          totalBalanceStr:  $scope.privateBalance + " ANON",
-        }
-      })
-    });
+    if($rootScope.isFullnodeMode) {
+      walletService.getZTotalBalance((result) => {
+        $scope.privateBalance = result.private;
+        $scope.wallets.push({
+          name: "Z Wallet",
+          zWallet: true,
+          cachedBalance: $scope.privateBalance,
+          status : {
+            availableBalanceStr: $scope.privateBalance + " ANON",
+            totalBalanceStr:  $scope.privateBalance + " ANON",
+          }
+        })
+      });
+    }
 
     $scope.singleWallet = $scope.wallets.length == 1;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('zWalletDetailsController', function($scope, $rootScope, $interval, $timeout, $filter, $log, $ionicModal, $ionicPopover, $state, $stateParams, $ionicHistory, profileService, lodash, configService, platformInfo, walletService, txpModalService, externalLinkService, popupService, addressbookService, storageService, $ionicScrollDelegate, $window, bwcError, gettextCatalog, timeService, feeService, appConfigService) {
+angular.module('copayApp.controllers').controller('zAddressHistoryController', function($scope, $rootScope, $interval, $timeout, $filter, $log, $ionicModal, $ionicPopover, $state, $stateParams, $ionicHistory, profileService, lodash, configService, platformInfo, walletService, txpModalService, externalLinkService, popupService, addressbookService, storageService, $ionicScrollDelegate, $window, bwcError, gettextCatalog, timeService, feeService, appConfigService) {
 
   var HISTORY_SHOW_LIMIT = 10;
   var currentTxHistoryPage = 0;
@@ -16,13 +16,6 @@ angular.module('copayApp.controllers').controller('zWalletDetailsController', fu
 
   $scope.openExternalLink = function(url, target) {
     externalLinkService.open(url, target);
-  };
-
-  $scope.openAddressHistory = function(address) {
-      $state.go('tabs.zAddressHistory', {
-        zAddress: address.address,
-        addressBalance: address.balance
-      });
   };
 
   var setPendingTxps = function(txps) {
@@ -127,12 +120,9 @@ angular.module('copayApp.controllers').controller('zWalletDetailsController', fu
     };
   };
 
-  $scope.openTxModal = function(btx) {
-    $scope.btx = lodash.cloneDeep(btx);
-    $scope.walletId = $scope.wallet.id;
+  $scope.openTxModal = function(address) {
     $state.transitionTo('tabs.wallet.tx-details', {
-      txid: $scope.btx.txid,
-      walletId: $scope.walletId
+      txid: address.txid,
     });
   };
 
@@ -361,9 +351,11 @@ angular.module('copayApp.controllers').controller('zWalletDetailsController', fu
 
     // $scope.walletId = data.stateParams.walletId;
     // $scope.wallet = profileService.getWallet($scope.walletId);
-    $scope.totalBalance = data.stateParams.totalBalance
-    walletService.getZTransactions((zAddressList) => {
-      $scope.zAddressList = zAddressList;
+    $scope.zAddress = data.stateParams.zAddress;
+    $scope.zAddressBalance = data.stateParams.addressBalance;
+
+    walletService.zListReceivedByAddress($scope.zAddress, (zAddressTransactionList) => {
+      $scope.zAddressTransactionList = zAddressTransactionList;
     })
     $scope.wallet = {};
     $scope.wallet.name = data.stateParams.walletName;

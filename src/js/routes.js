@@ -150,13 +150,22 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         }
       })
       .state('tabs.zWallet', {
-        url: '/zWallet/:walletName',
+        url: '/zWallet/:walletName/:totalBalance',
         views: {
           'tab-home@tabs': {
             controller: 'zWalletDetailsController',
             templateUrl: 'views/zWalletDetails.html'
           }
-        }
+        } 
+      })
+      .state('tabs.zAddressHistory', {
+        url: '/zWallet/:walletName/:zAddress/:addressBalance',
+        views: {
+          'tab-home@tabs': {
+            controller: 'zAddressHistoryController',
+            templateUrl: 'views/zAddressHistory.html'
+          }
+        } 
       })
       .state('tabs.activity', {
         url: '/activity',
