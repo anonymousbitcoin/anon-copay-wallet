@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, $interval, rpcService, configService, platformInfo, setupFullnode, networkStatsService) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, $interval, rpcService, configService, platformInfo, setupFullnode, networkStatsService, gettextCatalog, popupService) {
 
   // store the interval promise in this variable
   var promiseLocalStats;
@@ -14,7 +14,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.stopRPCInterval();
 
     //no need to start the interval is anon core went OFF.
-    if($scope.isAnonCoreON){
+    if ($scope.isAnonCoreON) {
       // store the interval promise
       promiseNetStats = $interval(fetchNetworkStats, 30000);
       promiseLocalStats = $interval(fetchLocalRPCInfo, 1000);
@@ -59,14 +59,14 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     //only run when we know that anon core is ON
     if ($scope.isAnonCoreON) {
       setupFullnode.localRPCGetinfo(function (res) {
-        if(res.error){
+        if (res.error) {
           $scope.anonCoreErrorMessage = res.error.message
           $scope.isAnonCoreReady = false
         } else {
-        // $scope.anonCoreErrorMessage = res.error.message
-        $scope.isAnonCoreReady = true;
-        $scope.localRPCInfo = res;
-        $log.debug("Here is the local daemon stats from setupFullnode controller", res)
+          // $scope.anonCoreErrorMessage = res.error.message
+          $scope.isAnonCoreReady = true;
+          $scope.localRPCInfo = res;
+          $log.debug("Here is the local daemon stats from setupFullnode controller", res)
         }
       });
     }
@@ -132,24 +132,31 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   }
 
   $scope.stopAnonCore = function () {
-    $scope.stoppingAnonCore = true;
-    $scope.startlog = "";
-    setupFullnode.callAnonCore("stop", function (err, res) {
-      // $log.debug("inside stopNode")
-      // $log.debug("res:")
-      // $log.debug(res)
-      // $log.debug("err:")
-      // $log.debug(err)
-      if (err) {
-        $scope.stoplog = "Coudn't stop the node, perhaps already stopped?";
-      } else if (res) {
-        $log.debug("Successfully stopped...")
-        $scope.stoplog = "Successfully stopped..."
-      }
-      $rootScope.isAnonCoreON = false;
-      $scope.stoppingAnonCore = false;
-      $scope.$apply();
-      $scope.stopRPCInterval();
+
+    var title = gettextCatalog.getString('Warning!');
+    var message = gettextCatalog.getString('Are you sure you want to stop the fullnode?');
+    popupService.showConfirm(title, message, null, null, function (res) {
+      if (!res) return;
+
+      $scope.stoppingAnonCore = true;
+      $scope.startlog = "";
+      setupFullnode.callAnonCore("stop", function (err, res) {
+        // $log.debug("inside stopNode")
+        // $log.debug("res:")
+        // $log.debug(res)
+        // $log.debug("err:")
+        // $log.debug(err)
+        if (err) {
+          $scope.stoplog = "Coudn't stop the node, perhaps already stopped?";
+        } else if (res) {
+          $log.debug("Successfully stopped...")
+          $scope.stoplog = "Successfully stopped..."
+        }
+        $rootScope.isAnonCoreON = false;
+        $scope.stoppingAnonCore = false;
+        $scope.$apply();
+        $scope.stopRPCInterval();
+      });
     });
   }
 
@@ -157,9 +164,9 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
     $scope.anonCoreErrorMessage = "Loading..."
     //find out from anon explorer what is the currrent block height in the network
-    
+
     //fetch only when local node is ON
-    if ($rootScope.isAnonCoreON){
+    if ($rootScope.isAnonCoreON) {
       fetchNetworkStats();
       fetchLocalRPCInfo();
       $scope.startRPCInterval();
