@@ -360,9 +360,9 @@ angular.module('copayApp.controllers').controller('zAddressHistoryController', f
     $scope.wallet = {};
     $scope.wallet.name = data.stateParams.walletName;
     if (!$scope.wallet) return;
-    $scope.requiresMultipleSignatures = $scope.wallet.credentials.m > 1;
+    // $scope.requiresMultipleSignatures = $scope.wallet.credentials.m > 1;
 
-    $scope.updatingTxHistory = true;
+    // $scope.updatingTxHistory = true;
 
     addressbookService.list(function(err, ab) {
       if (err) $log.error(err);

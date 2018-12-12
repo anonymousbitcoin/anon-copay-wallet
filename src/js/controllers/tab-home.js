@@ -39,19 +39,15 @@ angular.module('copayApp.controllers').controller('tabHomeController',
             if(err)
               $log.debug("Error: tabHomeController->setupAnonConfService - ", err)
             else {
-            $rootScope.RPCusername = res.rpcuser.data;
-            $rootScope.RPCpassword = res.rpcpassword.data;
-            setupFullnode.checkIfAnonFullnodeONService();
-            $scope.mainnet = !$rootScope.testnet
-            $scope.testnet = $rootScope.testnet
-            walletService.getZTotalBalance((result) => {
-              $scope.privateBalance = result.private;
-            });
-            checkIfAnonFullnodeONService.localRPCGetinfo(result => {
-              $scope.mainnet = !result.testnet
-              $scope.testnet = result.testnet
-            })
-          }
+              $rootScope.RPCusername = res.rpcuser.data;
+              $rootScope.RPCpassword = res.rpcpassword.data;
+              setupFullnode.checkIfAnonFullnodeONService();
+              $scope.mainnet = !$rootScope.testnet
+              $scope.testnet = $rootScope.testnet
+              walletService.getZTotalBalance((result) => {
+                $scope.privateBalance = result.private;
+              });
+            }
 
           });
         }
@@ -217,8 +213,9 @@ angular.module('copayApp.controllers').controller('tabHomeController',
     };
 
     $scope.openZWallet = function() {
+      let network = $rootScope.mainnet ? "Mainnet" : "Testnet";
       $state.go('tabs.zWallet', {
-        walletName: "Mainnet Z Wallet",
+        walletName: `${network} Z Wallet`,
         totalBalance: $scope.privateBalance,
       });
     };

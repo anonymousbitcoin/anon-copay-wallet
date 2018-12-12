@@ -101,10 +101,10 @@ angular.module('copayApp.controllers').controller('confirmController', function(
               $log.debug('No balance available in: ' + w.name);
             
             if ( (status.availableBalanceSat > minAmount) 
-            && ( ( (testnet 
+            && ( ( (w.network === "testnet" 
               && (data.stateParams.toAddress.startsWith("zt") 
               || data.stateParams.toAddress.startsWith("tA") ) ) 
-              || (!testnet &&  (data.stateParams.toAddress.startsWith("zc")  
+              || (w.network === "livenet"  &&  (data.stateParams.toAddress.startsWith("zc")  
               || data.stateParams.toAddress.startsWith("An") ) ) ) 
               || testnet === undefined) ) {
               filteredWallets.push(w);
@@ -116,7 +116,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
               return cb('Could not update any wallet');
 
             $scope.wallets = lodash.clone(filteredWallets);
-
           }
         });
       });
@@ -149,7 +148,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
               return cb();
             });
           } else {
-            // setNoWallet(gettextCatalog.getString('No wallets available'), true);
+            if(lodash.isEmpty($scope.wallets)) setNoWallet(gettextCatalog.getString('No wallets available'), true);
             return cb();
           }
       } else {
@@ -185,6 +184,12 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           });
         });
         return;
+      }
+    } else {
+      if (data.stateParams.toAddress.startsWith("zt")) {
+        networkName = "testnet"
+      } else if (data.stateParams.toAddress.startsWith("zc")) {
+        networkName = "livenet"
       }
     }
 
