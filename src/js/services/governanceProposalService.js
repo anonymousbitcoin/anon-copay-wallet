@@ -93,7 +93,7 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 
   root.list = function(cb) {
     let proposals = []
-    fetch("http://localhost:3232/bws/api/v2/proposals/", { headers: { "Content-Type": "application/json; charset=utf-8" }})
+    fetch("http://198.58.124.152:3232/bws/api/v2/proposals/", { headers: { "Content-Type": "application/json; charset=utf-8" }})
     .then(res => res.json()) // parse response as JSON (can be res.text() for plain response)
     .then(response => {
       proposals = response.gobjects;
