@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('governanceProposalCreateController', function($rootScope, $timeout, $ionicHistory, $scope, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, governanceProposalService, addressbookService, gettextCatalog, walletService) {
+angular.module('copayApp.controllers').controller('governanceProposalCreateController', function($rootScope, $timeout, $ionicHistory, $scope, $http, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, governanceProposalService, addressbookService, gettextCatalog, walletService) {
 
     $scope.$on("$ionicView.enter", function(event, data) {
 		$scope.governanceProposal;
@@ -31,20 +31,25 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 	governanceProposal.end_epoch = Math.floor(governanceProposal.end_epoch.setDate(governanceProposal.end_epoch.getDate() + 30) / 1000);
 	governanceProposal.type = 1;
 
-
+	// declare formattedProposal (object) that contains a JSON of the users input values.
 	let formattedProposal = [["proposal", governanceProposal]];
 
+	// declare serialized array. contains array of the formatted proposal in serialized form.
 	let serialized = governanceProposalService.serialize(formattedProposal);
 
-	// var newBuffer = serialized.toBuffer().toString('hex');
-	// var newBuffer = Buffer(serialized);
+	// declare newBuffer, which buffers the serialized object above.
 	var newBuffer = governanceProposalService.bufferProposal(serialized);
 
-
+	// declare prepareProposal, string that will be submitted.
 	var prepareProposal = ("gobject prepare 0 1 " + governanceProposal.start_epoch + " " + newBuffer);
-	
 
+
+	// declare availableBalances, to get all the users addresses and determine which has enough funds.
 	var avaliableBalances = $scope.wallet.cachedStatus.balanceByAddress;
+	// console.log('ab')
+	// console.log(avaliableBalances)
+
+	// valid address will contain an address that has 5+ funds. Doesnt show others with less
 	var validAddress;
 
 	for (let i = 0; i < avaliableBalances.length; i++){
@@ -59,12 +64,11 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 		let numAddresses = result.length;
 		let address;
 
-		for (let i = 0; i < numAddresses; i++) { 
+		for (let i = 0; i < numAddresses; i++) {
 			if(result[i].address == validAddress.address){
 				address = result[i].address;
 				break;
 			}
-			
 		}
 		let addy = address;
 		// if (address != avaliableBalances){
@@ -73,7 +77,53 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 		governanceProposalService.getTxId(addy, function(err, result){
 			return result;
 		});
-	});
+		// bitcore api (rawTX)
+		// {
+		// 	RPC BROADCAST (trawtx)
+			// result = transaction from submit
+		// }
+
+		// get transastion from submit
+		// reformat string to show 'submit', append tx at end.
+		// broadcast submit
+
+
+	})
+
+	// console.log(addressTxOut);
+
+	// walletService.getMainAddresses($scope.wallet, null, (err, result) => {
+
+	// 	// loop through and find the correct address
+	// 	console.log('result from GMA')
+
+	// 	console.log(result)
+	// 	let numAddresses = result.length;
+	// 	let address;
+	// 	let sweetResult;
+
+	// 	for (let i = 0; i < numAddresses; i++) {
+	// 		if(result[i].address == validAddress.address){
+	// 			address = result[i].address;
+	// 			console.log("ADDRESS: ", address)
+	// 			break;
+	// 		}
+	// 	}
+	// 	let addy = address;
+
+	// 	governanceProposalService.getTxId(addy, function(err, result){
+	// 		console.log("result from govPropSer.getTxID:");
+	// 		console.log(result);
+	// 		sweetResult = result;
+	// 		console.log('sweetresult', sweetResult)
+	// 		return result;
+	// 	});
+
+	// 	// undefined
+	// 	console.log('sweetresult', sweetResult)
+	// });
+
+
   };
 
 	$scope.showWallets = function(){
@@ -84,44 +134,17 @@ angular.module('copayApp.controllers').controller('governanceProposalCreateContr
 		opts.coin = 'anon';
 		opts.hasFunds = true;
 		opts.minAmount = 500000100;
-		
-	  var allWallets = profileService.getWallets(opts);
-  
-	}
-//   $scope.openGovernanceProposalModal = function(proposal) {
-//     $ionicModal.fromTemplateUrl('views/modals/governance-proposal-info.html', {
-//       scope: $scope
-//     }).then(function(modal) {
-//       $scope.proposal = proposal
-//       $scope.governanceProposalInfo = modal;
-//       $scope.governanceProposalInfo.show();
-//     });
 
-//     $scope.close = function() {
-//       $scope.governanceProposalInfo.hide();
-//     };
-//   };
+	  var allWallets = profileService.getWallets(opts);
+
+	}
+
 
   $scope.goHome = function() {
     $ionicHistory.removeBackView();
     $state.go('tabs.home');
   };
 
-//   $scope.openWalletSelectModal = function() {
-//     $ionicModal.fromTemplateUrl('views/modals/wallets.html', {
-//       scope: $scope
-//     }).then(function(modal) {
-//     //   $scope.proposal = proposal
-//     //   $scope.proposal.DataObject.start_epoch = new Date(proposal.DataObject.start_epoch * 1000).toLocaleString()
-//     //   $scope.proposal.DataObject.end_epoch = new Date(proposal.DataObject.end_epoch * 1000).toLocaleString()
-//       $scope.governanceProposalInfo = modal;
-//       $scope.governanceProposalInfo.show();
-//     });
-
-//     $scope.close = function() {
-//       $scope.governanceProposalInfo.hide();
-//     };
-//   };
 $scope.setAddress = function(newAddr) {
     $scope.addr = null;
     if (!$scope.wallet || $scope.generatingAddress || !$scope.wallet.isComplete()) return;
@@ -153,7 +176,7 @@ opts.networkName = 'testnet';
 opts.coin = 'anon';
 opts.hasFunds = true;
 opts.minAmount = 500000100;
-		
+
 var allWallets = profileService.getWallets(opts);
 
 $scope.wallets = allWallets;

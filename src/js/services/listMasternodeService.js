@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('masternodeCreateService', function($log, bitcoreAnon, storageService, lodash, profileService) {
+angular.module('copayApp.services').factory('listMasternodeService', function($log, bitcoreAnon, storageService, lodash, profileService) {
   var root = {};
 
 //   var getNetwork = function(address) {
@@ -24,23 +24,20 @@ angular.module('copayApp.services').factory('masternodeCreateService', function(
 //     });
 //   };
 
-  root.startAll = function(cb) {
-    let result = []
-    fetch("http://45.79.13.202:3001/insight-api-anon/masternodes/create", { headers: { "Content-Type": "application/json; charset=utf-8" }})
+  root.list = function(cb) {
+    let masternodes = []
+    fetch("http://198.58.124.152:3232/bws/api/v2/masternodes/list", { headers: { "Content-Type": "application/json; charset=utf-8" }})
     .then(res => res.json()) // parse response as JSON (can be res.text() for plain response)
     .then(response => {
-      result = response.gobjects;
-        // here you do what you want with response
-        return cb(null, result);
+      masternodes = response.masternodes;
+		// here you do what you want with response
+		console.log('response here:');
+		console.log(masternodes)
+        return cb(null, masternodes);
     })
     .catch(err => {
         console.log("sorry, there are no results for your search")
 	});
-	
-	
-
-
-    
     // profileService.getProposals(function(err, proposals) {
     //     console.log("wher ame i?")
     //   if (err) return cb('Could not get the Proposals');
@@ -50,25 +47,25 @@ angular.module('copayApp.services').factory('masternodeCreateService', function(
     // });
   };
 
-  root.add = function(entry, cb) {
-	// var network = getNetwork(entry.address);
-	var network = "testnet";
-    if (lodash.isEmpty(network)) return cb('Not valid ANON Address');
-    storageService.getMasternode(network, function(err, ab) {
-      if (err) return cb(err);
-      if (ab) ab = JSON.parse(ab);
-      ab = ab || {};
-      if (lodash.isArray(ab)) ab = {}; // No array
-      if (ab[entry.address]) return cb('Entry already exist');
-      ab[entry.address] = entry;
-      storageService.setMasternode(network, JSON.stringify(ab), function(err, ab) {
-        if (err) return cb('Error adding new entry');
-        root.list(function(err, ab) {
-          return cb(err, ab);
-        });
-      });
-    });
-  };
+//   root.add = function(entry, cb) {
+// 	// var network = getNetwork(entry.address);
+// 	var network = "testnet";
+//     if (lodash.isEmpty(network)) return cb('Not valid ANON Address');
+//     storageService.getMasternode(network, function(err, ab) {
+//       if (err) return cb(err);
+//       if (ab) ab = JSON.parse(ab);
+//       ab = ab || {};
+//       if (lodash.isArray(ab)) ab = {}; // No array
+//       if (ab[entry.address]) return cb('Entry already exist');
+//       ab[entry.address] = entry;
+//       storageService.setMasternode(network, JSON.stringify(ab), function(err, ab) {
+//         if (err) return cb('Error adding new entry');
+//         root.list(function(err, ab) {
+//           return cb(err, ab);
+//         });
+//       });
+//     });
+//   };
 
 //   root.remove = function(addr, cb) {
 //     var network = getNetwork(addr);
