@@ -20,11 +20,14 @@
           <!-- <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\> -->
           <div class="wallet-balance__content no-border">
             <div class="wallet-balance__title" translate>Payment Address</div>
-            <span class="item-note text-right wallet-balance__amount">
+            <!-- <span class="item-note text-right wallet-balance__amount">
               <span class="wallet-balance__amount wallet-balance__amount--total">
                   {{proposal.DataObject.payment_address}}
               </span>
-            </span>
+            </span> -->
+          </div>
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>{{proposal.DataObject.payment_address}}</div>
           </div>
         </div>
       </div>
