@@ -17,21 +17,23 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="wallet-balance__list list card">
-      <div class="wallet-balance__item item">
-        <!--
-          <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
-        -->
-        <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>VIN:</div>
-          <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
-              {{ masternode.vin }}
-            </span>
-          </span>
+
+      <div class="wallet-balance__list list card">
+          <div class="wallet-balance__item item">
+            <!--
+              <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
+            -->
+            <div style="word-wrap: break-word"  class="wallet-balance__content no-border">
+              <div class="wallet-balance__title" translate><span style="font-weight:bold;">VIN:</span>
+              <span class="item-note text-right wallet-balance__amount">
+                <span class="wallet-balance__amount wallet-balance__amount--total">
+                    {{ masternode.vin }}
+                </span>
+              </span>
+            </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
     <div class="wallet-balance__list list card">
       <div class="wallet-balance__item item">
@@ -39,12 +41,13 @@
           <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Payee:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Payee:</span>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.payee }}
             </span>
           </span>
+        </div>
         </div>
       </div>
     </div>
@@ -55,7 +58,7 @@
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Status:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Status:</div></span>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.status }}
@@ -70,7 +73,7 @@
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Rank:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Rank:</span></div>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.rank }}
@@ -85,7 +88,7 @@
           <i class="wallet-balance__icon icon ion-ios-checkmark-outline"></i>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Node IP:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Node IP:</span></div>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.ip }}
@@ -100,7 +103,7 @@
           <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Active Seconds:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Active Seconds:</span></div>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.activeseconds }}
@@ -115,7 +118,7 @@
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Last Seen:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Last Seen:</span></div>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.lastseen }}
@@ -130,7 +133,7 @@
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
         <div class="wallet-balance__content no-border">
-          <div class="wallet-balance__title" translate>Protocol:</div>
+          <div class="wallet-balance__title" translate><span style="font-weight:bold;">Protocol:</span></div>
           <span class="item-note text-right wallet-balance__amount">
             <span class="wallet-balance__amount wallet-balance__amount--total">
               {{ masternode.protocol }}
