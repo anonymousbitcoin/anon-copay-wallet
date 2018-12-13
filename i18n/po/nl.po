@@ -1323,7 +1323,7 @@ msgid "Get started"
 msgstr "Aan de slag"
 
 #: www/views/addressbook.html:20
-msgid "Get started by adding your first one."
+msgid "Get started by adding one."
 msgstr "Ga aan de slag door uw eerste toe te voegen."
 
 #: src/js/services/onGoingProcess.js:23
