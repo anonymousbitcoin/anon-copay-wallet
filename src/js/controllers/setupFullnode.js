@@ -8,6 +8,18 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   // stores 'getinfo' data
   $scope.localRPCInfo = [];
 
+  var setupAnonConf = function(){
+    setupFullnode.setupAnonConfService(function (err, res) {
+      if (err) {
+        $log.debug("Error: setupAnonConf - ", err)
+      } else {
+        $rootScope.RPCusername = res.rpcuser.data;
+        $rootScope.RPCpassword = res.rpcpassword.data;
+        $log.debug("Res: setupAnonConf - ", res)
+      }
+    });
+  }
+
   // starts the interval
   $scope.startRPCInterval = function () {
     // stops any running interval to avoid two intervals running at the same time
@@ -95,6 +107,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       } else {
         $scope.downloadanonlog = res;
         $rootScope.isFullnodeDownloaded = true;
+        setupAnonConf();
       }
       // UpdateConfig();
       $scope.installationStarted = false;
