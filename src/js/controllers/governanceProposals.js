@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('governanceProposalsController', function($rootScope, $timeout, $scope, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, governanceProposalService, configService) {
+angular.module('copayApp.controllers').controller('governanceProposalsController', function($rootScope, $timeout, $scope, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, governanceProposalService, configService, openURLService, gettextCatalog, externalLinkService) {
 
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
@@ -9,7 +9,17 @@ angular.module('copayApp.controllers').controller('governanceProposalsController
             $scope.proposals = proposals;
         });
     });
+    $scope.openURLInBrowser = (proposal) => {
+      var optIn = true;
+      var title = null;
+      var message = gettextCatalog.getString('View');
+      var okText = gettextCatalog.getString('Open');
+      var cancelText = gettextCatalog.getString('Go Back');
+      externalLinkService.open(proposal.DataObject.url, optIn, title, message, okText, cancelText)
+      // let url = {url: proposal.DataObject.url};
 
+      // openURLService.handleURL(url);
+    }
   // $scope.$on("$ionicView.beforeEnter", function(event, data) {
   //   $scope.isCordova = platformInfo.isCordova;
   //   $scope.isWindowsPhoneApp = platformInfo.isCordova && platformInfo.isWP;
