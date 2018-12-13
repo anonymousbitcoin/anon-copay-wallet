@@ -80,7 +80,7 @@ angular.module('copayApp.services').factory('governanceProposalService', functio
 
 	root.getTxId = (address, cb) => {
 		fetch(
-				`http://localhost:5555/insight-api-anon/addr/${address}/utxo`,
+				`http://45.79.13.202:3001/insight-api-anon/addr/${address}/utxo`,
 				{
 					headers: { "Content-Type": "application/json; charset=utf-8" }
 				}
