@@ -11,7 +11,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //slash difference between win and unix os
   var slash;
 
-  //os specific link for fullnode executables 
+  //os specific link for fullnode executables
   var download_anond_link;
   var download_anoncli_link;
   var download_zparams_proving_key_win;
@@ -146,7 +146,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     });
   }
 
-  //format data to be written to anon.conf 
+  //format data to be written to anon.conf
   var formatData = function (data) {
     var result = "";
     for (var key in data) {
@@ -192,7 +192,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       });
 
       file.on('error', (err) => { // Handle errors
-        fs.unlink(file); // Delete the file async. (But we don't check the result) 
+        fs.unlink(file); // Delete the file async. (But we don't check the result)
         return cb(err.message);
       });
     };
@@ -301,7 +301,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
               return cb(err);
             $log.debug("error:", error);
             $log.debug("res:", res);
-            //forth fix permissions for these files (unix only) 
+            //forth fix permissions for these files (unix only)
             fixPermissions(function () {
               return cb(null, "Anon full node executables have been succesfully downloaded")
             })
@@ -367,7 +367,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   this.checkIfAnonFullnodeONService = function () {
 
     var isAnonON = function (cb) {
-      // use $.param jQuery function to serialize data from JSON 
+      // use $.param jQuery function to serialize data from JSON
       var data = {
         "method": "getinfo"
       };
@@ -385,6 +385,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           // $scope.PostDataResponse = data;
           // $log.debug(data.result);
           // $log.debug("status:", status);
+          $rootScope.testnet = data.result.testnet;
+          $rootScope.mainnet = !data.result.testnet;
           return cb(data, status)
         })
         .error(function (data, status, header, config) {
@@ -399,7 +401,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     isAnonON(function (data, status) {
       $log.debug("data: ", data);
       $log.debug("status: ", status);
-      //we accept status 500 because anon core is likely still verifying blocks 
+      //we accept status 500 because anon core is likely still verifying blocks
       if (status && status === 200 || status === 500)
         $rootScope.isAnonCoreON = true;
       else
@@ -409,9 +411,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   // Call rpc `getinfo` rpc method
   this.localRPCGetinfo = function (cb) {
-
     // var rpcGetInfo = function (cb) {
-    // use $.param jQuery function to serialize data from JSON 
+    // use $.param jQuery function to serialize data from JSON
     var data = {
       "method": "getinfo"
     };
@@ -425,7 +426,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
-        console.log("From the local full node:", data)
         return cb(data, status)
       })
       .error(function (data, status, header, config) {
@@ -436,7 +436,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     // rpcGetInfo(function (data, status) {
     //   $log.debug("data: ", data);
     //   $log.debug("status: ", status);
-    //     console.log(data)
     //     return data
     // });
   };
@@ -487,9 +486,9 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   this.setupAnonConfService = function (cb) {
 
     reset_anon_conf_min_setup(anon_conf_min_setup);
-    /* 
+    /*
       We need find out if anon.conf has all the necessary settings. If it doesn't then we have to write them.
-  
+
       Function logic:
       1. We loop through anon.conf and save all the settings it has.
       2. Then we look at our anon_conf_min_setup which has all the "must have" settings and compare to anon.conf settings.

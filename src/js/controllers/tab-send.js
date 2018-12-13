@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('tabSendController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService) {
+angular.module('copayApp.controllers').controller('tabSendController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService, networkStatsService) {
 
   var originalList;
   var CONTACTS_SHOW_LIMIT;
@@ -159,7 +159,6 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
   };
 
   $scope.findContact = function(search) {
-
     if (incomingData.redir(search)) {
       return;
     }
@@ -181,23 +180,34 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
   };
 
   $scope.goToAmount = function(item) {
-    $timeout(function() {
-      item.getAddress(function(err, addr) {
-        if (err || !addr) {
-          //Error is already formated
-          return popupService.showAlert(err);
-        }
-        $log.debug('Got toAddress:' + addr + ' | ' + item.name);
-        return $state.transitionTo('tabs.send.amount', {
-          recipientType: item.recipientType,
-          toAddress: addr,
-          toName: item.name,
-          toEmail: item.email,
-          toColor: item.color,
-          coin: item.coin
-        })
-      });
+    networkStatsService.getInfo((result) => {
+      $scope.testnet = result.testnet;
+      
+      walletService.getZTotalBalance((result) => {
+        $scope.zWallet = result.private ? true : false;
+  
+        $timeout(function() {
+          item.getAddress(function(err, addr) {
+            if (err || !addr) {
+              //Error is already formated
+              return popupService.showAlert(err);
+            }
+            $log.debug('Got toAddress:' + addr + ' | ' + item.name);
+            return $state.transitionTo('tabs.send.amount', {
+              recipientType: item.recipientType,
+              toAddress: addr,
+              toName: item.name,
+              toEmail: item.email,
+              toColor: item.color,
+              coin: item.coin,
+              zWallet: $scope.zWallet,
+              testnet: $scope.testnet
+            })
+          });
+        });
+      })
     });
+
   };
 
   // This could probably be enhanced refactoring the routes abstract states

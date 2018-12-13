@@ -91,7 +91,45 @@
             Incomplete
           </span>
           <span ng-if="wallet.isComplete()">
-            <span ng-if="!wallet.balanceHidden  && !wallet.scanning"> {{wallet.status.totalBalanceStr ? wallet.status.totalBalanceStr : ( wallet.cachedBalance ? wallet.cachedBalance   + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn  * 1000 | amTimeAgo) : '') : ''  ) }} </span>
+            <span ng-if="!wallet.balanceHidden  && !wallet.scanning">{{wallet.status.totalBalanceStr ? wallet.status.totalBalanceStr : ( wallet.cachedBalance ? wallet.cachedBalance   + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn  * 1000 | amTimeAgo) : '') : ''  ) }} </span>
+            <span ng-if="wallet.scanning" translate> Scanning funds... </span>
+            <span ng-if="wallet.balanceHidden && !wallet.scanning" translate>[Balance Hidden]</span>
+            <span class="tab-home__wallet__multisig-number" ng-if="wallet.n > 1">
+              {{wallet.m}}-of-{{wallet.n}}
+            </span>
+            <i ng-if="!wallet.balanceHidden && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)" class="tab-home__wallet__status-icon ion-ios-timer-outline"></i>
+            <span class="assertive" ng-if="wallet.error">{{wallet.error}}</span>
+          </span>
+          &nbsp;
+          </p>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Z Wallets -->
+    <div class="list card" ng-if="isFullnodeMode">
+      <div>
+        <a ng-if="!wallets[0]" ui-sref="tabs.add" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+         <i class="icon big-icon-svg">
+           <img src="img/icon-wallet.svg" class="bg wallet icon-create-wallet"/>
+         </i>
+          <span translate>Create ANON Wallet</span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+        <a class="item item-sub item-icon-left item-big-icon-left item-icon-right wallet"
+           ng-click="openZWallet(wallet)">
+          <i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i>
+          <span>
+            <span ng-if="testnet">Testnet</span><span ng-if="mainnet">Mainnet</span> Z Wallet
+          </span>
+          <p>
+          <!-- <span ng-if="!wallet.isComplete()" class="assertive" translate>
+            Incomplete
+          </span> -->
+          <span>
+            
+            <span>{{privateBalance}} ANON</span>
             <span ng-if="wallet.scanning" translate> Scanning funds... </span>
 
             <span ng-if="wallet.balanceHidden && !wallet.scanning" translate>[Balance Hidden]</span>

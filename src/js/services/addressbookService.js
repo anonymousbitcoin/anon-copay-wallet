@@ -16,6 +16,7 @@ angular.module('copayApp.services').factory('addressbookService', function($log,
       if (ab && ab[addr]) return cb(null, ab[addr]);
 
       storageService.getAddressbook('livenet', function(err, ab) {
+
         if (err) return cb(err);
         if (ab) ab = JSON.parse(ab);
         if (ab && ab[addr]) return cb(null, ab[addr]);

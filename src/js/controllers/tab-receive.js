@@ -15,7 +15,13 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
   $scope.setAddress = function(newAddr) {
     $scope.addr = null;
-    if (!$scope.wallet || $scope.generatingAddress || !$scope.wallet.isComplete()) return;
+
+    if (!$scope.wallet || $scope.generatingAddress) return;
+    
+    if ($rootScope.isFullnodeMode && $scope.wallet.zWallet){
+      $scope.generateZAddress();
+      return;
+    } 
     $scope.generatingAddress = true;
     walletService.getAddress($scope.wallet, newAddr, function(err, addr) {
       $scope.generatingAddress = false;
@@ -31,6 +37,32 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
       }, 10);
     });
   };
+
+  $scope.generateZAddress = () => {
+    walletService.getZTransactions((addresses) => {
+      let zAddresses = []
+      let largestAddress = {
+        balance: 0
+      };
+      addresses.forEach((val, ix) => {
+        if (val.balance  !== 0 && val.balance > largestAddress.balance)
+        largestAddress = val;
+        zAddresses.push(val) 
+      })
+
+      $scope.addr = largestAddress.address
+      $scope.address = largestAddress.address
+      $scope.zAddresses = zAddresses;
+    });
+  }
+
+  $scope.generateZNewAddress = () => {
+    walletService.getNewZAddresss((address) => {
+
+      $scope.addr = address
+      $scope.address = address
+    });
+  }
 
   $scope.goCopayers = function() {
     $ionicHistory.removeBackView();
@@ -75,7 +107,7 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
   $scope.shouldShowReceiveAddressFromHardware = function() {
     var wallet = $scope.wallet;
-    if (wallet.isPrivKeyExternal() && wallet.credentials.hwInfo) {
+    if (!wallet.zWallet && wallet.isPrivKeyExternal() && wallet.credentials.hwInfo) {
       return (wallet.credentials.hwInfo.name == walletService.externalSource.intelTEE.id);
     } else {
       return false;
@@ -84,13 +116,35 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
 
   $scope.showReceiveAddressFromHardware = function() {
     var wallet = $scope.wallet;
-    if (wallet.isPrivKeyExternal() && wallet.credentials.hwInfo) {
+    if (!wallet.zWallet && wallet.isPrivKeyExternal() && wallet.credentials.hwInfo) {
       walletService.showReceiveAddressFromHardware(wallet, $scope.addr, function() {});
     }
   };
 
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
+
+    // storageService.getAddressbook('testnet', function(err, ab) {
+    //   // if (err) return cb(err);
+    //   if (ab) ab = JSON.parse(ab);
+      // if (ab && ab[addr]) return cb(null, ab[addr]);
+      // return cb();
+    // });
     $scope.wallets = profileService.getWallets();
+    if($rootScope.isFullnodeMode) {
+      walletService.getZTotalBalance((result) => {
+        $scope.privateBalance = result.private;
+        $scope.wallets.push({
+          name: "Z Wallet",
+          zWallet: true,
+          cachedBalance: $scope.privateBalance,
+          status : {
+            availableBalanceStr: $scope.privateBalance + " ANON",
+            totalBalanceStr:  $scope.privateBalance + " ANON",
+          }
+        })
+      });
+    }
+
     $scope.singleWallet = $scope.wallets.length == 1;
 
     if (!$scope.wallets[0]) return;
@@ -138,6 +192,19 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
     if ($scope.singleWallet) return;
     $scope.walletSelectorTitle = gettextCatalog.getString('Select a wallet');
     $scope.showWallets = true;
+  };
+
+  $scope.onAddressSelect = function(address) {
+    $scope.address = address;
+    $scope.addr = address.address;
+    // setProtocolHandler();
+    // $scope.setAddress();
+  };
+
+  $scope.showAddressSelector = function() {
+    if ($scope.singleAddress) return;
+    $scope.addressSelectorTitle = gettextCatalog.getString('Select a address');
+    $scope.showAddresses = true;
   };
 
   $scope.shareAddress = function() {

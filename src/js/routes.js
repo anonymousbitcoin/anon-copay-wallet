@@ -149,6 +149,24 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      .state('tabs.zWallet', {
+        url: '/zWallet/:walletName/:totalBalance',
+        views: {
+          'tab-home@tabs': {
+            controller: 'zWalletDetailsController',
+            templateUrl: 'views/zWalletDetails.html'
+          }
+        } 
+      })
+      .state('tabs.zAddressHistory', {
+        url: '/zWallet/:walletName/:zAddress/:addressBalance',
+        views: {
+          'tab-home@tabs': {
+            controller: 'zAddressHistoryController',
+            templateUrl: 'views/zAddressHistory.html'
+          }
+        } 
+      })
       .state('tabs.activity', {
         url: '/activity',
         views: {
@@ -279,7 +297,50 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      /*
+      *
+      * Goverance 
+      * 
+      */
+      .state('tabs.governance', {
+        url: '/governance',
+        views: {
+          'tab-governance': {
+            controller: 'tabGovernanceController',
+            templateUrl: 'views/tab-governance.html',
+          }
+        }
+      })
 
+      .state('tabs.governanceProposals', {
+        url: '/governance/governanceProposals',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'governanceProposalsController',
+            templateUrl: 'views/governance-proposals.html'
+          }
+        }
+	  })
+	  
+	  .state('tabs.listMasternodes', {
+        url: '/governance/listMasternodes',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'listMasternodeController',
+            templateUrl: 'views/masternodeList.html'
+          }
+        }
+      })
+
+	  .state('tabs.createGovernancePropsal', {
+        url: '/governance/governanceProposals/createGovernancePropsal',
+        views: {
+          'tab-governance@tabs': {
+            controller: 'governanceProposalCreateController',
+            templateUrl: 'views/governance-proposal-create.html'
+          }
+        }
+      })
       /*
        *
        * Send
@@ -287,7 +348,7 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
        */
 
       .state('tabs.send.amount', {
-        url: '/amount/:recipientType/:toAddress/:toName/:toEmail/:toColor/:coin/:fixedUnit',
+        url: '/amount/:recipientType/:toAddress/:toName/:toEmail/:toColor/:coin/:fixedUnit/:zWallet/:testnet',
         views: {
           'tab-send@tabs': {
             controller: 'amountController',
@@ -296,7 +357,7 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         }
       })
       .state('tabs.send.confirm', {
-        url: '/confirm/:recipientType/:toAddress/:toName/:toAmount/:toEmail/:toColor/:description/:coin/:useSendMax',
+        url: '/confirm/:recipientType/:toAddress/:toName/:toAmount/:toEmail/:toColor/:description/:coin/:useSendMax/:zWallet/:testnet',
         views: {
           'tab-send@tabs': {
             controller: 'confirmController',
@@ -491,7 +552,7 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
        */
 
       .state('tabs.preferences', {
-        url: '/preferences/:walletId',
+        url: '/preferences/:walletId/:zWallet',
         views: {
           'tab-settings@tabs': {
             controller: 'preferencesController',
@@ -657,7 +718,7 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
        */
 
       .state('tabs.settings.addresses', {
-        url: '/addresses/:walletId/:toAddress',
+        url: '/addresses/:walletId/:toAddress/:zWallet',
         views: {
           'tab-settings@tabs': {
             controller: 'addressesController',

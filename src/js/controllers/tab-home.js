@@ -24,6 +24,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
       //load config regarding fullnode
       var config = configService.getSync();
       $rootScope.isFullnodeMode = config.wallet.isFullnodeMode;
+      $scope.isFullnodeMode = $rootScope.isFullnodeMode;
 
       if (!$scope.homeTip) {
         storageService.getHomeTipAccepted(function(error, value) {
@@ -38,10 +39,15 @@ angular.module('copayApp.controllers').controller('tabHomeController',
             if(err)
               $log.debug("Error: tabHomeController->setupAnonConfService - ", err)
             else {
-            $rootScope.RPCusername = res.rpcuser.data;
-            $rootScope.RPCpassword = res.rpcpassword.data;
-            setupFullnode.checkIfAnonFullnodeONService();
-          }
+              $rootScope.RPCusername = res.rpcuser.data;
+              $rootScope.RPCpassword = res.rpcpassword.data;
+              setupFullnode.checkIfAnonFullnodeONService();
+              $scope.mainnet = !$rootScope.testnet
+              $scope.testnet = $rootScope.testnet
+              walletService.getZTotalBalance((result) => {
+                $scope.privateBalance = result.private;
+              });
+            }
 
           });
         }
@@ -59,7 +65,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
           }
         });
       }
-
+      
       storageService.getFeedbackInfo(function(error, info) {
 
         if ($scope.isWindowsPhoneApp) {
@@ -195,6 +201,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
     $scope.openWallet = function(wallet) {
       if (!wallet.isComplete()) {
+
         return $state.go('tabs.copayers', {
           walletId: wallet.credentials.walletId
         });
@@ -202,6 +209,14 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
       $state.go('tabs.wallet', {
         walletId: wallet.credentials.walletId
+      });
+    };
+
+    $scope.openZWallet = function() {
+      let network = $rootScope.mainnet ? "Mainnet" : "Testnet";
+      $state.go('tabs.zWallet', {
+        walletName: `${network} Z Wallet`,
+        totalBalance: $scope.privateBalance,
       });
     };
 

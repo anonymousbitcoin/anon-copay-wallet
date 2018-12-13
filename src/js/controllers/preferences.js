@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesController',
-  function($scope, $rootScope, $timeout, $log, $ionicHistory, configService, profileService, fingerprintService, walletService, platformInfo, externalLinkService, gettextCatalog) {
+  function($scope, $rootScope, $timeout, $log, $ionicHistory, $state, $stateParams, configService, profileService, fingerprintService, walletService, platformInfo, externalLinkService, gettextCatalog) {
     var wallet;
     var walletId;
 
@@ -83,6 +83,19 @@ angular.module('copayApp.controllers').controller('preferencesController',
     };
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
+      $scope.zWallet = data.stateParams.zWallet;
+
+      walletService.getZTransactions((addresses) => {
+        let zAddresses = []
+        addresses.forEach((val, ix) => {
+          if (val.balance  !== 0)
+            zAddresses.push(val) 
+        })
+        $scope.zAddresses = zAddresses;
+      });
+
+      if($scope.zWallet) return;
+
       wallet = profileService.getWallet(data.stateParams.walletId);
       walletId = wallet.credentials.walletId;
       $scope.wallet = wallet;
@@ -112,4 +125,11 @@ angular.module('copayApp.controllers').controller('preferencesController',
         $scope.deleted = true;
       }
     });
+
+    $scope.goToAddresses = function() {
+      $state.go('tabs.settings.addresses', {
+        walletId: $stateParams.walletId,
+        zWallet: true
+      });
+    };
   });

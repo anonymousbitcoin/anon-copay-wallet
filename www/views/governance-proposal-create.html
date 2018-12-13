@@ -1,0 +1,78 @@
+<ion-view id="add-address" hide-tabs>
+		<ion-nav-bar class="bar-royal">
+		  <ion-nav-title>
+			<span translate>Create Proposal</span>
+		  </ion-nav-title>
+		  <ion-nav-back-button>
+		  </ion-nav-back-button>
+		  <ion-nav-buttons side="secondary">
+			<button class="button back-button" ng-click="goHome()" ng-if="fromSendTab">
+			  {{'Cancel' | translate}}
+			</button>
+		  </ion-nav-buttons>
+		</ion-nav-bar>
+	  
+		<ion-content>
+	  
+		  <form name="addressbookForm" no-validate>
+	  
+			<div class="list add-address-list add-address-input-group">
+			  <label class="item item-input item-stacked-label no-border">
+				<span class="input-label" translate>Proposal Name: </span>
+				<input type="text"
+					   id="name"
+					   name="name"
+					   ng-model="governanceProposal.name"
+					   required>
+			  </label>
+			  <label class="item item-input item-stacked-label">
+				<span class="input-label" translate>Payment Address: </span>
+				<input type="text"
+					   id="address"
+					   name="address"
+					   ng-model="governanceProposal.payment_address">
+			  </label>
+			<label class="item item-input item-stacked-label">
+				<span class="input-label" translate>URL: </span>
+				<div class="input-notification">
+				<!-- <i ng-show="!addressbookForm.address.$invalid" class="icon ion-checkmark-circled valid"></i> -->
+				<!-- <i ng-show="addressbookForm.address.$invalid && governanceProposal.address" class="icon ion-close-circled invalid"></i> -->
+				</div>
+				<input type="text"
+						id="URL"
+						name="URL"
+						ng-model="governanceProposal.url"
+						valid-address required>
+			</label>
+			</div>
+
+			<div class="padding">
+				<button type="submit"
+					class="button button-standard button-primary"
+					ng-click="showWalletSelector() && makeVisible()"
+					ng-disabled="!addressbookForm.$valid" translate>
+				Choose Wallet
+				</button>
+			</div>
+
+			<div class="padding">
+			  <button type="submit"
+					  class="button button-standard button-primary"
+					  ng-click="add(governanceProposal)"
+					  ng-disabled="!wallet" translate>
+				Save
+			  </button>
+			</div>
+	  
+		  </form>
+		</ion-content>
+		<wallet-selector
+			ng-hide="!showModal"
+			wallet-selector-title="walletSelectorTitle"
+			wallet-selector-wallets="wallets"
+			wallet-selector-selected-wallet="wallet"
+			wallet-selector-show="showWallets"
+			wallet-selector-on-select="onWalletSelect">
+		</wallet-selector>
+	  </ion-view>
+	  

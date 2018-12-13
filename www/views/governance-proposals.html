@@ -1,0 +1,49 @@
+<ion-view hide-tabs>
+  <ion-nav-bar class="bar-royal">
+    <ion-nav-title>{{'Proposals' | translate}}</ion-nav-title>
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-content>
+    <ion-refresher
+      ng-if="!proposals[0]"
+      pulling-icon="ion-ios-refresh"
+      spinner="ios-small"
+      on-refresh="onRefresh()">
+    </ion-refresher>
+    <div class="settings-list list">
+      
+        <div data-ng-repeat="proposal in proposals" ng-click="openGovernanceProposalModal(proposal)">
+            <a  class="item item-icon-right next-step">
+             <!-- <i class="icon big-icon-svg">
+               <img src="img/icon-wallet.svg" class="bg wallet icon-create-wallet"/>
+             </i> -->
+              <span translate>{{proposal.DataObject.name}}</span> {{proposal.DataObject.AbsoluteYesCount}}
+              <i class="icon bp-arrow-right"></i>
+            </a>
+            <a ng-repeat="wallet in wallets track by $index"
+               class="item item-sub item-icon-left item-big-icon-left item-icon-right wallet"
+               >
+              <i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i>
+              <span>
+                
+              </span>
+              <p>
+              
+              </span>
+              &nbsp;
+              </p>
+              <i class="icon bp-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+	  <div class="item item-divider"></div>
+	  <button ng-disabled="true" type="submit"
+			class="button button-standard button-primary"
+			ui-sref="tabs.createGovernancePropsal">
+		Create New Propsal
+	  </button>
+  </ion-content>
+</ion-view>
+      

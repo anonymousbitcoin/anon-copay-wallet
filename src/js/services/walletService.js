@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('walletService', function($log, $timeout, lodash, trezor, ledger, intelTEE, storageService, configService, rateService, uxLanguage, $filter, gettextCatalog, bwcError, $ionicPopup, fingerprintService, ongoingProcess, gettext, $rootScope, txFormatService, $ionicModal, $state, bwcService, bitcoreAnon, popupService) {
+angular.module('copayApp.services').factory('walletService', function($log, $timeout, lodash, trezor, ledger, intelTEE, storageService, configService, rateService, uxLanguage, $filter, gettextCatalog, bwcError, $ionicPopup, fingerprintService, ongoingProcess, gettext, $rootScope, txFormatService, $ionicModal, $state, $http, bwcService, bitcoreAnon, popupService) {
 
   // Ratio low amount warning (fee/amount) in incoming TX
   var LOW_AMOUNT_RATIO = 0.15;
@@ -562,6 +562,262 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
     });
   };
 
+  root.getZAddressesBalances = (cb, addresses) => {
+     
+     let addressesWithBalances = [];
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+     let config = {
+         headers : {
+             'Content-Type': 'application/json'
+
+         }
+     };
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+     for(let i = 0; i < addresses.length; i++) {
+      let data = {
+        "method": "z_getbalance",
+        "params": [addresses[i]]
+      };
+      $http.post('http://localhost:3130', data, config)
+      .success(function (data, status, headers, config) {
+         //  $scope.PostDataResponse = data;
+          addressesWithBalances.push({address: addresses[i], balance: data.result})
+          if(i === (addresses.length - 1))
+            cb(addressesWithBalances);
+          //  return cb(data.result);
+      })
+      .error(function (data, status, header, config) {
+         return cb(["Error", data]);
+         //  $scope.ResponseDetails = "Data: " + data +
+         //      "<hr />status: " + status +
+         //      "<hr />headers: " + header +
+         //      "<hr />config: " + config;
+      });
+     }
+  }
+
+  root.getZTransactions = cb => {
+    // use $.param jQuery function to serialize data from JSON 
+     let data = {
+         "method": "z_listaddresses"
+     };
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+     let config = {
+         headers : {
+             'Content-Type': 'application/json'
+
+         }
+     }
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+     
+     $http.post('http://localhost:3130', data, config)
+     .success(function (data, status, headers, config) {
+        //  $scope.PostDataResponse = data;
+          return root.getZAddressesBalances(cb, data.result);
+     })
+     .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+        //  $scope.ResponseDetails = "Data: " + data +
+        //      "<hr />status: " + status +
+        //      "<hr />headers: " + header +
+        //      "<hr />config: " + config;
+     });
+ };
+
+ root.getNewZAddresss = cb => {
+  // use $.param jQuery function to serialize data from JSON 
+   let data = {
+       "method": "z_getnewaddress"
+   };
+  //  test.writeToClipboard("some  daata");
+  //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+  // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+   let config = {
+       headers : {
+           'Content-Type': 'application/json'
+
+       }
+   }
+  //  
+  $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+   
+   $http.post('http://localhost:3130', data, config)
+   .success(function (data, status, headers, config) {
+      //  $scope.PostDataResponse = data;
+        return cb(data.result);
+   })
+   .error(function (data, status, header, config) {
+      console.log("ERROR", data);
+      return data.result;
+      // return cb(["Error", data]);
+      //  $scope.ResponseDetails = "Data: " + data +
+      //      "<hr />status: " + status +
+      //      "<hr />headers: " + header +
+      //      "<hr />config: " + config;
+   });
+};
+
+ root.getZTotalBalance = (cb) => {
+  // use $.param jQuery function to serialize data from JSON '
+   let data = {
+       "method": "z_gettotalbalance"
+   };
+  //  test.writeToClipboard("some  daata");
+  //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+  // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+   let config = {
+       headers : {
+           'Content-Type': 'application/json'
+
+       }
+   }
+  //  
+  $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+   
+   $http.post('http://localhost:3130', data, config)
+   .success(function (data, status, headers, config) {
+      //  $scope.PostDataResponse = data;
+        return cb(data.result);
+   })
+   .error(function (data, status, header, config) {
+
+      return cb(["Error", data]);
+      //  $scope.ResponseDetails = "Data: " + data +
+      //      "<hr />status: " + status +
+      //      "<hr />headers: " + header +
+      //      "<hr />config: " + config;
+   });
+};
+
+  root.sendZtransaction = (zAddress, tAddress, amount, cb) => {
+    // use $.param jQuery function to serialize data from JSON '
+    let data = {
+        "method": "z_sendmany",
+        "params": [zAddress, [{"address": tAddress,"amount": amount}]]
+    };
+    //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+    let config = {
+        headers : {
+            'Content-Type': 'application/json'
+
+        }
+    }
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.post('http://localhost:3130', data, config)
+    .success(function (data, status, headers, config) {
+        //  $scope.PostDataResponse = data;
+          return cb(data.result);
+    })
+    .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+        //  $scope.ResponseDetails = "Data: " + data +
+        //      "<hr />status: " + status +
+        //      "<hr />headers: " + header +
+        //      "<hr />config: " + config;
+    });
+  };
+
+  root.validateZAddress = (zAddress, cb) => {
+    // use $.param jQuery function to serialize data from JSON '
+    let data = {
+        "method": "z_validateaddress",
+        "params": [zAddress]
+    };
+    //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+    let config = {
+        headers : {
+            'Content-Type': 'application/json'
+
+        }
+    }
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.post('http://localhost:3130', data, config)
+    .success(function (data, status, headers, config) {
+        //  $scope.PostDataResponse = data;
+          return cb(data.result);
+    })
+    .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+        //  $scope.ResponseDetails = "Data: " + data +
+        //      "<hr />status: " + status +
+        //      "<hr />headers: " + header +
+        //      "<hr />config: " + config;
+    });
+  };
+
+  root.zGetOperationStatus = (opid, cb) => {
+    // use $.param jQuery function to serialize data from JSON '
+    let data = {
+        "method": "z_getoperationstatus",
+    };
+    let config = {
+        headers : {
+            'Content-Type': 'application/json'
+
+        }
+    }
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.post('http://localhost:3130', data, config)
+    .success(function (data, status, headers, config) {
+      
+      return cb(data.result);
+    })
+    .error(function (data, status, header, config) {
+      console.log("ERROR", data)
+
+        return cb(["Error", data]);
+    });
+  };
+
+  root.zListReceivedByAddress = (zAddress, cb) => {
+    // use $.param jQuery function to serialize data from JSON '
+    let data = {
+        "method": "z_listreceivedbyaddress",
+        "params": [zAddress]
+    };
+    let config = {
+        headers : {
+            'Content-Type': 'application/json'
+
+        }
+    }
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.post('http://localhost:3130', data, config)
+    .success(function (data, status, headers, config) {
+      
+      return cb(data.result);
+    })
+    .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+    });
+  };
+
   root.getTxNote = function(wallet, txid, cb) {
     wallet.getTxNote({
       txid: txid
@@ -660,7 +916,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
   root.createTx = function(wallet, txp, cb) {
     if (lodash.isEmpty(txp) || lodash.isEmpty(wallet))
       return cb('MISSING_PARAMETER');
-
     wallet.createTxProposal(txp, function(err, createdTxp) {
       if (err) return cb(err);
       else {

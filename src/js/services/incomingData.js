@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog) {
+angular.module('copayApp.services').factory('incomingData', function($log, $state, $timeout, $ionicHistory, bitcoreAnon, $rootScope, payproService, scannerService, appConfigService, popupService, gettextCatalog, networkStatsService, walletService) {
 
   var root = {};
 
@@ -129,6 +129,24 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       }
 
       // BitPayCard Authentication
+    } else if ((data.startsWith("zt") || data.startsWith("zc")) && $rootScope.isFullnodeMode) {
+      // if (data.startsWith("zt"))
+        // data.network.name = "testnet"
+      // else if (data.startsWith("zc"))
+        // data.network.nam/e = "livenet"
+        walletService.validateZAddress(data, (result) => {
+          if (result.isvalid) {
+            if ($state.includes('tabs.scan')) {
+              root.showMenu({
+                data: data,
+                type: 'anonAddress'
+              });
+            } else {
+              goToAmountPage(data);
+            }
+          }
+        })  
+      // BitPayCard Authentication
     } else if (data && data.indexOf(appConfigService.name + '://') === 0) {
 
       // Disable BitPay Card
@@ -197,12 +215,24 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       'reload': true,
       'notify': $state.current.name == 'tabs.send' ? false : true
     });
-    $timeout(function() {
-      $state.transitionTo('tabs.send.amount', {
-        toAddress: toAddress,
-        coin: coin,
-      });
-    }, 100);
+    let testnet;
+    let zWallet;
+    networkStatsService.getInfo((result) => {
+      testnet = result.testnet;
+      
+      walletService.getZTotalBalance((result) => {
+        zWallet = result.private ? true : false;
+  
+        $timeout(function() {
+          $state.transitionTo('tabs.send.amount', {
+            toAddress: toAddress,
+            coin: coin,
+            zWallet,
+            testnet
+          });
+        }, 100);
+      })
+    });
   }
 
   function handlePayPro(payProDetails, coin) {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('walletDetailsController', function($scope, $rootScope, $interval, $timeout, $filter, $log, $ionicModal, $ionicPopover, $state, $stateParams, $ionicHistory, profileService, lodash, configService, platformInfo, walletService, txpModalService, externalLinkService, popupService, addressbookService, storageService, $ionicScrollDelegate, $window, bwcError, gettextCatalog, timeService, feeService, appConfigService) {
+angular.module('copayApp.controllers').controller('zWalletDetailsController', function($scope, $rootScope, $interval, $timeout, $filter, $log, $ionicModal, $ionicPopover, $state, $stateParams, $ionicHistory, profileService, lodash, configService, platformInfo, walletService, txpModalService, externalLinkService, popupService, addressbookService, storageService, $ionicScrollDelegate, $window, bwcError, gettextCatalog, timeService, feeService, appConfigService) {
 
   var HISTORY_SHOW_LIMIT = 10;
   var currentTxHistoryPage = 0;
@@ -16,6 +16,13 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
 
   $scope.openExternalLink = function(url, target) {
     externalLinkService.open(url, target);
+  };
+
+  $scope.openAddressHistory = function(address) {
+      $state.go('tabs.zAddressHistory', {
+        zAddress: address.address,
+        addressBalance: address.balance
+      });
   };
 
   var setPendingTxps = function(txps) {
@@ -67,29 +74,29 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     $scope.updateStatusError = null;
     $scope.walletNotRegistered = false;
 
-    walletService.getStatus($scope.wallet, {
-      force: !!force,
-    }, function(err, status) {
-      $scope.updatingStatus = false;
-      if (err) {
-        if (err === 'WALLET_NOT_REGISTERED') {
-          $scope.walletNotRegistered = true;
-        } else {
-          $scope.updateStatusError = bwcError.msg(err, gettextCatalog.getString('Could not update wallet'));
-        }
-        $scope.status = null;
-      } else {
-        setPendingTxps(status.pendingTxps);
-        $scope.status = status;
-      }
-      refreshAmountSection();
-      $timeout(function() {
-        $scope.$apply();
-      });
+    // walletService.getStatus($scope.wallet, {
+    //   force: !!force,
+    // }, function(err, status) {
+    //   $scope.updatingStatus = false;
+    //   if (err) {
+    //     if (err === 'WALLET_NOT_REGISTERED') {
+    //       $scope.walletNotRegistered = true;
+    //     } else {
+    //       $scope.updateStatusError = bwcError.msg(err, gettextCatalog.getString('Could not update wallet'));
+    //     }
+    //     $scope.status = null;
+    //   } else {
+    //     setPendingTxps(status.pendingTxps);
+    //     $scope.status = status;
+    //   }
+    //   refreshAmountSection();
+    //   $timeout(function() {
+    //     $scope.$apply();
+    //   });
 
-      analyzeUtxos();
+    //   analyzeUtxos();
 
-    });
+    // });
   };
 
   $scope.openSearchModal = function() {
@@ -147,7 +154,7 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
       if (err) return;
       $timeout(function() {
         walletService.startScan($scope.wallet, function() {
-          $scope.updateAll();
+        //   $scope.updateAll();
           $scope.$apply();
         });
       });
@@ -246,7 +253,7 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     $timeout(function() {
       $scope.$broadcast('scroll.refreshComplete');
     }, 300);
-    $scope.updateAll(true);
+    // $scope.updateAll(true);
   };
 
   $scope.updateAll = function(force, cb)  {
@@ -351,13 +358,20 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
   });
 
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
-    $scope.walletId = data.stateParams.walletId;
-    $scope.wallet = profileService.getWallet($scope.walletId);
-    if (!$scope.wallet) return;
-    $scope.requiresMultipleSignatures = $scope.wallet.credentials.m > 1;
 
-    $scope.updatingTxHistory = true;
- 
+    // $scope.walletId = data.stateParams.walletId;
+    // $scope.wallet = profileService.getWallet($scope.walletId);
+    $scope.totalBalance = data.stateParams.totalBalance
+    walletService.getZTransactions((zAddressList) => {
+      $scope.zAddressList = zAddressList;
+    })
+    $scope.wallet = {};
+    $scope.wallet.name = data.stateParams.walletName;
+    if (!$scope.wallet) return;
+    // $scope.requiresMultipleSignatures = $scope.wallet.credentials.m > 1;
+
+    // $scope.updatingTxHistory = true;
+
     addressbookService.list(function(err, ab) {
       if (err) $log.error(err);
       $scope.addressbook = ab || {};
@@ -365,18 +379,18 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
 
     listeners = [
       $rootScope.$on('bwsEvent', function(e, walletId) {
-        if (walletId == $scope.wallet.id && e.type != 'NewAddress')
-          $scope.updateAll();
+        // if (walletId == $scope.wallet.id && e.type != 'NewAddress')
+        //   $scope.updateAll();
       }),
       $rootScope.$on('Local/TxAction', function(e, walletId) {
-        if (walletId == $scope.wallet.id)
-          $scope.updateAll();
+        // if (walletId == $scope.wallet.id)
+        //   $scope.updateAll();
       }),
     ];
   });
 
   $scope.$on("$ionicView.afterEnter", function(event, data) {
-    $scope.updateAll();
+    // $scope.updateAll();
     refreshAmountSection();
   });
 

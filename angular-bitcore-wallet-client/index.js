@@ -1,5 +1,6 @@
 var bwcModule = angular.module('bwcModule', []);
 var Client = require('../node_modules/bitcore-wallet-client-anon');
+var Bitcore = require('../node_modules/bitcore-lib-anon');
 
 bwcModule.constant('MODULE_VERSION', '1.0.0');
 
@@ -8,6 +9,19 @@ bwcModule.provider("bwcService", function() {
 
   provider.$get = function() {
     var service = {};
+	//KEV & LUIS BUFFER STUFF
+
+	service.getProposalBuffer = function() {
+		return Bitcore;
+	};
+
+	// kev & luis z transaction stuff
+	service.shell = function() {
+		var shell = Bitcore.util.buffer;
+		console.log('ITS WORKING BOOIS');
+		console.log(shell);
+		return shell;
+	};
 
     service.getBitcoreAnon = function() {
       return Client.BitcoreAnon;

@@ -1,0 +1,98 @@
+<ion-view id="add-address" hide-tabs>
+		<ion-nav-bar class="bar-royal">
+		  <ion-nav-title> <span translate>ALL MASTERNODES</span> </ion-nav-title>
+		  <ion-nav-back-button> </ion-nav-back-button>
+		  <ion-nav-buttons side="secondary">
+			<button
+			  class="button back-button"
+			  ng-click="goHome()"
+			  ng-if="fromSendTab"
+			>
+			  {{ "Cancel" | translate }}
+			</button>
+		  </ion-nav-buttons>
+		</ion-nav-bar>
+	  
+		<ion-content>
+		  <ion-refresher
+			ng-if="!masternodes[0]"
+			pulling-icon="ion-ios-refresh"
+			spinner="ios-small"
+			on-refresh="onRefresh()">
+		  </ion-refresher>
+		  <div class="settings-list list">
+			
+			  <div data-ng-repeat="masternode in masternodes" ng-click="openMasternodeDetailModal(masternode)" >
+				  <a  class="item item-icon-right next-step">
+				   <!-- <i class="icon big-icon-svg">
+					 <img src="img/icon-wallet.svg" class="bg wallet icon-create-wallet"/>
+				   </i> -->
+					<span translate>Masternode: {{masternode.vin}} </span> 
+					<i class="icon bp-arrow-right"></i>
+				  </a>
+				  <a ng-repeat="wallet in wallets track by $index"
+					 class="item item-sub item-icon-left item-big-icon-left item-icon-right wallet"
+					 >
+					<i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i>
+					<span>
+					  
+					</span>
+					<p>
+					
+					</span>
+					&nbsp;
+					</p>
+					<i class="icon bp-arrow-right"></i>
+				  </a>
+				</div>
+			  </div>
+			<div class="item item-divider"></div>
+		</ion-content>
+	  
+		<!-- <ion-content>
+		  <form name="addressbookForm" no-validate>
+			<div class="list add-address-list add-address-input-group">
+			  <label class="item item-input item-stacked-label no-border">
+				<span class="input-label" translate>masternode Name: </span>
+				<input
+				  type="text"
+				  id="name"
+				  name="name"
+				  ng-model="masternode.name"
+				  required
+				/>
+			  </label>
+			  <label class="item item-input item-stacked-label">
+				<span class="input-label" translate>Payment : </span>
+				<input type="text" id="" name="" ng-model="masternode.address" />
+			  </label>
+			  <label class="item item-input item-stacked-label">
+				<span class="input-label" translate>URL: </span>
+				<div class="input-notification">
+	  
+				</div>
+				<input
+				  type="text"
+				  id="URL"
+				  name="URL"
+				  ng-model="masternode.URL"
+				  valid-address
+				  required
+				/>
+			  </label>
+			</div>
+	  
+			<div class="padding">
+			  <button
+				type="submit"
+				class="button button-standard button-primary"
+				ng-click="list()"
+				translate
+			  >
+				Save
+			  </button>
+			</div>
+		  </form>
+		</ion-content> -->
+	  </ion-view>
+	  

@@ -13,10 +13,10 @@
             {{wallet.name}}
           </div>
           <p class="wallet-balance">
-            <span ng-if="!wallet.isComplete()" class="assertive" translate>
+            <span ng-if="!wallet.zWallet && !wallet.isComplete()" class="assertive" translate>
               Incomplete
             </span>
-            <span ng-if="wallet.isComplete()">
+            <span ng-if="!wallet.zWallet && wallet.isComplete() || wallet.zWallet">
               <span ng-if="!wallet.balanceHidden">{{wallet.status.availableBalanceStr}}</span>
               <span ng-if="wallet.balanceHidden" translate>[Balance Hidden]</span>
             </span>
