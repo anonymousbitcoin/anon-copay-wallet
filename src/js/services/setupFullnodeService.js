@@ -111,12 +111,26 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     fs.access(file, fs.constants.F_OK | fs.constants.R_OK, callback);
   }
 
+  //checks if a file exist and can be read
+  var isAnonFolderExist = function (path, callback) {
+    var fs = require('fs');
+    if (!fs.existsSync(path)) {
+      fs.mkdir(path, function (err) {
+        if (err)
+          return callback(err)
+        return callback();
+      });
+    }
+    return callback();
+  }
+
   //create and write data to a file
   var writeToFile = function (file, data, cb) {
     var fs = require('fs');
     fs.writeFile(file, data, function (err) {
       if (err)
         return cb(err);
+      return cb();
     });
   }
 
@@ -496,8 +510,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     */
 
     this.getAnonConfService(function (err, res) {
-      var fs = require('fs');
-      
+
       //that's fine if anon.conf doesn't exist, we will create it later
       if (err) {
         $log.debug(err)
@@ -541,20 +554,21 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         //check if anon.conf exist
         isFileExist(path_to_datadir + slash + "anon.conf", function (err) {
           //when anon.conf doesn't exist
-
-          //create anon folder if doesn't exist
-          if (!fs.existsSync(path_to_datadir))
-              fs.mkdirSync(path_to_datadir);
-
           if (err) {
-            writeToFile(path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
-              //something went wrong during writing the file
+            //create anon folder if doesn't exist
+            isAnonFolderExist(path_to_datadir, function (err) {
               if (err)
                 return cb(err)
-              //wrote the file successfully
-              $log.debug("Anon.conf has been created");
-              return cb(null, anon_conf_min_setup);
-            });
+              //write anon.conf from scratch
+              writeToFile(path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
+                //something went wrong during writing the file
+                if (err)
+                  return cb(err)
+                //wrote the file successfully
+                $log.debug("Anon.conf has been created");
+                return cb(null, anon_conf_min_setup);
+              });
+            })
             //when anon.conf already exist, we just want to append the missing settings
           } else {
             appendToFile(path_to_datadir + slash + "anon.conf", "#ADDED BY ANON COPAY WALLET\n" + formatData(anon_conf_min_setup), function (err) {

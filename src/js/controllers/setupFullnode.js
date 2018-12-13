@@ -26,7 +26,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     $scope.stopRPCInterval();
 
     //no need to start the interval is anon core went OFF.
-    if ($scope.isAnonCoreON) {
+    if ($rootScope.isAnonCoreON) {
       // store the interval promise
       promiseNetStats = $interval(fetchNetworkStats, 30000);
       promiseLocalStats = $interval(fetchLocalRPCInfo, 1000);
@@ -69,7 +69,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   var fetchLocalRPCInfo = function () {
     //only run when we know that anon core is ON
-    if ($scope.isAnonCoreON) {
+    if ($rootScope.isAnonCoreON) {
       setupFullnode.localRPCGetinfo(function (res) {
         if (res.error) {
           $scope.anonCoreErrorMessage = res.error.message
