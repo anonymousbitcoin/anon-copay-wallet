@@ -31,8 +31,8 @@ angular.module('copayApp.services').factory('listMasternodeService', function($l
     .then(response => {
       masternodes = response.masternodes;
 		// here you do what you want with response
-		console.log('response here:');
-		console.log(masternodes)
+		// console.log('response here:');
+		// console.log(masternodes)
         return cb(null, masternodes);
     })
     .catch(err => {
