@@ -119,7 +119,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           }
         });
       });
-      if($rootScope.isFullnodeMode) {
+      if($rootScope.isAnonCoreON && $rootScope.isFullnodeMode) {
           if(( (testnet 
             && (data.stateParams.toAddress.startsWith("zt") 
             || data.stateParams.toAddress.startsWith("tA") ) ) 

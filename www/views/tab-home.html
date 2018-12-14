@@ -108,7 +108,7 @@
     </div>
 
     <!-- Z Wallets -->
-    <div class="list card" ng-if="isFullnodeMode">
+    <div class="list card" ng-show="isAnonCoreON && isFullnodeMode">
       <div>
         <a ng-if="!wallets[0]" ui-sref="tabs.add" class="item item-icon-left item-big-icon-left item-icon-right next-step">
          <i class="icon big-icon-svg">

@@ -36,8 +36,8 @@ angular.module('copayApp.controllers').controller('tabHomeController',
         //if fullnode mode is activated check if Anon fullnode already running
         if($rootScope.isFullnodeMode){
           setupFullnode.setupAnonConfService(function(err,res){
-            if(err)
-              $log.debug("Error: tabHomeController->setupAnonConfService - ", err)
+            if(err) 
+              $log.debug("Error: tabHomeController->setupAnonConfService - ", err); 
             else {
               $rootScope.RPCusername = res.rpcuser.data;
               $rootScope.RPCpassword = res.rpcpassword.data;

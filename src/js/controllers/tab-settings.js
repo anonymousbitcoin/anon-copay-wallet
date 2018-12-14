@@ -34,11 +34,10 @@ angular.module('copayApp.controllers').controller('tabSettingsController', funct
 
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
     
-    $scope.isFullnodeMode = $rootScope.isFullnodeMode
-    if($rootScope.isFullnodeMode) {
+    if($rootScope.isAnonCoreON && $rootScope.isFullnodeMode) {
       setupFullnode.localRPCGetinfo(result => {
-        $scope.mainnet = !result.info.testnet
-        $scope.testnet = result.info.testnet
+        $scope.mainnet = !result.testnet
+        $scope.testnet = result.testnet
       })
     }
     $scope.isCordova = platformInfo.isCordova;

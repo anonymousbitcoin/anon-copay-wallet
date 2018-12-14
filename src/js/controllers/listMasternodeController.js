@@ -3,12 +3,10 @@
 angular.module('copayApp.controllers').controller('listMasternodeController', function($rootScope, $timeout, $ionicHistory, $scope, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, listMasternodeService) {
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
-		listMasternodeService.list(function(err, masternodes){
-			if(err) $log.error(err);
-			$scope.masternodes = masternodes;
-			console.log('controller: ')
-			console.log(masternodes);
-		}) 
+      listMasternodeService.list(function(err, masternodes){
+        if(err) $log.error(err);
+        $scope.masternodes = masternodes;
+      }) 
     });
 
 
@@ -40,7 +38,7 @@ angular.module('copayApp.controllers').controller('listMasternodeController', fu
 //     };
 //   };
 
-$scope.openMasternodeDetailModal = function(masternode) {
+  $scope.openMasternodeDetailModal = function(masternode) {
     $ionicModal.fromTemplateUrl('views/modals/masternode-detail.html', {
       scope: $scope
     }).then(function(modal) {

@@ -129,7 +129,7 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
       }
 
       // BitPayCard Authentication
-    } else if ((data.startsWith("zt") || data.startsWith("zc")) && $rootScope.isFullnodeMode) {
+    } else if ((data.startsWith("zt") || data.startsWith("zc")) && $rootScope.isAnonCoreON && $rootScope.isFullnodeMode) {
       // if (data.startsWith("zt"))
         // data.network.name = "testnet"
       // else if (data.startsWith("zc"))

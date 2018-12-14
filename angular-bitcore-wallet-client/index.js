@@ -18,7 +18,6 @@ bwcModule.provider("bwcService", function() {
 	// kev & luis z transaction stuff
 	service.shell = function() {
 		var shell = Bitcore.util.buffer;
-		console.log('ITS WORKING BOOIS');
 		console.log(shell);
 		return shell;
 	};
