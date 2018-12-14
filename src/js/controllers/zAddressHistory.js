@@ -359,6 +359,8 @@ angular.module('copayApp.controllers').controller('zAddressHistoryController', f
     })
     $scope.wallet = {};
     $scope.wallet.name = data.stateParams.walletName;
+    $scope.wallet.zWallet = true;
+    $rootScope.mainnet ? $scope.wallet.network = "livenet" : null;
     if (!$scope.wallet) return;
     // $scope.requiresMultipleSignatures = $scope.wallet.credentials.m > 1;
 
