@@ -1325,7 +1325,7 @@ msgid "Get started"
 msgstr "始めよう"
 
 #: www/views/addressbook.html:20
-msgid "Get started by adding your first one."
+msgid "Get started by adding one."
 msgstr "初めての連絡先を追加しましょう。"
 
 #: src/js/services/onGoingProcess.js:23

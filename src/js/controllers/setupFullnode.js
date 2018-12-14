@@ -8,13 +8,25 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   // stores 'getinfo' data
   $scope.localRPCInfo = [];
 
+  var setupAnonConf = function(){
+    setupFullnode.setupAnonConfService(function (err, res) {
+      if (err) {
+        $log.debug("Error: setupAnonConf - ", err)
+      } else {
+        $rootScope.RPCusername = res.rpcuser.data;
+        $rootScope.RPCpassword = res.rpcpassword.data;
+        $log.debug("Res: setupAnonConf - ", res)
+      }
+    });
+  }
+
   // starts the interval
   $scope.startRPCInterval = function () {
     // stops any running interval to avoid two intervals running at the same time
     $scope.stopRPCInterval();
 
     //no need to start the interval is anon core went OFF.
-    if ($scope.isAnonCoreON) {
+    if ($rootScope.isAnonCoreON) {
       // store the interval promise
       promiseNetStats = $interval(fetchNetworkStats, 30000);
       promiseLocalStats = $interval(fetchLocalRPCInfo, 1000);
@@ -57,7 +69,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
 
   var fetchLocalRPCInfo = function () {
     //only run when we know that anon core is ON
-    if ($scope.isAnonCoreON) {
+    if ($rootScope.isAnonCoreON) {
       setupFullnode.localRPCGetinfo(function (res) {
         if (res.error) {
           $scope.anonCoreErrorMessage = res.error.message
@@ -95,6 +107,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       } else {
         $scope.downloadanonlog = res;
         $rootScope.isFullnodeDownloaded = true;
+        setupAnonConf();
       }
       // UpdateConfig();
       $scope.installationStarted = false;
