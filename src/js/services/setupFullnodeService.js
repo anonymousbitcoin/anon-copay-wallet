@@ -112,7 +112,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   }
 
   //checks if a file exist and can be read
-  var isAnonFolderExist = function (path, callback) {
+  var ensureAnonFolderExist = function (path, callback) {
     var fs = require('fs');
     if (!fs.existsSync(path)) {
       fs.mkdir(path, function (err) {
@@ -556,7 +556,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
           //when anon.conf doesn't exist
           if (err) {
             //create anon folder if doesn't exist
-            isAnonFolderExist(path_to_datadir, function (err) {
+            ensureAnonFolderExist(path_to_datadir, function (err) {
               if (err)
                 return cb(err)
               //write anon.conf from scratch
