@@ -3,11 +3,13 @@
 angular.module('copayApp.controllers').controller('listMasternodeController', function ($ionicHistory, $scope, $ionicModal, $log, listMasternodeService, ongoingProcess) {
 
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
+    ongoingProcess.set('Loading Masternodes', true);
     listMasternodeService.list(function (err, masternodes) {
       if (err) {
         $log.error(err);
       }
       $scope.masternodes = masternodes;
+      ongoingProcess.set('Loading Masternodes', false);
       // console.log('controller: ')
       // console.log(masternodes);
     })

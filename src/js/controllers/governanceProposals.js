@@ -1,12 +1,14 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('governanceProposalsController', function($rootScope, $timeout, $scope, appConfigService, $ionicModal, $log, lodash, profileService, platformInfo, governanceProposalService, configService, openURLService, gettextCatalog, externalLinkService) {
+angular.module('copayApp.controllers').controller('governanceProposalsController', function($scope, $ionicModal, $log, governanceProposalService, gettextCatalog, externalLinkService, ongoingProcess) {
 
 
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
-        governanceProposalService.list(function(err, proposals) {
+      ongoingProcess.set('Loading Proposals', true);  
+      governanceProposalService.list(function(err, proposals) {
             if (err) $log.error(err);
             $scope.proposals = proposals;
+            ongoingProcess.set('Loading Proposals', false);
         });
     });
     $scope.openURLInBrowser = (proposal) => {
