@@ -24,6 +24,8 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
       if (err) {
         $log.debug("Error: setupAnonConf - ", err)
       } else {
+        $rootScope.RPCusername = res.rpcuser.data;
+        $rootScope.RPCpassword = res.rpcpassword.data;
         $log.debug("Res: setupAnonConf - ", res)
       }
     });
