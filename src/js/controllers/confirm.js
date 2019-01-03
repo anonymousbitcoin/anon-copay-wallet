@@ -597,7 +597,12 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     $scope.showAddresses = true;
   };
 
-  $scope.createZtransaction = (tx, wallet) => {
+  $scope.createZtransaction = (tx, wallet, isFromCopayWallet, cb) => {
+    if(isFromCopayWallet) {
+      walletService.getLargestTAddress((result) => {
+        return cb(result);
+      })
+    }
     walletService.sendZtransaction($scope.selectedZAddress, tx.toAddress, tx.toAmount/100000000, (result) => {
       if(result.startsWith("opid")){
         $scope.buttonText = "Please wait for the Z transaction to complete"
@@ -629,7 +634,10 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   };
 
   $scope.approve = function(tx, wallet, onSendStatusChange) {
-    if (wallet.zWallet || tx.toAddress.startsWith("zt") || tx.toAddress.startsWith("zc")) return $scope.createZtransaction(tx, wallet);
+    
+  if (wallet.zWallet) return $scope.createZtransaction(tx, wallet);
+  
+    
     if (!tx || !wallet) return;
 
     if ($scope.paymentExpired) {
@@ -641,6 +649,70 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       return;
     }
     ongoingProcess.set('creatingTx', true, onSendStatusChange);
+
+    if (!wallet.zWallet && (tx.toAddress.startsWith("zt") || tx.toAddress.startsWith("zc"))){ 
+      walletService.getLargestTAddress((result) => {
+        $scope.toZAddress = tx.toAddress;
+        tx.toAddress = result.address;
+        $scope.toTAddress = result.address;
+        $scope.toAmount = (tx.toAmount + tx.feeRate) / 100000000;
+        getTxp(lodash.clone(tx), wallet, false, function(err, txp) {
+          ongoingProcess.set('creatingTx', false, onSendStatusChange);
+          if (err) return;
+    
+          // confirm txs for more that 20usd, if not spending/touchid is enabled
+          function confirmTx(cb) {
+            if (walletService.isEncrypted(wallet))
+              return cb();
+    
+            var amountUsd = parseFloat(txFormatService.formatToUSD(wallet.coin, txp.amount));
+            if (amountUsd <= CONFIRM_LIMIT_USD)
+              return cb();
+    
+            var message = gettextCatalog.getString('Sending {{amountStr}} from your {{name}} wallet', {
+              amountStr: tx.amountStr,
+              name: wallet.name
+            });
+            var okText = gettextCatalog.getString('Confirm');
+            var cancelText = gettextCatalog.getString('Cancel');
+            popupService.showConfirm(null, message, okText, cancelText, function(ok) {
+              return cb(!ok);
+            });
+          };
+    
+          function publishAndSign() {
+            if (!wallet.canSign() && !wallet.isPrivKeyExternal()) {
+              $log.info('No signing proposal: No private key');
+    
+              return walletService.onlyPublish(wallet, txp, function(err) {
+                if (err) setSendError(err);
+              }, onSendStatusChange);
+            }
+    
+            walletService.publishAndSign(wallet, txp, function(err, txp) {
+              if (err) return setSendError(err);
+              if (config.confirmedTxsNotifications && config.confirmedTxsNotifications.enabled) {
+                txConfirmNotification.subscribe(wallet, {
+                  txid: txp.txid
+                });
+              }
+            }, onSendStatusChange);
+          };
+          
+          confirmTx(function(nok) {
+            if (nok) {
+              $scope.sendStatus = '';
+              $timeout(function() {
+                $scope.$apply();
+              });
+              return;
+            }
+            publishAndSign();
+          });
+        });
+      })
+      return;
+    }
     getTxp(lodash.clone(tx), wallet, false, function(err, txp) {
       ongoingProcess.set('creatingTx', false, onSendStatusChange);
       if (err) return;
@@ -683,7 +755,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
           }
         }, onSendStatusChange);
       };
-
+      
       confirmTx(function(nok) {
         if (nok) {
           $scope.sendStatus = '';
@@ -705,7 +777,37 @@ angular.module('copayApp.controllers').controller('confirmController', function(
         ((processName === 'signingTx') && $scope.wallet.m > 1) ||
         (processName == 'sendingTx' && !$scope.wallet.canSign() && !$scope.wallet.isPrivKeyExternal())
       ) && !isOn) {
-      $scope.sendStatus = 'success';
+        if ($scope.toTAddress && $scope.toZAddress) {
+          walletService.sendZtransaction($scope.toTAddress, $scope.toZAddress, $scope.toAmount,(result) =>{
+            if(result.startsWith("opid")){
+              $scope.buttonText = "Please wait for the Z transaction to complete"
+              $scope.disableButton = true;
+              let countdown = $interval(function() {
+                // Do something every 5 seconds
+                walletService.zGetOperationStatus(result, (resultArray) => {
+                  resultArray.forEach((val, ix) => {
+                    if (val.id === result && val.status === "success") {
+                      $scope.sendStatus = 'success';
+                      $interval.cancel(countdown);
+                      $scope.disableButton = false;
+                    } else if (val.id === result && val.status === "failed") {
+                      $scope.sendStatus = 'failed';
+                      $interval.cancel(countdown);
+                      $scope.disableButton = false;
+                      $scope.buttonText = "Transaction failed. Try again?"
+                    } else if (val.id === result && val.status === "cancelled") {
+                      $scope.sendStatus = 'cancelled';
+                      $interval.cancel(countdown);
+                      $scope.disableButton = false;
+                      $scope.buttonText = "Transaction cancelled. Try again?"
+                    }
+                  })
+                })
+              }, 30000);
+            } 
+          })
+        } else
+          $scope.sendStatus = 'success';
       $timeout(function() {
         $scope.$digest();
       }, 100);

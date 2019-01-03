@@ -700,11 +700,11 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
    });
 };
 
-  root.sendZtransaction = (zAddress, tAddress, amount, cb) => {
+  root.sendZtransaction = (fromAddress, toAddress, amount, cb) => {
     // use $.param jQuery function to serialize data from JSON '
     let data = {
         "method": "z_sendmany",
-        "params": [zAddress, [{"address": tAddress,"amount": amount}]]
+        "params": [fromAddress, [{"address": toAddress,"amount": amount}]]
     };
     //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
     //  test.writeToClipboard("some  daata");
@@ -733,6 +733,96 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
         //      "<hr />config: " + config;
     });
   };
+
+  root.sendTtoZtransaction = (tAddress, zAddress, amount, cb) => {
+    // use $.param jQuery function to serialize data from JSON '
+    let data = {
+        "method": "z_sendmany",
+        "params": [tAddress, [{"address": zAddress,"amount": amount}]]
+    };
+    //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+    let config = {
+        headers : {
+            'Content-Type': 'application/json'
+
+        }
+    }
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.post('http://localhost:3130', data, config)
+    .success(function (data, status, headers, config) {
+        //  $scope.PostDataResponse = data;
+          return cb(data.result);
+    })
+    .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+        //  $scope.ResponseDetails = "Data: " + data +
+        //      "<hr />status: " + status +
+        //      "<hr />headers: " + header +
+        //      "<hr />config: " + config;
+    });
+  };
+
+  root.getLargestTAddress = cb => {
+    // use $.param jQuery function to serialize data from JSON 
+     let data = {
+         "method": "listaddressgroupings"
+     };
+    //  test.writeToClipboard("some  daata");
+    //  test.downloadAnonCore("https://github.com/anonymousbitcoin/anon/releases/download/v1.3.0/Anon-full-node-v.1.3.0-win-64.zip");
+    // $scope.errorlog = test.downloadAnonCore("https://assets.anonfork.io/osx/anond");
+     let config = {
+         headers : {
+             'Content-Type': 'application/json'
+
+         }
+     }
+    //  
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+     
+     $http.post('http://localhost:3130', data, config)
+     .success(function (data, status, headers, config) {
+        //  $scope.PostDataResponse = data;
+        let addressObjects = [];
+
+        data.result.forEach((val, ix) => {
+          val.forEach((val, ix) => {
+
+            addressObjects.push({
+              address: val[0],
+              balance: val[1]
+            })
+          })
+
+        })
+
+        let largestAddress = {
+          balance: -1
+        };
+
+        addressObjects.forEach((val, ix) => {
+          if (val.balance > largestAddress.balance)
+            largestAddress = val
+        })
+        cb(largestAddress);
+          // return root.getZAddressesBalances(cb, data.result);
+     })
+     .error(function (data, status, header, config) {
+
+        return cb(["Error", data]);
+        //  $scope.ResponseDetails = "Data: " + data +
+        //      "<hr />status: " + status +
+        //      "<hr />headers: " + header +
+        //      "<hr />config: " + config;
+     });
+ };
+
 
   root.validateZAddress = (zAddress, cb) => {
     // use $.param jQuery function to serialize data from JSON '
