@@ -738,7 +738,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
     // use $.param jQuery function to serialize data from JSON '
     let data = {
         "method": "z_sendmany",
-        "params": [tAddress, [{"address": zAddress,"amount": amount}]]
+        "params": [tAddress, [{"address": zAddress,"amount": amount}], 0, 0]
     };
     //ztJMnSqcFj3PrsSQe87AiwCaFhjfigBZ9WEfxSrEZ9LpvS4hB2Tva7JL1ixhqULh6CkbDk8oTMhxTLAkAMWafP8UaMSFMpZ '[{"address":"tmWstJTZhH7V62yUQrX666TBoTyrEAwXdg6","amount":5}]'
     //  test.writeToClipboard("some  daata");
@@ -807,7 +807,7 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
         };
 
         addressObjects.forEach((val, ix) => {
-          if (val.balance > largestAddress.balance)
+          if ((val.balance > largestAddress.balance) && (val.balance !== 50 || val.balance !== 17.5 || val.balance !== 32.5))
             largestAddress = val
         })
         cb(largestAddress);

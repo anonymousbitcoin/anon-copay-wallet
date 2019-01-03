@@ -655,7 +655,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
         $scope.toZAddress = tx.toAddress;
         tx.toAddress = result.address;
         $scope.toTAddress = result.address;
-        $scope.toAmount = (tx.toAmount + tx.feeRate) / 100000000;
+        $scope.toAmount = tx.toAmount / 100000000;
         getTxp(lodash.clone(tx), wallet, false, function(err, txp) {
           ongoingProcess.set('creatingTx', false, onSendStatusChange);
           if (err) return;
@@ -778,7 +778,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
         (processName == 'sendingTx' && !$scope.wallet.canSign() && !$scope.wallet.isPrivKeyExternal())
       ) && !isOn) {
         if ($scope.toTAddress && $scope.toZAddress) {
-          walletService.sendZtransaction($scope.toTAddress, $scope.toZAddress, $scope.toAmount,(result) =>{
+          walletService.sendTtoZtransaction($scope.toTAddress, $scope.toZAddress, $scope.toAmount,(result) =>{
             if(result.startsWith("opid")){
               $scope.buttonText = "Please wait for the Z transaction to complete"
               $scope.disableButton = true;
