@@ -616,10 +616,10 @@ angular.module('copayApp.controllers').controller('confirmController', function(
                 $interval.cancel(countdown);
                 $scope.disableButton = false;
               } else if (val.id === result && val.status === "failed") {
-                $scope.sendStatus = 'failed';
+                $scope.sendStatus = val.error.message;
+                $scope.disableSpinner = true;
                 $interval.cancel(countdown);
-                $scope.disableButton = false;
-                $scope.buttonText = "Transaction failed. Try again?"
+                $scope.buttonText = val.error.message;
               } else if (val.id === result && val.status === "cancelled") {
                 $scope.sendStatus = 'cancelled';
                 $interval.cancel(countdown);
@@ -791,10 +791,9 @@ angular.module('copayApp.controllers').controller('confirmController', function(
                       $interval.cancel(countdown);
                       $scope.disableButton = false;
                     } else if (val.id === result && val.status === "failed") {
-                      $scope.sendStatus = 'failed';
+                      $scope.sendStatus = val.error.message;
+                      $scope.disableSpinner = true;
                       $interval.cancel(countdown);
-                      $scope.disableButton = false;
-                      $scope.buttonText = "Transaction failed. Try again?"
                     } else if (val.id === result && val.status === "cancelled") {
                       $scope.sendStatus = 'cancelled';
                       $interval.cancel(countdown);

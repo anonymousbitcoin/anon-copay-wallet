@@ -114,7 +114,8 @@
     ng-click="approve(tx, wallet, statusChangeHandler)"
     ng-if="(!isCordova || isWindowsPhoneApp) && wallet"
     click-send-status="sendStatus"
-    is-disabled="!wallet || disableButton">
+    is-disabled="!wallet || disableButton"
+    disable-spinner="disableSpinner">
     {{buttonText}}
   </click-to-accept>
   <slide-to-accept
