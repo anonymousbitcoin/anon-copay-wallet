@@ -586,8 +586,10 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
       .success(function (data, status, headers, config) {
          //  $scope.PostDataResponse = data;
           addressesWithBalances.push({address: addresses[i], balance: data.result})
-          if(i === (addresses.length - 1))
+          if(i === (addresses.length - 1)) {
             cb(addressesWithBalances);
+
+          }
           //  return cb(data.result);
       })
       .error(function (data, status, header, config) {

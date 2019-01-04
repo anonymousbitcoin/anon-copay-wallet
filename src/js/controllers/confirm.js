@@ -127,25 +127,26 @@ angular.module('copayApp.controllers').controller('confirmController', function(
             || data.stateParams.toAddress.startsWith("An") ) ) ) ) {
             walletService.getZTotalBalance((result) => {
               $scope.privateBalance = result.private;
-              // if($scope.selectedZAddressBalance > minAmount) {
-              //   filteredWallets.push($scope.wallets)
-              // }
-              if($scope.privateBalance > minAmount /100000000.0) {
-                $scope.wallets.push({
-                  name: "Z Wallet",
-                  zWallet: true,
-                  cachedBalance: $scope.privateBalance,
-                  status : {
-                    availableBalanceStr: $scope.privateBalance + " ANON",
-                    totalBalanceStr:  $scope.privateBalance + " ANON",
-                  },
-                  coin: coin
-                })
-              }
-              if (lodash.isEmpty($scope.wallets)) {
-                setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
-              }
-              return cb();
+
+              $scope.generateZAddress(() => {
+                if(($scope.privateBalance > minAmount /100000000.0) && ($scope.selectedZAddressBalance > minAmount / 100000000.0)) {
+                  $scope.wallets.push({
+                    name: "Z Wallet",
+                    zWallet: true,
+                    cachedBalance: $scope.privateBalance,
+                    status : {
+                      availableBalanceStr: $scope.privateBalance + " ANON",
+                      totalBalanceStr:  $scope.privateBalance + " ANON",
+                    },
+                    coin: coin
+                  })
+                }
+                if (lodash.isEmpty($scope.wallets)) {
+                  setNoWallet(gettextCatalog.getString('Insufficient funds'), true);
+                }
+                return cb();
+              });
+              
             });
           } else {
             if(lodash.isEmpty($scope.wallets)) setNoWallet(gettextCatalog.getString('No wallets available'), true);
@@ -194,6 +195,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     }
 
     // Grab stateParams
+    $scope.toAmount = parseInt(data.stateParams.toAmount);
     tx = {
       toAmount: parseInt(data.stateParams.toAmount),
       sendMax: data.stateParams.useSendMax == 'true' ? true : false,
@@ -566,7 +568,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
   $scope.cancel = function() {
     $scope.payproModal.hide();
   };
-  $scope.generateZAddress = () => {
+  $scope.generateZAddress = (cb) => {
     walletService.getZTransactions((addresses) => {
       let zAddresses = []
       let largestAddress = {
@@ -574,13 +576,15 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       };
       addresses.forEach((val, ix) => {
         if (val.balance  !== 0 && val.balance > largestAddress.balance)
-        largestAddress = val;
-        zAddresses.push(val) 
+          largestAddress = val;
+        if(val.balance > $scope.toAmount / 100000000)
+          zAddresses.push(val)
       })
 
       $scope.selectedZAddress = largestAddress.address
       $scope.selectedZAddressBalance = largestAddress.balance;
       $scope.zAddresses = zAddresses;
+      cb ? cb(largestAddress) : null;
     });
   }
   
