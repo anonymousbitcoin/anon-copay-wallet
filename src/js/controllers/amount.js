@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('amountController', function($scope, $filter, $timeout, $ionicScrollDelegate, $ionicHistory, gettextCatalog, platformInfo, lodash, configService, rateService, $stateParams, $window, $state, $log, txFormatService, ongoingProcess, popupService, bwcError, payproService, profileService, bitcoreAnon, nodeWebkitService) {
+angular.module('copayApp.controllers').controller('amountController', function($scope, $filter, $timeout, $ionicScrollDelegate, $ionicHistory, gettextCatalog, platformInfo, lodash, configService, rateService, $stateParams, $window, $state, $log, txFormatService, ongoingProcess, popupService, bwcError, payproService, profileService, bitcoreAnon, nodeWebkitService, walletService) {
   var _id;
   var unitToSatoshi;
   var satToUnit;
@@ -29,6 +29,8 @@ angular.module('copayApp.controllers').controller('amountController', function($
 
     $scope.testnet = data.stateParams.testnet;
     $scope.zWallet = data.stateParams.zWallet;
+    $scope.zAddress = data.stateParams.toAddress.startsWith("z") ? data.stateParams.toAddress: null;
+    $scope.shieldMessage = "Shield Coinbase"
     function setAvailableUnits() {
 
       availableUnits = [];
@@ -386,5 +388,28 @@ angular.module('copayApp.controllers').controller('amountController', function($
       });
     }
     $scope.useSendMax = null;
+  };
+
+  $scope.shieldCoinbase = () => {
+    walletService.shieldCoinbase($scope.zAddress, (result) => {
+      if(result[0] === "Error") {
+        $scope.shieldMessage = result[1].error.message;
+      } else {
+        $scope.coinbaseShielded = result.result.opid ? result.result.opid : null;
+        $scope.shieldedValue = $scope.coinbaseShielded ? result.result.shieldingValue : 0;
+      }
+    })
+  }
+
+  $scope.onSuccessConfirm = function() {
+    $scope.coinbaseShielded = '';
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true,
+      historyRoot: true
+    });
+    $state.go('tabs.send').then(function() {
+      $ionicHistory.clearHistory();
+      $state.transitionTo('tabs.home');
+    });
   };
 });
