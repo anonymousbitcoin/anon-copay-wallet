@@ -576,29 +576,32 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
      };
     //  
     $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
-
-     for(let i = 0; i < addresses.length; i++) {
-      let data = {
-        "method": "z_getbalance",
-        "params": [addresses[i]]
-      };
-      $http.post('http://localhost:3130', data, config)
-      .success(function (data, status, headers, config) {
-         //  $scope.PostDataResponse = data;
-          addressesWithBalances.push({address: addresses[i], balance: data.result})
-          if(i === (addresses.length - 1)) {
-            cb(addressesWithBalances);
-
-          }
-          //  return cb(data.result);
-      })
-      .error(function (data, status, header, config) {
-         return cb(["Error", data]);
-         //  $scope.ResponseDetails = "Data: " + data +
-         //      "<hr />status: " + status +
-         //      "<hr />headers: " + header +
-         //      "<hr />config: " + config;
-      });
+     if(addresses.length != 0) {
+       for(let i = 0; i < addresses.length; i++) {
+        let data = {
+          "method": "z_getbalance",
+          "params": [addresses[i]]
+        };
+        $http.post('http://localhost:3130', data, config)
+        .success(function (data, status, headers, config) {
+           //  $scope.PostDataResponse = data;
+            addressesWithBalances.push({address: addresses[i], balance: data.result})
+            if(i === (addresses.length - 1)) {
+              cb(addressesWithBalances);
+  
+            }
+            //  return cb(data.result);
+        })
+        .error(function (data, status, header, config) {
+           return cb(["Error", data]);
+           //  $scope.ResponseDetails = "Data: " + data +
+           //      "<hr />status: " + status +
+           //      "<hr />headers: " + header +
+           //      "<hr />config: " + config;
+        });
+       }
+     } else {
+       cb([])
      }
   }
 
@@ -626,7 +629,6 @@ angular.module('copayApp.services').factory('walletService', function($log, $tim
           return root.getZAddressesBalances(cb, data.result);
      })
      .error(function (data, status, header, config) {
-
         return cb(["Error", data]);
         //  $scope.ResponseDetails = "Data: " + data +
         //      "<hr />status: " + status +

@@ -43,15 +43,20 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
       let largestAddress = {
         balance: -1
       };
-      addresses.forEach((val, ix) => {
-        if (val.balance > largestAddress.balance)
-        largestAddress = val;
-        zAddresses.push(val) 
-      })
 
-      $scope.addr = largestAddress.address
-      $scope.address = largestAddress.address
-      $scope.zAddresses = zAddresses;
+      if(addresses.length === 0) {
+        $scope.generateZNewAddress();
+      } else {
+        addresses.forEach((val, ix) => {
+          if (val.balance > largestAddress.balance)
+          largestAddress = val;
+          zAddresses.push(val) 
+        })
+  
+        $scope.addr = largestAddress.address
+        $scope.address = largestAddress.address
+        $scope.zAddresses = zAddresses;
+      }
     });
   }
 
