@@ -61,11 +61,15 @@
 
     <div class="keypad">
       <div class="row">
-        <div class="col col-25 col-offset-75 operator-send"
+        <div ng-show="zAddress" class="col col-75 shield-coinbase" ng-click="shieldCoinbase()">
+          {{shieldMessage}}
+        </div>
+        <div class="col col-25 operator-send"
              ng-show="allowSend" ng-click="finish()">
           <i class="icon ion-ios-arrow-thin-right"></i>
         </div>
       </div>
+
       <div class="row">
         <div class="col digit" ng-click="pushDigit('7')">7</div>
         <div class="col digit" ng-click="pushDigit('8')">8</div>
@@ -99,4 +103,10 @@
     item-selector-show="showSendMax"
     item-selector-on-select="sendMax">
   </item-selector>
+  <slide-to-accept-success
+    slide-success-show="coinbaseShielded"
+    slide-success-on-confirm="onSuccessConfirm()"
+    slide-success-hide-on-confirm="true">
+    Coinbase has been shielded
+  </slide-to-accept-success>
 </ion-view>

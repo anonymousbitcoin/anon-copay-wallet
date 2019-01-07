@@ -17,7 +17,6 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
     $scope.addr = null;
 
     if (!$scope.wallet || $scope.generatingAddress) return;
-    
     if ($rootScope.isFullnodeMode && $rootScope.isAnonCoreON && $scope.wallet.zWallet){
       $scope.generateZAddress();
       return;
@@ -42,17 +41,22 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
     walletService.getZTransactions((addresses) => {
       let zAddresses = []
       let largestAddress = {
-        balance: 0
+        balance: -1
       };
-      addresses.forEach((val, ix) => {
-        if (val.balance  !== 0 && val.balance > largestAddress.balance)
-        largestAddress = val;
-        zAddresses.push(val) 
-      })
 
-      $scope.addr = largestAddress.address
-      $scope.address = largestAddress.address
-      $scope.zAddresses = zAddresses;
+      if(addresses.length === 0) {
+        $scope.generateZNewAddress();
+      } else {
+        addresses.forEach((val, ix) => {
+          if (val.balance > largestAddress.balance)
+          largestAddress = val;
+          zAddresses.push(val) 
+        })
+  
+        $scope.addr = largestAddress.address
+        $scope.address = largestAddress.address
+        $scope.zAddresses = zAddresses;
+      }
     });
   }
 
@@ -142,10 +146,12 @@ angular.module('copayApp.controllers').controller('tabReceiveController', functi
             totalBalanceStr:  $scope.privateBalance + " ANON",
           }
         })
+        $scope.singleWallet = $scope.wallets.length == 1;
       });
+    } else {
+      $scope.singleWallet = $scope.wallets.length == 1;
     }
 
-    $scope.singleWallet = $scope.wallets.length == 1;
 
     if (!$scope.wallets[0]) return;
 

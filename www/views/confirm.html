@@ -97,7 +97,7 @@
           </span>
           <i class="icon bp-arrow-right"></i>
         </a>
-        <a class="item item-icon-right" ng-if="wallet" ng-click="showDescriptionPopup(tx)">
+        <a class="item item-icon-right" ng-if="wallet && !wallet.zWallet && !tx.toAddress.startsWith('z')" ng-click="showDescriptionPopup(tx)">
           <span class="label" translate>Add Memo</span>
           <span class="item-note m10l">
             {{tx.description}}
@@ -114,7 +114,8 @@
     ng-click="approve(tx, wallet, statusChangeHandler)"
     ng-if="(!isCordova || isWindowsPhoneApp) && wallet"
     click-send-status="sendStatus"
-    is-disabled="!wallet || disableButton">
+    is-disabled="!wallet || disableButton"
+    disable-spinner="disableSpinner">
     {{buttonText}}
   </click-to-accept>
   <slide-to-accept

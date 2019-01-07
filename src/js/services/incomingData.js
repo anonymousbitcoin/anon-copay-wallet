@@ -130,10 +130,6 @@ angular.module('copayApp.services').factory('incomingData', function($log, $stat
 
       // BitPayCard Authentication
     } else if ((data.startsWith("zt") || data.startsWith("zc")) && $rootScope.isAnonCoreON && $rootScope.isFullnodeMode) {
-      // if (data.startsWith("zt"))
-        // data.network.name = "testnet"
-      // else if (data.startsWith("zc"))
-        // data.network.nam/e = "livenet"
         walletService.validateZAddress(data, (result) => {
           if (result.isvalid) {
             if ($state.includes('tabs.scan')) {

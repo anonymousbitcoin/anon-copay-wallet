@@ -257,6 +257,16 @@
         background-color: $v-subtle-gray;
       }
     }
+    .shield-coinbase {
+      font-weight: bolder;
+      color: #fff;
+      background-color: #21C219;
+      cursor: pointer;
+
+      &:active {
+        background-color: #eaeaea;
+      }
+    }
 
     @media(max-height: 480px) {
       font-size: 12px;

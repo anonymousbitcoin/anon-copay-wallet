@@ -9,6 +9,7 @@ angular.module('copayApp.directives')
       scope: {
         sendStatus: '=clickSendStatus',
         isDisabled: '=isDisabled',
+        disableSpinner: '=disableSpinner'
       },
       link: function(scope, element, attrs) {
         scope.$watch('sendStatus', function() {
