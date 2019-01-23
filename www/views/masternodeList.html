@@ -19,7 +19,16 @@
 			pulling-icon="ion-ios-refresh"
 			spinner="ios-small"
 			on-refresh="onRefresh()">
-		  </ion-refresher>
+			</ion-refresher>
+			<div class="send-header-wrapper">
+        <!-- <div class="item item-heading send-heading"><span translate>Masternode IP</span></div> -->
+        <div class="item input search-wrapper" ng-class="{'focus': searchFocus}">
+          <i class="icon icon-svg abs-v-center"><img class="svg" src="img/icon-bitcoin-symbol.svg"></i>
+          <div class="item-icon-right">
+            <input type="text" class="search-input" placeholder="{{'Enter Masternode IP' | translate}}" ng-model="formData.search" ng-change="findMasternode(formData.search)" ng-model-onblur ng-focus="searchInFocus()" ng-blur="searchBlurred()">
+          </div>
+        </div>
+      </div>
 		  <div class="settings-list list">
 			
 			  <div data-ng-repeat="masternode in masternodes" ng-click="openMasternodeDetailModal(masternode)" >

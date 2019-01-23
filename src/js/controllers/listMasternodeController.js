@@ -1,17 +1,19 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('listMasternodeController', function ($ionicHistory, $scope, $ionicModal, $log, listMasternodeService, ongoingProcess) {
+angular.module('copayApp.controllers').controller('listMasternodeController', function ($ionicHistory, $scope, $ionicModal, $log, listMasternodeService, ongoingProcess, lodash) {
 
+  var originalList;
   $scope.$on("$ionicView.beforeEnter", function (event, data) {
     ongoingProcess.set('Loading Masternodes', true);
+    originalList = [];
     listMasternodeService.list(function (err, masternodes) {
       if (err) {
         $log.error(err);
       }
       $scope.masternodes = masternodes;
+      originalList = masternodes; 
       ongoingProcess.set('Loading Masternodes', false);
-      // console.log('controller: ')
-      // console.log(masternodes);
+      
     })
   });
 
@@ -84,5 +86,30 @@ angular.module('copayApp.controllers').controller('listMasternodeController', fu
     var sDisplay = s > 0 ? s + (" sec") : "";
     return dDisplay + hDisplay + mDisplay + sDisplay;
   }
+  var searchLength = 0;
+  $scope.findMasternode = function(search) {
+
+    if (!search) {
+      $timeout(function() {
+        $scope.$apply();
+      });
+      return;
+    }
+    
+    if(searchLength < search.length) {
+      var result = lodash.filter($scope.masternodes, function(item) {
+        var val = item.ip;
+        searchLength = search.length;
+        return lodash.includes(val, search);
+      });
+      $scope.masternodes = result;
+    } else {
+      var result = lodash.filter(originalList, function(item) {
+        var val = item.ip;
+        return lodash.includes(val, search);
+      });
+      $scope.masternodes = result;
+    }
+  };
 
 });
