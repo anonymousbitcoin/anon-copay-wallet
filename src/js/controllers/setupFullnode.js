@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, $interval, rpcService, configService, platformInfo, setupFullnode, networkStatsService, gettextCatalog, popupService) {
+angular.module('copayApp.controllers').controller('setupFullnodeController', function ($scope, $rootScope, $log, $timeout, $interval, rpcService, configService, platformInfo, setupFullnode, networkStatsService, gettextCatalog, popupService, walletService) {
 
   // store the interval promise in this variable
   var promiseLocalStats;
@@ -139,6 +139,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
           $scope.$apply();
           $scope.startRPCInterval();
           fetchNetworkStats();
+          walletService.getZTotalBalance((result) => {
+            $scope.privateBalance = result.private;
+            $rootScope.privateBalance = result.private;
+          });
         }, 3000);
       }
     });
@@ -167,6 +171,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
         }
         $rootScope.isAnonCoreON = false;
         $scope.stoppingAnonCore = false;
+        $rootScope.privateBalance = false;
         $scope.$apply();
         $scope.stopRPCInterval();
       });

@@ -46,6 +46,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
               $scope.testnet = $rootScope.testnet
               walletService.getZTotalBalance((result) => {
                 $scope.privateBalance = result.private;
+                $rootScope.privateBalance = parseInt(result.private);
               });
             }
 

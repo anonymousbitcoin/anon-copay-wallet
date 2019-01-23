@@ -50,6 +50,11 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
         }
       });
     });
+
+    if($rootScope.privateBalance) {
+      $scope.hasFunds = true;
+      $rootScope.everHasFunds = true;
+    }
   };
 
   var updateWalletsList = function() {
