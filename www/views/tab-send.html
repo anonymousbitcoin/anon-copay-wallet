@@ -17,6 +17,13 @@
       </div>
     </div>
 
+    <div class="card" ng-if="hasCoinbase && isFullnodeMode && isAnonCoreON">
+        <a class="item item-icon-right" ng-click="goToShieldCoinbase()">
+            Shield Coinbase {{totalCoinbaseAmount}} ANON
+            <i class="icon bp-arrow-right"></i>
+        </a>
+    </div>
+
     <div ng-if="!checkingBalance && (!hasFunds || !hasWallets)">
       <div class="list card sendTip">
         <div class="item item-icon-right item-heading"></div>
@@ -38,6 +45,7 @@
         </div>
       </div>
     </div>
+
 
     <div class="card" ng-if="hasContacts && hasWallets && hasFunds">
       <div class="item item-icon-right item-heading">

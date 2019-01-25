@@ -279,15 +279,6 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         controller: 'tabScanController',
         templateUrl: 'views/tab-scan.html'
       })
-      .state('tabs.send', {
-        url: '/send',
-        views: {
-          'tab-send': {
-            controller: 'tabSendController',
-            templateUrl: 'views/tab-send.html',
-          }
-        }
-      })
       .state('tabs.settings', {
         url: '/settings',
         views: {
@@ -302,8 +293,8 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
       * Goverance 
       * 
       */
-      .state('tabs.governance', {
-        url: '/governance',
+     .state('tabs.governance', {
+       url: '/governance',
         views: {
           'tab-governance': {
             controller: 'tabGovernanceController',
@@ -311,7 +302,7 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
-
+      
       .state('tabs.governanceProposals', {
         url: '/governance/governanceProposals',
         views: {
@@ -320,9 +311,9 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
             templateUrl: 'views/governance-proposals.html'
           }
         }
-	  })
-	  
-	  .state('tabs.listMasternodes', {
+      })
+      
+      .state('tabs.listMasternodes', {
         url: '/governance/listMasternodes',
         views: {
           'tab-governance@tabs': {
@@ -331,8 +322,8 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
-
-	  .state('tabs.createGovernancePropsal', {
+      
+      .state('tabs.createGovernancePropsal', {
         url: '/governance/governanceProposals/createGovernancePropsal',
         views: {
           'tab-governance@tabs': {
@@ -342,11 +333,29 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
         }
       })
       /*
-       *
-       * Send
-       *
-       */
-
+      *
+      * Send
+      *
+      */
+     
+     .state('tabs.send', {
+       url: '/send',
+       views: {
+         'tab-send': {
+           controller: 'tabSendController',
+           templateUrl: 'views/tab-send.html',
+         }
+       }
+     })
+     .state('tabs.send.shieldCoinbase', {
+      url: '/shieldCoinbase',
+      views: {
+        'tab-send@tabs': {
+          controller: 'shieldCoinbaseController',
+          templateUrl: 'views/shield-coinbase.html',
+        }
+      }
+    })
       .state('tabs.send.amount', {
         url: '/amount/:recipientType/:toAddress/:toName/:toEmail/:toColor/:coin/:fixedUnit/:zWallet/:testnet',
         views: {
