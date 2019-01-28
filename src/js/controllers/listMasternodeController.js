@@ -90,12 +90,11 @@ angular.module('copayApp.controllers').controller('listMasternodeController', fu
   $scope.findMasternode = function(search) {
 
     if (!search) {
-      $timeout(function() {
-        $scope.$apply();
-      });
+      $scope.masternodes = originalList;
+      $scope.$apply();
       return;
     }
-    
+    // executes when the search length entered is greater than 0 or greater than the previous search length entered
     if(searchLength < search.length) {
       var result = lodash.filter($scope.masternodes, function(item) {
         var val = item.ip;
@@ -106,6 +105,7 @@ angular.module('copayApp.controllers').controller('listMasternodeController', fu
     } else {
       var result = lodash.filter(originalList, function(item) {
         var val = item.ip;
+        searchLength = search.length;
         return lodash.includes(val, search);
       });
       $scope.masternodes = result;
