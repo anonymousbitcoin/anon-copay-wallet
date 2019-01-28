@@ -1,0 +1,70 @@
+<ion-view id="tab-send" hide-tabs>
+    <ion-nav-bar class="bar-royal">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-title>{{'Shield Coinbase' | translate}}</ion-nav-title>
+    </ion-nav-bar>
+    <ion-content>
+
+        
+        <div class="card" ng-if="hasFunds">
+            <!-- <a class="item item-icon-right shield-coinbase" ng-click="showAddressSelector()">
+                Select UTXO
+            </a> -->
+            <a class="item text-center" ng-click="showTAddressSelector()">
+                Choose A UTXO
+            </a>
+        </div>
+        <div class="card" ng-if="hasFunds">
+            <a class="item shield-coinbase" ng-click="shieldCoinbase()">
+                Shield All UTXO's {{totalCoinbaseAmount}} ANON
+            </a>
+        </div>
+        <div class="card" ng-if="hasFunds">
+            <a class="item shield-coinbase" ng-click="shieldCoinbase(address.address)">
+                Shield Selected UTXO {{address.address}}
+            </a>
+        </div>
+        <div class="wallet-selector" ng-click="showAddressSelector()" ng-if="zAddress">
+        <a ng-if="zAddress" class="item item-sub item-icon-left item-big-icon-left item-icon-right">
+          <!-- <i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i> -->
+          Shielded Z Address
+          <span>
+            {{zAddress.address}}
+          </span>
+          <p>
+          <span> {{zAddress.balance}} ANON </span>
+  
+          <!-- <span ng-if="wallet.balanceHidden" translate>[Balance Hidden]</span>
+          <span class="tab-home__wallet__multisig-number" ng-if="wallet.n > 1">
+            {{address.m}}-of-{{address.n}}
+          </span> -->
+          <!-- <span class="assertive" ng-if="wallet.error">{{address.error}}</span> -->
+          &nbsp;
+          </p>
+          <!-- <i ng-if="!singleWallet" class="icon bp-arrow-right"></i> -->
+        </a>
+      </div>
+      <slide-to-accept-success
+          slide-success-show="coinbaseShielded"
+          slide-success-on-confirm="onSuccessConfirm()"
+          slide-success-hide-on-confirm="true">
+          Coinbase has been shielded
+      </slide-to-accept-success>
+</ion-content>
+    <address-selector
+        address-selector-title="addressSelectorTitle"
+        address-selector-addresses="zAddresses"
+        address-selector-selected-address="address"
+        address-selector-show="showAddresses"
+        address-selector-on-select="onAddressSelect">
+    </address-selector>
+    <address-selector
+        address-selector-title="addressSelectorTitle"
+        address-selector-addresses="addresses"
+        address-selector-selected-address="tAddress"
+        address-selector-show="showTAddresses"
+        address-selector-on-select="onAddressSelectTAddress">
+    </address-selector>
+</ion-view>
+      

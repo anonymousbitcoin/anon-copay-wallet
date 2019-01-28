@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('tabSendController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService, networkStatsService) {
+angular.module('copayApp.controllers').controller('shieldCoinbaseController', function($scope, $rootScope, $log, $timeout, $ionicScrollDelegate, $ionicHistory, addressbookService, profileService, lodash, $state, walletService, incomingData, popupService, platformInfo, bwcError, gettextCatalog, scannerService, networkStatsService) {
 
   var originalList;
   var CONTACTS_SHOW_LIMIT;
@@ -54,6 +54,7 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
     if($rootScope.privateBalance) {
       $scope.hasFunds = true;
       $rootScope.everHasFunds = true;
+      $scope.shieldMessage = "Shield Coinbase";
     }
   };
 
@@ -238,13 +239,11 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
     currentContactsPage = 0;
     hasWallets();
     walletService.getCoinbaseGeneratedAddresses((addresses, totalCoinbaseAmount) => {
-      if(addresses.length !== 0) {
-        $scope.hasCoinbase = true;
+        $scope.addresses = addresses;
+        $scope.address = addresses[0];
         $scope.totalCoinbaseAmount = totalCoinbaseAmount;
-      }
-      else 
-        $scope.hasCoinbase = false;
-    })  
+    })
+    $scope.generateZAddress();
   });
 
   $scope.$on("$ionicView.enter", function(event, data) {
@@ -257,9 +256,82 @@ angular.module('copayApp.controllers').controller('tabSendController', function(
     updateContactsList(function() {
       updateList();
     });
-
-    $scope.goToShieldCoinbase = function() {
-      return $state.transitionTo('tabs.send.shieldCoinbase',{});
-    }
   });
+
+  $scope.onSuccessConfirm = function() {
+    $scope.sendStatus = '';
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true,
+      historyRoot: true
+    });
+    $state.go('tabs.send').then(function() {
+      $ionicHistory.clearHistory();
+      $state.transitionTo('tabs.home');
+    });
+  };
+
+  $scope.shieldCoinbase = (tAddress) => {
+    walletService.shieldCoinbase($scope.zAddress.address, tAddress, (result) => {
+      if(result[0] === "Error") {
+        $scope.shieldMessage = result[1].error.message;
+      } else {
+        $scope.coinbaseShielded = result.result.opid ? result.result.opid : null;
+        $scope.shieldedValue = $scope.coinbaseShielded ? result.result.shieldingValue : 0;
+      }
+    })
+  }
+  $scope.onAddressSelect = function(address) {
+    $scope.zAddress = address;
+    // $scope.addr = address.address;
+  }; 
+
+  $scope.onAddressSelectTAddress = function(tAddress) {
+    $scope.address = tAddress;
+    // $scope.addr = address.address;
+  };
+
+  $scope.showAddressSelector = function() {
+    // if ($scope.singleAddress) return;
+    $scope.addressSelectorTitle = gettextCatalog.getString('Select a address');
+    $scope.showAddresses = true;
+  }; 
+
+  $scope.showTAddressSelector = function() {
+    // if ($scope.singleAddress) return;
+    $scope.addressSelectorTitle = gettextCatalog.getString('Select a address');
+    $scope.showTAddresses = true;
+  };
+
+  $scope.generateZAddress = () => {
+    walletService.getZTransactions((addresses) => {
+      let zAddresses = []
+      let largestAddress = {
+        balance: -1
+      };
+
+      if(addresses.length === 0) {
+        $scope.generateZNewAddress();
+      } else {
+        addresses.forEach((val, ix) => {
+          if (val.balance > largestAddress.balance)
+          largestAddress = val;
+          zAddresses.push(val) 
+        })
+  
+        // $scope.addr = largestAddress.address
+        $scope.zAddress = largestAddress
+        $scope.zAddresses = zAddresses;
+      }
+    });
+  }
+
+  $scope.generateZNewAddress = () => {
+    walletService.getNewZAddresss((address) => {
+
+      // $scope.addr = address
+      $scope.zAddress = address
+    });
+  }
+  
+
 });
