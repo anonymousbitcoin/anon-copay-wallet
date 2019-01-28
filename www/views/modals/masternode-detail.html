@@ -8,13 +8,6 @@
       Close
     </button>
     <div class="title">Masternode Detail:</div>
-    <div class="buttons buttons-right header-item">
-      <span class="secondary-buttons">
-        <button class="button button-clear" ng-click="updateAll(true)">
-          <i class="icon ion-ios-refresh-empty"></i>
-        </button>
-      </span>
-    </div>
   </ion-header-bar>
   <ion-content>
 
@@ -23,10 +16,10 @@
             <!--
               <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
             -->
-            <div style="word-wrap: break-word"  class="wallet-balance__content no-border">
+            <div style="word-wrap: break-word"  class="wallet-balance__content no-border" copy-to-clipboard="masternode.vin">
               <div class="wallet-balance__title" translate><span style="font-weight:bold;">VIN:</span>
               <span class="item-note text-right wallet-balance__amount">
-                <span class="wallet-balance__amount wallet-balance__amount--total">
+                <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
                     {{ masternode.vin }}
                 </span>
               </span>
@@ -40,10 +33,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.payee">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Payee:</span>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.payee }}
             </span>
           </span>
@@ -57,10 +50,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.status">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Status:</div></span>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.status }}
             </span>
           </span>
@@ -72,10 +65,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.rank">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Rank:</span></div>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.rank }}
             </span>
           </span>
@@ -87,10 +80,10 @@
         <!--
           <i class="wallet-balance__icon icon ion-ios-checkmark-outline"></i>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.ip">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Node IP:</span></div>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.ip }}
             </span>
           </span>
@@ -102,10 +95,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-sigma.svg" height="18" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.activeseconds">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Active Seconds:</span></div>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.activeseconds }}
             </span>
           </span>
@@ -117,10 +110,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.lastseen">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Last Seen:</span></div>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.lastseen }}
             </span>
           </span>
@@ -132,10 +125,10 @@
         <!--
           <img class="wallet-balance__icon" src="img/icon-confirming-clear.svg" width="18"\>
         -->
-        <div class="wallet-balance__content no-border">
+        <div class="wallet-balance__content no-border" copy-to-clipboard="masternode.protocol">
           <div class="wallet-balance__title" translate><span style="font-weight:bold;">Protocol:</span></div>
           <span class="item-note text-right wallet-balance__amount">
-            <span class="wallet-balance__amount wallet-balance__amount--total">
+            <span class="wallet-balance__amount wallet-balance__amount--total wallet-balance__amount--available">
               {{ masternode.protocol }}
             </span>
           </span>
