@@ -14,7 +14,7 @@
     </ion-refresher>
     <div class="settings-list list">
       
-        <div data-ng-repeat="proposal in proposals" ng-click="openGovernanceProposalModal(proposal)">
+        <div data-ng-repeat="proposal in proposals| orderBy:'-DataObject.start_epoch'"  ng-click="openGovernanceProposalModal(proposal)">
             <a  class="item item-icon-right next-step">
              <!-- <i class="icon big-icon-svg">
                <img src="img/icon-wallet.svg" class="bg wallet icon-create-wallet"/>
