@@ -90,6 +90,19 @@
         </div>
       </div>
       <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
+        <div class="wallet-balance__item item">
+          <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
+          <div class="wallet-balance__content no-border">
+            <div class="wallet-balance__title" translate>Payment Cycles</div>
+            <span class="item-note text-right wallet-balance__amount">
+              <span class="wallet-balance__amount wallet-balance__amount--available">
+                  {{proposal.paymentCycles}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="wallet-balance__list list card" ng-show="status.lockedBalanceSat!=0">
           <div class="wallet-balance__item item">
             <!-- <img class="wallet-balance__icon" src="img/icon-lock.svg" width="18"\> -->
             <div class="wallet-balance__content no-border">

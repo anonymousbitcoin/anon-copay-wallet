@@ -41,6 +41,7 @@ angular.module('copayApp.controllers').controller('governanceProposalsController
       scope: $scope
     }).then(function(modal) {
       $scope.proposal = proposal
+      $scope.proposal.paymentCycles = Math.floor((proposal.DataObject.end_epoch - proposal.DataObject.start_epoch) / 2629800) + 1;
       $scope.proposal.DataObject.start_epoch = new Date(proposal.DataObject.start_epoch * 1000).toLocaleString()
       $scope.proposal.DataObject.end_epoch = new Date(proposal.DataObject.end_epoch * 1000).toLocaleString()
       $scope.governanceProposalInfo = modal;
