@@ -50,6 +50,22 @@
   }
 }
 
+.md-icon-svg {
+  padding: 0 7px;
+  > .bg {
+    border-radius: $v-icon-border-radius;
+    width: 30px;
+    height: 30px;
+    // box-shadow: $v-hovering-box-shadow;
+    background-repeat:no-repeat;
+    background-clip: padding-box;
+    background-size: 103%;
+    &.green{
+      background: #ED1E24;
+    }
+  }
+}
+
 
 .wallet-item {
   padding: 1rem 0 2rem 0;

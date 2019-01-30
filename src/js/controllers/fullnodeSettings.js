@@ -8,7 +8,7 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
   };
 
   var checkIfAnonExecFilesExist = function(){
-    setupFullnode.checkIfAnonExecFilesExistService(function (err) {
+    setupFullnode.checkIfAnonExecFilesExistService(null, function (err) {
       if (err) {
         $rootScope.isFullnodeDownloaded = false;
         $log.debug("Error: Anon core doesn't exist - ", err)

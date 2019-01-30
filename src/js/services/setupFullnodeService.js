@@ -59,6 +59,14 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   }();
 
+  // not the best way, needs to be refactored later
+  this.updatePath = function(){
+    if($rootScope.fullnodeList.length){
+      path_to_executables  = $rootScope.fullnodeList[0].anonCoreFullPath || path_to_executables;
+      path_to_datadir  = $rootScope.fullnodeList[0].anonCoreDataDir || path_to_datadir; 
+    }
+  }
+
   //for generating random password
   var crypto = require("crypto");
 
@@ -234,55 +242,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       exec("chmod a+x " + path_to_executables + slash + anond + " " + path_to_executables + slash + anon_cli, callback);
     }
 
-    var fetchZcashParamsUnix = function (callback) {
-      //download and run bash script
-      $log.debug("Fetching Zcash Param Keys...")
-      exec("curl -s https://raw.githubusercontent.com/anonymousbitcoin/anon/master/anonutil/fetch-params.sh | bash", callback);
-    }
-
-    var fetchProvingKeyWin = function (callback) {
-      // check if already exist
-      isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
-        //if doesn't exist start downloading
-        if (err) {
-          //download proving key
-          $log.debug("Couldn't locate sprout-proving.key...starting to download");
-          download(download_zparams_proving_key_win, path_to_zcashparams + slash + "sprout-proving.key", path_to_zcashparams, function (err) {
-            //if something happend during downloading
-            if (err)
-              return callback(err)
-            //successfully downloaded
-            $log.debug("done writing zparams proving key");
-            return callback()
-          })
-          //when it already exists
-        } else {
-          return callback()
-        }
-      })
-    }
-
-    var fetchVerifyingKeyWin = function (callback) {
-      // check if already exist
-      isFileExist(path_to_zcashparams + slash + "sprout-verifying.key", function (err) {
-        //if doesn't exist start downloading
-        if (err) {
-          //download proving key
-          $log.debug("Couldn't locate sprout-verifying.key...starting to download");
-          download(download_zparams_verifying_key_win, path_to_zcashparams + slash + "sprout-verifying.key", path_to_zcashparams, function (err) {
-            //if something happend during downloading
-            if (err)
-              return callback(err)
-            //successfully downloaded
-            $log.debug("done writing zparams verifying key");
-            return callback()
-          })
-          //when it already exists
-        } else {
-          return callback()
-        }
-      })
-    }
     //first download and save anond binary
     download(download_anond_link, path_to_executables + slash + anond, path_to_executables, function (err) {
       if (err)
@@ -294,7 +253,9 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         if (err)
           return cb(err)
         $log.debug("done writing file anon-cli");
-
+         //fix permissions for these files (unix only)
+         fixPermissions(function () {
+    
         //third fetch zcash param keys (for now unix only)
         //on Windows
         if (platformInfo.OS === "Win") {
@@ -315,12 +276,10 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
               return cb(err);
             $log.debug("error:", error);
             $log.debug("res:", res);
-            //forth fix permissions for these files (unix only)
-            fixPermissions(function () {
-              return cb(null, "Anon full node executables have been succesfully downloaded")
-            })
+            return cb(null, "Anon full node executables have been succesfully downloaded")
           })
         }
+      })
       });
     });
   };
@@ -456,8 +415,13 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
 
   //Check if the AnonCore files and Zcash Param keys exist in the default directory, and if they are readable.
-  this.checkIfAnonExecFilesExistService = function (cb) {
-
+  this.checkIfAnonExecFilesExistService = function (doNotCheckZKeys, cb) {
+    //if user choose a custom path
+    // if($rootScope.anonCoreFullPath){
+    //   console.log("anonCoreFullPath exists:")
+    //   console.log("Here the path: ", $rootScope.anonCoreFullPath)
+    //   path_to_executables = $rootScope.anonCoreFullPath;
+    // }
     //check if anond exists
     isFileExist(path_to_executables + slash + anond, function (err) {
       if (err)
@@ -466,6 +430,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       isFileExist(path_to_executables + slash + anon_cli, function (err) {
         if (err)
           return cb(err);
+        if(doNotCheckZKeys)
+          return cb()
         //check if zcash proving key exists
         isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
           if (err)
@@ -587,6 +553,58 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         return cb(null, anon_conf_min_setup);
       }
     })
+  }
+
+  //helper functions
+  var fetchVerifyingKeyWin = function (callback) {
+    // check if already exist
+    isFileExist(path_to_zcashparams + slash + "sprout-verifying.key", function (err) {
+      //if doesn't exist start downloading
+      if (err) {
+        //download proving key
+        $log.debug("Couldn't locate sprout-verifying.key...starting to download");
+        download(download_zparams_verifying_key_win, path_to_zcashparams + slash + "sprout-verifying.key", path_to_zcashparams, function (err) {
+          //if something happend during downloading
+          if (err)
+            return callback(err)
+          //successfully downloaded
+          $log.debug("done writing zparams verifying key");
+          return callback()
+        })
+        //when it already exists
+      } else {
+        return callback()
+      }
+    })
+  }
+
+  var fetchProvingKeyWin = function (callback) {
+    // check if already exist
+    isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
+      //if doesn't exist start downloading
+      if (err) {
+        //download proving key
+        $log.debug("Couldn't locate sprout-proving.key...starting to download");
+        download(download_zparams_proving_key_win, path_to_zcashparams + slash + "sprout-proving.key", path_to_zcashparams, function (err) {
+          //if something happend during downloading
+          if (err)
+            return callback(err)
+          //successfully downloaded
+          $log.debug("done writing zparams proving key");
+          return callback()
+        })
+        //when it already exists
+      } else {
+        return callback()
+      }
+    })
+  }
+
+  var fetchZcashParamsUnix = function (callback) {
+    var exec = require('child_process').exec;
+    //download and run bash script
+    $log.debug("Fetching Zcash Param Keys...")
+    exec("curl -s https://raw.githubusercontent.com/anonymousbitcoin/anon/master/anonutil/fetch-params.sh | bash", callback);
   }
 
   //end of service

@@ -48,6 +48,7 @@ angular.module('copayApp.services').factory('configService', function(storageSer
       isAnonCoreON: false,
       reconnectDelay: 5000,
       idleDurationMin: 4,
+      fullnodeList: [],
       settings: {
         unitName: 'ANON',
         unitToSatoshi: 100000000,

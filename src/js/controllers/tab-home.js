@@ -34,6 +34,12 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
       if ($scope.isNW) {
         //if fullnode mode is activated check if Anon fullnode already running
+
+        //sync fullnode list
+        configService.getSync();
+        $rootScope.fullnodeList = config.wallet.fullnodeList.slice()  || [];
+        setupFullnode.updatePath();
+
         if($rootScope.isFullnodeMode){
           setupFullnode.setupAnonConfService(function(err,res){
             if(err) 

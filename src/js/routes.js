@@ -515,6 +515,15 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           }
         }
       })
+      .state('tabs.addNewNode', {
+        url: '/addNewNode',
+        views: {
+          'tab-settings@tabs': {
+            controller: 'addNewNodeController',
+            templateUrl: 'views/addNewNode.html'
+          }
+        }
+      })
       .state('tabs.advanced', {
         url: '/advanced',
         views: {

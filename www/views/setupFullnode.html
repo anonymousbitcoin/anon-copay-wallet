@@ -10,8 +10,8 @@
       <i class="icon zero-state-icon icon-big-svg">
         <img class="bg" src="img/icon-setup.svg" />
       </i>
-      <div class="zero-state-heading" translate>Couldn't locate Anon Full Node</div>
-      <div class="zero-state-description" translate>Get started by adding one.</div>
+      <div class="zero-state-heading" translate>Couldn't locate Zcash Params Keys</div>
+      <!-- <div class="zero-state-description" translate>Get started by adding one.</div> -->
       <div class="zero-state-cta">
         <button class="button button-standard button-primary" ng-disabled="installationStarted" ng-click="downloadAnonCore()"
           translate>{{ installationStarted ? "Installing" : "Install" }}</button>
@@ -20,11 +20,15 @@
   </ion-content>
 
   <ion-content ng-if="isFullnodeDownloaded && !isAnonCoreON" scroll="false" id="add-address">
+
     <div class="zero-state">
+
       <div ng-show="startlog" ng-bind="startlog" class="zero-state-description"></div>
       <button class="button button-standard button-primary" ng-disabled="startingAnonCore" ng-click="startAnonCore()"
         translate>{{ startingAnonCore ? "Starting" : "Start Full Node" }} </button>
+
     </div>
+
   </ion-content>
 
   <ion-content ng-if="isAnonCoreON" scroll="false">
@@ -32,18 +36,18 @@
       <div ng-show="!isAnonCoreReady" class="list">
         <div class="info">
           <div class="item single-line">
-            <span class="label" ng-bind="anonCoreErrorMessage" ></span>              
-        </div>
+            <span class="label" ng-bind="anonCoreErrorMessage"></span>
+          </div>
         </div>
       </div>
       <div ng-show="isAnonCoreReady" class="list">
-      <div class="info">
-        <div class="settings-list list">
+        <div class="info">
+          <div class="settings-list list">
 
-          <div class="item single-line">
+            <div class="item single-line">
               <span class="label" translate>Block Height:</span>
               <span ng-if="!networkStats.info.blocks || !localRPCInfo.result.blocks" class="label">Checking...</span>
-                <span ng-if="networkStats.info.blocks && localRPCInfo.result.blocks" style="font-weight: bold;" class="label">
+              <span ng-if="networkStats.info.blocks && localRPCInfo.result.blocks" style="font-weight: bold;" class="label">
                 <span>{{localRPCInfo.result.blocks}}</span>
                 <span>/</span>
                 <span>{{networkStats.info.blocks}}</span>
@@ -51,30 +55,31 @@
                 <span>{{(localRPCInfo.result.blocks/networkStats.info.blocks * 100).toFixed(2)}}</span>
                 <span>%)</span>
               </span>
-          </div>
-          <div class="item single-line">
-            <span class="label" translate>Connections:</span>
-            <span class="label" style="font-weight: bold;">
-              {{ localRPCInfo.result.connections}}
-            </span>
-          </div>
-          <div class="item single-line">
+            </div>
+            <div class="item single-line">
+              <span class="label" translate>Connections:</span>
+              <span class="label" style="font-weight: bold;">
+                {{ localRPCInfo.result.connections}}
+              </span>
+            </div>
+            <div class="item single-line">
               <span class="label" translate>Version:</span>
-                <span class="label" style="font-weight: bold;">
+              <span class="label" style="font-weight: bold;">
                 <span>{{localRPCInfo.result.version}}</span>
               </span>
             </div>
             <div class="item single-line">
-                <span class="label" translate>Protocol:</span>
-                  <span class="label" style="font-weight: bold;">
-                  <span>{{localRPCInfo.result.protocolversion}}</span>
-                </span>
-              </div>
+              <span class="label" translate>Protocol:</span>
+              <span class="label" style="font-weight: bold;">
+                <span>{{localRPCInfo.result.protocolversion}}</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
-      
-      <button ng-show="isAnonCoreReady" class="view-on-blockchain-btn button button-standard button-secondary" style="color:white;" translate>
+
+      <button ng-show="isAnonCoreReady" class="view-on-blockchain-btn button button-standard button-secondary" style="color:white;"
+        translate>
         Details
       </button>
 
