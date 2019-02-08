@@ -5,8 +5,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   const homedir = require('os').homedir();
 
   //os specific path
-  var path_to_executables;
-  var path_to_datadir;
+  $rootScope.path_to_executables;
+  $rootScope.path_to_datadir;
   var path_to_zcashparams;
   //slash difference between win and unix os
   var slash;
@@ -23,11 +23,11 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   $log.debug("homedir: ", homedir);
 
-  var setupOSPath = function () {
+  this.setupOSPath = function(cb) {
     //setup windows path
     if (platformInfo.OS === "Win") {
-      path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
-      path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
+      $rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
+      $rootScope.path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
       path_to_zcashparams = homedir + "\\AppData\\Roaming\\ZcashParams";
       slash = "\\";
       download_anond_link = "https://assets.anonfork.io/win64/anond.exe";
@@ -37,10 +37,11 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       anond = "anond.exe";
       anon_cli = "anon-cli.exe"
       $rootScope.isOSsupported = true;
+      // this.downloadAnonService(cb)
       //setup macos path
     } else if (platformInfo.OS === "Mac") {
-      path_to_executables = homedir + "/AnonCopayFullnode";
-      path_to_datadir = homedir + "/Library/Application Support/Anon";
+      $rootScope.path_to_executables = homedir + "/AnonCopayFullnode";
+      $rootScope.path_to_datadir = homedir + "/Library/Application Support/Anon";
       path_to_zcashparams = homedir + "/Library/Application Support/ZcashParams"
       slash = "/";
       download_anond_link = "https://assets.anonfork.io/osx/anond";
@@ -53,11 +54,26 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     else {
       $rootScope.isOSsupported = false;
     }
-    $log.debug("path_to_executables: ", path_to_executables);
-    $log.debug("path_to_datadir: ", path_to_datadir);
+    if($rootScope.isOSsupported){
+      $rootScope.anonCoreDatadir = $rootScope.path_to_datadir;
+      $rootScope.anonCoreFullPath = $rootScope.path_to_executables;
+      this.downloadAnonService(cb)
+
+    }
+    $log.debug("$rootScope.path_to_executables: ", $rootScope.path_to_executables);
+    $log.debug("$rootScope.path_to_datadir: ", $rootScope.path_to_datadir);
     $log.debug("path_to_zcashparams: ", path_to_zcashparams);
 
-  }();
+  };
+
+  // not the best way, needs to be refactored later
+  this.updatePath = function(){
+    // if($rootScope.fullnodeList.length){
+    //   console.log("BEACH BOYS dklhnsdhnskjdnghjkdfgshnkjsd", $rootScope.fullnodeList)
+    //   $rootScope.path_to_executables  = $rootScope.fullnodeList[0].anonCoreFullPath || $rootScope.path_to_executables;
+    //   $rootScope.path_to_datadir  = $rootScope.fullnodeList[0].anonCoreDataDir || $rootScope.path_to_datadir; 
+    // }
+  }
 
   //for generating random password
   var crypto = require("crypto");
@@ -180,7 +196,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var https = require('https');
 
-    var download = (url, file, path_file_folder, cb) => {
+    var download = (url, file, path_file_folder, finalCb, cb) => {
       //create folder if it doesn't exist
       if (!fs.existsSync(path_file_folder))
         fs.mkdirSync(path_file_folder);
@@ -190,24 +206,24 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       const request = https.get(url, (response) => {
         // check if response is success
         if (response.statusCode !== 200) {
-          return cb('Response status was ' + response.statusCode);
+          return cb('Response status was ' + response.statusCode, false);
         }
 
         response.pipe(file);
       });
 
       // close() is async, call cb after close completes
-      file.on('finish', () => file.close(cb));
+      file.on('finish', () => file.close(cb("", true)));
 
       // check for request error too
       request.on('error', (err) => {
         fs.unlink(file);
-        return cb(err.message);
+        return cb(err.message, false);
       });
 
       file.on('error', (err) => { // Handle errors
         fs.unlink(file); // Delete the file async. (But we don't check the result)
-        return cb(err.message);
+        return cb(err.message, false);
       });
     };
     //KEEP IT HERE FOR NOW, UNTIL FIGURE OUT WHY REQUEST DOESN"T WORK ON WINDOWS
@@ -221,8 +237,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     //       return cb(err)
 
     //     //create folder if it doesn't exist
-    //     if (!fs.existsSync(path_to_executables))
-    //       fs.mkdirSync(path_to_executables);
+    //     if (!fs.existsSync($rootScope.path_to_executables))
+    //       fs.mkdirSync($rootScope.path_to_executables);
 
     //     //save the file
     //     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
@@ -231,99 +247,54 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     //deal with permission issues on unix
     var fixPermissions = function (callback) {
-      exec("chmod a+x " + path_to_executables + slash + anond + " " + path_to_executables + slash + anon_cli, callback);
+      exec("chmod a+x " + $rootScope.path_to_executables + slash + anond + " " + $rootScope.path_to_executables + slash + anon_cli, callback);
     }
 
-    var fetchZcashParamsUnix = function (callback) {
-      //download and run bash script
-      $log.debug("Fetching Zcash Param Keys...")
-      exec("curl -s https://raw.githubusercontent.com/anonymousbitcoin/anon/master/anonutil/fetch-params.sh | bash", callback);
-    }
-
-    var fetchProvingKeyWin = function (callback) {
-      // check if already exist
-      isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
-        //if doesn't exist start downloading
-        if (err) {
-          //download proving key
-          $log.debug("Couldn't locate sprout-proving.key...starting to download");
-          download(download_zparams_proving_key_win, path_to_zcashparams + slash + "sprout-proving.key", path_to_zcashparams, function (err) {
-            //if something happend during downloading
-            if (err)
-              return callback(err)
-            //successfully downloaded
-            $log.debug("done writing zparams proving key");
-            return callback()
-          })
-          //when it already exists
-        } else {
-          return callback()
-        }
-      })
-    }
-
-    var fetchVerifyingKeyWin = function (callback) {
-      // check if already exist
-      isFileExist(path_to_zcashparams + slash + "sprout-verifying.key", function (err) {
-        //if doesn't exist start downloading
-        if (err) {
-          //download proving key
-          $log.debug("Couldn't locate sprout-verifying.key...starting to download");
-          download(download_zparams_verifying_key_win, path_to_zcashparams + slash + "sprout-verifying.key", path_to_zcashparams, function (err) {
-            //if something happend during downloading
-            if (err)
-              return callback(err)
-            //successfully downloaded
-            $log.debug("done writing zparams verifying key");
-            return callback()
-          })
-          //when it already exists
-        } else {
-          return callback()
-        }
-      })
-    }
     //first download and save anond binary
-    download(download_anond_link, path_to_executables + slash + anond, path_to_executables, function (err) {
+    download(download_anond_link, $rootScope.path_to_executables + slash + anond, $rootScope.path_to_executables, cb, function (err) {
       if (err)
         return cb(err)
       $log.debug("done writing file anond");
 
       //second download and save anon-cli binary
-      download(download_anoncli_link, path_to_executables + slash + anon_cli, path_to_executables, function (err) {
+      download(download_anoncli_link, $rootScope.path_to_executables + slash + anon_cli, $rootScope.path_to_executables, cb, function (err) {
         if (err)
           return cb(err)
         $log.debug("done writing file anon-cli");
+         //fix permissions for these files (unix only)
+        fixPermissions(function () {
 
         //third fetch zcash param keys (for now unix only)
         //on Windows
-        if (platformInfo.OS === "Win") {
-          fetchProvingKeyWin(function (err) {
-            if (err)
-              return cb(err)
-            fetchVerifyingKeyWin(function (err) {
+          if (platformInfo.OS === "Win") {
+            fetchProvingKeyWin(function (err) {
               if (err)
                 return cb(err)
-              return cb(null, "Anon full node executables have been succesfully downloaded")
+              fetchVerifyingKeyWin(function (err) {
+                if (err)
+                  return cb(err)
+                return cb(null, "Anon full node executables have been succesfully downloaded")
+              })
             })
-          })
 
           //on Unix (macOS, linux, etc)
-        } else {
-          fetchZcashParamsUnix(function (error, res) {
-            if (err)
-              return cb(err);
-            $log.debug("error:", error);
-            $log.debug("res:", res);
-            //forth fix permissions for these files (unix only)
-            fixPermissions(function () {
+          } else {
+            fetchZcashParamsUnix(function (error, res) {
+              if (err)
+                return cb(err);
+              $log.debug("error:", error);
+              $log.debug("res:", res);
               return cb(null, "Anon full node executables have been succesfully downloaded")
             })
-          })
-        }
+          }
+        })
       });
     });
   };
+
+  var successfulInstall = () => {
+    console.log("I HAVE INSTALLED CORRECTLY")
+  }
 
   //start-stop anon core
   this.callAnonCore = function (cmd, cb) {
@@ -339,7 +310,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
-      var ex = spawn(path_to_executables + slash + anon_binary, [command], {
+      var ex = spawn($rootScope.path_to_executables + slash + anon_binary + ` --datadir=${$rootScope.path_to_datadir}`, [command], {
         shell: true
       });
 
@@ -432,17 +403,19 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     };
     var config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword)
       }
     }
 
-    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+    // $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
 
     $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
         return cb(data, status)
       })
       .error(function (data, status, header, config) {
+        console.log("Error: ", data, status)
         return cb(data, status)
       });
     // }
@@ -456,16 +429,23 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
 
   //Check if the AnonCore files and Zcash Param keys exist in the default directory, and if they are readable.
-  this.checkIfAnonExecFilesExistService = function (cb) {
-
+  this.checkIfAnonExecFilesExistService = function (doNotCheckZKeys, cb) {
+    //if user choose a custom path
+    // if($rootScope.anonCoreFullPath){
+    //   console.log("anonCoreFullPath exists:")
+    //   console.log("Here the path: ", $rootScope.anonCoreFullPath)
+    //   $rootScope.path_to_executables = $rootScope.anonCoreFullPath;
+    // }
     //check if anond exists
-    isFileExist(path_to_executables + slash + anond, function (err) {
+    isFileExist($rootScope.path_to_executables + slash + anond, function (err) {
       if (err)
         return cb(err);
       //check if anon-cli exists
-      isFileExist(path_to_executables + slash + anon_cli, function (err) {
+      isFileExist($rootScope.path_to_executables + slash + anon_cli, function (err) {
         if (err)
           return cb(err);
+        if(doNotCheckZKeys)
+          return cb()
         //check if zcash proving key exists
         isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
           if (err)
@@ -483,12 +463,11 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   //read anon.conf | return: (err,res)
   this.getAnonConfService = function (cb) {
-
-    isFileExist(path_to_datadir + slash + "anon.conf", function (err) {
+    isFileExist($rootScope.path_to_datadir + slash + "anon.conf", function (err) {
       if (err)
         return cb(err);
       //if it is exist
-      readFile(path_to_datadir + slash + "anon.conf", function (err, res) {
+      readFile($rootScope.path_to_datadir + slash + "anon.conf", function (err, res) {
         if (err)
           return cb(err);
         return cb(null, res);
@@ -499,7 +478,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //read, parse and write anon.conf | return: (err, res)
   this.setupAnonConfService = function (cb) {
 
-    reset_anon_conf_min_setup(anon_conf_min_setup);
+    // reset_anon_conf_min_setup(anon_conf_min_setup);
     /*
       We need find out if anon.conf has all the necessary settings. If it doesn't then we have to write them.
 
@@ -552,15 +531,15 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       $log.debug("anon_conf_min_setup", anon_conf_min_setup);
       if (isUpdateAnonConfRequired(anon_conf_min_setup)) {
         //check if anon.conf exist
-        isFileExist(path_to_datadir + slash + "anon.conf", function (err) {
+        isFileExist($rootScope.path_to_datadir + slash + "anon.conf", function (err) {
           //when anon.conf doesn't exist
           if (err) {
             //create anon folder if doesn't exist
-            ensureAnonFolderExist(path_to_datadir, function (err) {
+            ensureAnonFolderExist($rootScope.path_to_datadir, function (err) {
               if (err)
                 return cb(err)
               //write anon.conf from scratch
-              writeToFile(path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
+              writeToFile($rootScope.path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
                 //something went wrong during writing the file
                 if (err)
                   return cb(err)
@@ -571,7 +550,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
             })
             //when anon.conf already exist, we just want to append the missing settings
           } else {
-            appendToFile(path_to_datadir + slash + "anon.conf", "#ADDED BY ANON COPAY WALLET\n" + formatData(anon_conf_min_setup), function (err) {
+            appendToFile($rootScope.path_to_datadir + slash + "anon.conf", "#ADDED BY ANON COPAY WALLET\n" + formatData(anon_conf_min_setup), function (err) {
               //something went wrong during writing the file
               if (err)
                 return cb(err)
@@ -587,6 +566,58 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         return cb(null, anon_conf_min_setup);
       }
     })
+  }
+
+  //helper functions
+  var fetchVerifyingKeyWin = function (callback) {
+    // check if already exist
+    isFileExist(path_to_zcashparams + slash + "sprout-verifying.key", function (err) {
+      //if doesn't exist start downloading
+      if (err) {
+        //download proving key
+        $log.debug("Couldn't locate sprout-verifying.key...starting to download");
+        download(download_zparams_verifying_key_win, path_to_zcashparams + slash + "sprout-verifying.key", path_to_zcashparams, function (err) {
+          //if something happend during downloading
+          if (err)
+            return callback(err)
+          //successfully downloaded
+          $log.debug("done writing zparams verifying key");
+          return callback()
+        })
+        //when it already exists
+      } else {
+        return callback()
+      }
+    })
+  }
+
+  var fetchProvingKeyWin = function (callback) {
+    // check if already exist
+    isFileExist(path_to_zcashparams + slash + "sprout-proving.key", function (err) {
+      //if doesn't exist start downloading
+      if (err) {
+        //download proving key
+        $log.debug("Couldn't locate sprout-proving.key...starting to download");
+        download(download_zparams_proving_key_win, path_to_zcashparams + slash + "sprout-proving.key", path_to_zcashparams, function (err) {
+          //if something happend during downloading
+          if (err)
+            return callback(err)
+          //successfully downloaded
+          $log.debug("done writing zparams proving key");
+          return callback()
+        })
+        //when it already exists
+      } else {
+        return callback()
+      }
+    })
+  }
+
+  var fetchZcashParamsUnix = function (callback) {
+    var exec = require('child_process').exec;
+    //download and run bash script
+    $log.debug("Fetching Zcash Param Keys...")
+    exec("curl -s https://raw.githubusercontent.com/anonymousbitcoin/anon/master/anonutil/fetch-params.sh | bash", callback);
   }
 
   //end of service

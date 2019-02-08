@@ -1,0 +1,147 @@
+<ion-view id="advanced-settings" class="settings" show-tabs>
+  <ion-nav-bar class="bar-royal">
+    <ion-nav-title>{{'Setup fullnode' | translate}}</ion-nav-title>
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <ion-content scroll="false" id="add-address">
+
+    <!-- <div class="settings-list list">
+
+      <ion-toggle class="has-comment" ng-show="!step1_2" ng-model="step1_1" toggle-class="toggle-balanced" ng-change="customDownload=false;autoDownload=true;step1_2=false;">
+        <span class="toggle-label" translate>Download Anon</span>
+      </ion-toggle>
+      <ion-icon name="heart"></ion-icon>
+      <div ng-show="!step1_2" class="comment" translate>
+        Copay will download anon core executables automatically
+      </div>
+
+      <div class="item item-divider"></div>
+
+      <ion-toggle ng-show="!step1_1" class="has-comment" ng-model="step1_2" toggle-class="toggle-balanced" ng-change="autoDownload=false;customDownload=true;step1_1=false;">
+        <span class="toggle-label" translate>Choose Anon</span>
+      </ion-toggle>
+      <div ng-show="!step1_1" class="comment" translate>
+        If you already have anon core executables, please specify its location.
+      </div>
+
+      <div ng-show="!step1_1" class="item item-divider"></div>
+
+    </div>
+
+    <div ng-show="step1_1 || step1_2">
+      <ion-label text-center ng-show="autoDownload">Choose folder to save</ion-label>
+
+      <ion-label ng-show="customDownload">Choose location</ion-label>
+      <input type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+
+      <div class="comment">{{anonCoreFullPath}}</div>
+    </div> -->
+
+    <div class="list card" ng-if="!defaultExists">
+      <!-- <div class="item item-icon-right item-heading">
+        <span translate>Wallets</span>
+        <a ui-sref="tabs.add" ng-if="wallets[0]"><i class="icon ion-ios-plus-empty list-add-button"></i></a>
+      </div> -->
+      <a ng-click="installDefault()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+        <i class="icon md-icon-svg">
+          <img src="img/cloud-download.svg" class="bg wallet icon-create-wallet"/>
+        </i>
+        <span translate>Install</span>
+        <i class="icon bp-arrow-right"></i>
+      </a>
+    </div>
+
+      <div class="item item-divider text-center" ng-if="!defaultExists">OR</div>
+
+      <div class="list card">
+        <a onclick="document.getElementById('choose_folder').click()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+          <i class="icon md-icon-svg">
+            <img src="img/folder.svg" class="bg wallet icon-create-wallet"/>
+          </i>
+          <span translate>Choose existing executables: {{selectedFullnodeList.name}}</span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+        <input class="ng-hide" id="choose_folder" type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+        <input class="ng-hide" id="choose_directory" type="file" nwdirectory onchange="angular.element(this).scope().chooseDirectory(this)">
+      </div>
+
+      <div class="list card">
+        <a onclick="document.getElementById('choose_directory').click()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+          <i class="icon md-icon-svg">
+            <img src="img/folder.svg" class="bg wallet icon-create-wallet"/>
+          </i>
+          <span translate>Choose Directory: </span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+        <input class="ng-hide" id="choose_folder" type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+        <input class="ng-hide" id="choose_directory" type="file" nwdirectory onchange="angular.element(this).scope().chooseDirectory(this)">
+      </div>
+
+        <!-- <a ng-repeat="wallet in wallets track by $index"
+           class="item item-sub item-icon-left item-big-icon-left item-icon-right wallet"
+           ng-click="openWallet(wallet)">
+
+          <i class="icon big-icon-svg" ng-include="'views/includes/walletIcon.html'"></i>
+          <span>
+            {{wallet.name || wallet.id}}
+          </span>
+          <p>
+          <span ng-if="!wallet.isComplete()" class="assertive" translate>
+            Incomplete
+          </span>
+          <span ng-if="wallet.isComplete()">
+            <span ng-if="!wallet.balanceHidden  && !wallet.scanning">{{wallet.status.totalBalanceStr ? wallet.status.totalBalanceStr : ( wallet.cachedBalance ? wallet.cachedBalance   + (wallet.cachedBalanceUpdatedOn ? ' &middot; ' + ( wallet.cachedBalanceUpdatedOn  * 1000 | amTimeAgo) : '') : ''  ) }} </span>
+            <span ng-if="wallet.scanning" translate> Scanning funds... </span>
+            <span ng-if="wallet.balanceHidden && !wallet.scanning" translate>[Balance Hidden]</span>
+            <span class="tab-home__wallet__multisig-number" ng-if="wallet.n > 1">
+              {{wallet.m}}-of-{{wallet.n}}
+            </span>
+            <i ng-if="!wallet.balanceHidden && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)" class="tab-home__wallet__status-icon ion-ios-timer-outline"></i>
+            <span class="assertive" ng-if="wallet.error">{{wallet.error}}</span>
+          </span>
+          &nbsp;
+          </p>
+          <i class="icon bp-arrow-right"></i>
+        </a> -->
+      
+
+    <!--     
+    <div class="zero-state">
+      <div class="zero-state-heading" translate>Step 1:</div>
+     
+      <div class="zero-state-heading">
+        <ion-label>1. Download Anon</ion-label>
+      </div>
+
+        <div class="zero-state-heading">
+          <ion-label>Copay will download anon core executables automatically.</ion-label>
+        </div>
+
+        <div class="zero-state-heading">
+        <ion-label>2. Choose Anon</ion-label>
+      </div>
+
+        <div class="zero-state-heading">
+          <ion-label>If you already have anon core executables, please specify its location.</ion-label>
+        <input type="file" nwdirectory>
+        </div> -->
+
+
+    <!-- <ion-checkbox [(ngModel)]="downloadAnon"></ion-checkbox> -->
+    <!-- <ion-label>Choose Anon</ion-label> -->
+    <!-- <ion-checkbox [(ngModel)]="!downloadAnon"></ion-checkbox> -->
+    <!-- <i class="icon zero-state-icon icon-big-svg">
+          <img class="bg" src="img/icon-setup.svg" />
+        </i> -->
+    <!-- <div class="zero-state-heading" translate>Couldn't locate Anon Full Node</div> -->
+    <!-- <div class="zero-state-description" translate>Get started by adding one.</div> -->
+    <!-- <div class="zero-state-cta">
+      <button class="button button-standard button-primary" ng-disabled="installationStarted" ng-click="downloadAnonCore()"
+        translate>{{ installationStarted ? "Installing" : "Install" }}</button>
+    </div> -->
+    <!-- </div> -->
+  </ion-content>
+
+</ion-view>

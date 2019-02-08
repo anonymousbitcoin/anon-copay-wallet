@@ -34,11 +34,11 @@ angular.module('copayApp.services')
     root.create = function(name, value, callback) {
       root.get(name,
         function(err, data) {
-          if (data) {
-            return callback('EEXISTS');
-          } else {
+          // if (data) {
+            // return callback('EEXISTS');
+          // } else {
             return root.set(name, value, callback);
-          }
+          // }
         });
     };
 
@@ -55,7 +55,6 @@ angular.module('copayApp.services')
         var obj = {};
 
         obj[k] = v;
-
         chrome.storage.local.set(obj, cb);
       } else {
         ls.setItem(k, v);

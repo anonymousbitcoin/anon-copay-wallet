@@ -13,13 +13,32 @@
           If enabled, you will be able to use private transactions (z), create/start a masternode and vote for proposals.
         </div>
         <div class="item item-divider"></div>
-        <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
+
+        <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.addNewNode">
+          <i class="icon icon-svg">
+            <img src="img/plus.svg" class="bg"/>
+          </i>
+          <span>{{'Add new' | translate}}</span>
+          <i class="icon bp-arrow-right"></i>
+      </a>
+
+      <div ng-repeat="fullnode in fullnodeList track by $index">
+        <a ng-if="isFullnodeMode && fullnodeList.length"  class="item item-icon-right item-icon-left" href ng-click="goToSetup(fullnode)">
+             <i class="icon icon-svg">
+               <img src="img/icon-setup.svg" class="bg"/>
+             </i>
+             <span>{{fullnode.name}}</span>
+             <i class="icon bp-arrow-right"></i>
+         </a>
+      </div>
+        <!-- ng-repeat="(key, value) in fullnodeList track by $index" -->
+        <!-- <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
             <i class="icon icon-svg">
               <img src="img/icon-setup.svg" class="bg"/>
             </i>
-            <span>{{'Setup full node' | translate}}</span>
+            <span>{{'Access node' | translate}}</span>
             <i class="icon bp-arrow-right"></i>
-        </a>
+        </a> -->
       </div>
     </ion-content>
   </ion-view>
