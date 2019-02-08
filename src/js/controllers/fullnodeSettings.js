@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode) {
+angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, storageService, $state) {
 
   var readConfig = function () {
     var config = configService.getSync();
@@ -56,7 +56,23 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
       setupAnonConf();
       setupFullnode.checkIfAnonFullnodeONService();
       checkIfAnonExecFilesExist();    
+      // setupFullnode.setupOSPath((err, response) => {
+      //   if(err) {
+      //   }
+        storageService.getFullNodeList(function(err, result){
+          $rootScope.fullnodeList = JSON.parse(result);
+        })
+      // })
     }
   });
+
+  $scope.goToSetup = (fullnode) => {
+    $rootScope.anonCoreDatadir = fullnode.anonCoreDatadir;
+    $rootScope.anonCoreFullPath = fullnode.anonCoreFullPath
+
+    $rootScope.path_to_datadir = fullnode.anonCoreDatadir;
+    $rootScope.path_to_executables = fullnode.anonCoreFullPath
+    $state.go('tabs.setupfullnode');
+  }
 
 });

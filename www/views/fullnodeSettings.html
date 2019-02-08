@@ -22,13 +22,15 @@
           <i class="icon bp-arrow-right"></i>
       </a>
 
-       <a ng-if="isFullnodeMode && fullnodeList.length"  class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
-            <i class="icon icon-svg">
-              <img src="img/icon-setup.svg" class="bg"/>
-            </i>
-            <span>{{fullnodeList[0].name}}</span>
-            <i class="icon bp-arrow-right"></i>
-        </a>
+      <div ng-repeat="fullnode in fullnodeList track by $index">
+        <a ng-if="isFullnodeMode && fullnodeList.length"  class="item item-icon-right item-icon-left" href ng-click="goToSetup(fullnode)">
+             <i class="icon icon-svg">
+               <img src="img/icon-setup.svg" class="bg"/>
+             </i>
+             <span>{{fullnode.name}}</span>
+             <i class="icon bp-arrow-right"></i>
+         </a>
+      </div>
         <!-- ng-repeat="(key, value) in fullnodeList track by $index" -->
         <!-- <a ng-if="isFullnodeMode" class="item item-icon-right item-icon-left" href ui-sref="tabs.setupfullnode">
             <i class="icon icon-svg">

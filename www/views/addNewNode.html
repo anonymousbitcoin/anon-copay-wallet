@@ -39,31 +39,44 @@
       <div class="comment">{{anonCoreFullPath}}</div>
     </div> -->
 
-    <div class="list card">
+    <div class="list card" ng-if="!defaultExists">
       <!-- <div class="item item-icon-right item-heading">
         <span translate>Wallets</span>
         <a ui-sref="tabs.add" ng-if="wallets[0]"><i class="icon ion-ios-plus-empty list-add-button"></i></a>
       </div> -->
-        <a ui-sref="tabs.add" class="item item-icon-left item-big-icon-left item-icon-right next-step">
-         <i class="icon md-icon-svg">
-           <img src="img/cloud-download.svg" class="bg wallet icon-create-wallet"/>
-         </i>
-          <span translate>Install</span>
-          <i class="icon bp-arrow-right"></i>
-        </a>
-      </div>
+      <a ng-click="installDefault()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+        <i class="icon md-icon-svg">
+          <img src="img/cloud-download.svg" class="bg wallet icon-create-wallet"/>
+        </i>
+        <span translate>Install</span>
+        <i class="icon bp-arrow-right"></i>
+      </a>
+    </div>
 
-      <div class="item item-divider text-center">OR</div>
+      <div class="item item-divider text-center" ng-if="!defaultExists">OR</div>
 
       <div class="list card">
         <a onclick="document.getElementById('choose_folder').click()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
-            <i class="icon md-icon-svg">
-              <img src="img/folder.svg" class="bg wallet icon-create-wallet"/>
-            </i>
-            <span translate>Choose existing</span>
-            <i class="icon bp-arrow-right"></i>
-          </a>
-          <input class="ng-hide" id="choose_folder" type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+          <i class="icon md-icon-svg">
+            <img src="img/folder.svg" class="bg wallet icon-create-wallet"/>
+          </i>
+          <span translate>Choose existing executables: {{selectedFullnodeList.name}}</span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+        <input class="ng-hide" id="choose_folder" type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+        <input class="ng-hide" id="choose_directory" type="file" nwdirectory onchange="angular.element(this).scope().chooseDirectory(this)">
+      </div>
+
+      <div class="list card">
+        <a onclick="document.getElementById('choose_directory').click()" class="item item-icon-left item-big-icon-left item-icon-right next-step">
+          <i class="icon md-icon-svg">
+            <img src="img/folder.svg" class="bg wallet icon-create-wallet"/>
+          </i>
+          <span translate>Choose Directory: </span>
+          <i class="icon bp-arrow-right"></i>
+        </a>
+        <input class="ng-hide" id="choose_folder" type="file" nwdirectory onchange="angular.element(this).scope().getPath(this)">
+        <input class="ng-hide" id="choose_directory" type="file" nwdirectory onchange="angular.element(this).scope().chooseDirectory(this)">
       </div>
 
         <!-- <a ng-repeat="wallet in wallets track by $index"

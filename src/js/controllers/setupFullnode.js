@@ -184,6 +184,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       fetchLocalRPCInfo();
       $scope.startRPCInterval();
     }
+    setupAnonConf();
     // $scope.startingAnonCore = false;
   });
 });

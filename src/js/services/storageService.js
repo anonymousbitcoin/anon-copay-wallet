@@ -9,7 +9,8 @@ angular
     $log,
     lodash,
     platformInfo,
-    $timeout
+    $timeout,
+    $rootScope
   ) {
     var root = {};
     var storage;
@@ -149,6 +150,50 @@ angular
 
     root.deleteProfile = function(cb) {
       storage.remove("profile", cb);
+    };
+
+    root.storeNewFullNodeList = function(fullNodeList, cb) {
+      root.getFullNodeList((err, str) =>{
+        let newList = []
+        let responseArray = JSON.parse(str);
+        if(responseArray[0]) {
+          responseArray.push(fullNodeList);
+          newList = responseArray;
+        } else {
+          newList.push(fullNodeList)
+        }
+        $rootScope.fullnodeList = newList;
+        storage.create("fullNodeList", newList, cb);
+      })
+    };
+
+    root.storeFullNodeList = function(fullNodeList, cb) {
+      storage.set("fullNodeList", fullNodeList.toObj(), cb);
+    };
+
+    root.getFullNodeList = function(cb) {
+      storage.get("fullNodeList", function(err, str) {
+        if (err || !str) return cb(err);
+
+
+        return cb(err, str)
+
+        decryptOnMobile(str, function(err, str) {
+          if (err) return cb(err);
+          var p, err;
+          try {
+            p = FullNodeList.fromString(str);
+          } catch (e) {
+            $log.debug("Could not read fullNodeList:", e);
+            err = new Error("Could not read fullNodeList:" + p);
+          }
+          return cb(err, p);
+        });
+      });
+    };
+
+    root.deleteFullNodeList = function(cb) {
+      storage.remove("fullNodeList", cb);
     };
 
     root.setFeedbackInfo = function(feedbackValues, cb) {

@@ -37,8 +37,8 @@ angular.module('copayApp.controllers').controller('tabHomeController',
 
         //sync fullnode list
         configService.getSync();
-        $rootScope.fullnodeList = config.wallet.fullnodeList.slice()  || [];
-        setupFullnode.updatePath();
+        // $rootScope.fullnodeList = config.wallet.fullnodeList.slice()  || [];
+        // setupFullnode.updatePath();
 
         if($rootScope.isFullnodeMode){
           setupFullnode.setupAnonConfService(function(err,res){
@@ -54,8 +54,15 @@ angular.module('copayApp.controllers').controller('tabHomeController',
                 $scope.privateBalance = result.private;
               });
             }
-
           });
+          setupFullnode.setupOSPath((err, response) => {
+            if(err) {
+              console.log("Error:", error)
+            }
+            storageService.getFullNodeList(function(err, result){
+              $rootScope.fullnodeList = JSON.parse(result);
+            })
+          })
         }
 
         latestReleaseService.checkLatestRelease(function(err, newRelease) {
