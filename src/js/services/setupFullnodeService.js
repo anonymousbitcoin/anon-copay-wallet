@@ -41,7 +41,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       //setup macos path
     } else if (platformInfo.OS === "Mac") {
       $rootScope.path_to_executables = homedir + "/AnonCopayFullnode";
-      $rootScope.path_to_datadir = homedir + "/Library/Application Support/Anon";
+      $rootScope.path_to_datadir = homedir + "'/Library/Application Support/Anon'";
       path_to_zcashparams = homedir + "/Library/Application Support/ZcashParams"
       slash = "/";
       download_anond_link = "https://assets.anonfork.io/osx/anond";
@@ -124,7 +124,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //checks if a file exist and can be read
   var isFileExist = function (file, callback) {
     var fs = require('fs');
-    fs.access(file, fs.constants.F_OK | fs.constants.R_OK, callback);
+    fs.access(file.replace(/["']/g, ""), fs.constants.F_OK | fs.constants.R_OK, callback);
   }
 
   //checks if a file exist and can be read
@@ -169,7 +169,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //read a file
   var readFile = function (file, cb) {
     var fs = require('fs');
-    fs.readFile(file, 'utf8', function (err, contents) {
+    fs.readFile(file.replace(/["']/g, ""), 'utf8', function (err, contents) {
       if (err)
         return cb(err);
       return cb(null, contents);
@@ -310,7 +310,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
-      var ex = spawn($rootScope.path_to_executables + slash + anon_binary + ` --datadir=${$rootScope.path_to_datadir}`, [command], {
+      var ex = spawn($rootScope.path_to_executables + slash + anon_binary, [" --datadir=" + $rootScope.path_to_datadir, command], {
         shell: true
       });
 
