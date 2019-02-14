@@ -14,7 +14,7 @@ angular.module('copayApp.services').factory('configService', function(storageSer
 
     // Bitcore wallet service URL
     bws: {
-      url: 'http://66.42.77.39:3232/bws/api',
+      url: 'https://bws.anonfork.io/bws/api',
     },
 
     download: {

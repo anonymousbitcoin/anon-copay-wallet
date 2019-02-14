@@ -26,7 +26,7 @@ angular.module('copayApp.services').factory('listMasternodeService', function($l
 
   root.list = function(cb) {
     let masternodes = []
-    fetch("http://66.42.77.39:3232/bws/api/v2/masternodes/list", { headers: { "Content-Type": "application/json; charset=utf-8" }})
+    fetch("https://bws.anonfork.io/bws/api/v2/masternodes/list", { headers: { "Content-Type": "application/json; charset=utf-8" }})
     .then(res => res.json()) // parse response as JSON (can be res.text() for plain response)
     .then(response => {
       masternodes = response.masternodes;
