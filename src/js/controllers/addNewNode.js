@@ -42,12 +42,13 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
               else  
                 $scope.fullnodeListObject = {"name": 'Nameless',"anonCoreFullPath": $rootScope.fullPath, "default": false }
                 $rootScope.path_to_executables = $rootScope.fullPath;
-    
-              $rootScope.fullnodeList.forEach((element, ix) => {
-                if (element.selected) {
-                  $rootScope.fullnodeList[ix].selected = false;
-                }
-              });
+              if($rootScope.fullnodeList) {
+                $rootScope.fullnodeList.forEach((element, ix) => {
+                  if (element.selected) {
+                    $rootScope.fullnodeList[ix].selected = false;
+                  }
+                });
+              }
               $scope.fullnodeListObject.selected = true;
               
               // popupService.showConfirm("Choose Datadir", "This is a folder where Anon Fullnode stores blocks.", "Choose", "Keep Default", function(res) {
@@ -74,11 +75,13 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
       setupFullnode.checkIfAnonExecFilesExistService(true, function (err) {
         $scope.fullnodeListObject.anonCoreDatadir = elem.files[0].path;
         $rootScope.path_to_datadir = elem.files[0].path;
-        $rootScope.fullnodeList.forEach((element, ix) => {
-          if (element.selected) {
-            $rootScope.fullnodeList[ix].selected = false;
-          }
-        });
+        if($rootScope.fullnodeList) {
+          $rootScope.fullnodeList.forEach((element, ix) => {
+            if (element.selected) {
+              $rootScope.fullnodeList[ix].selected = false;
+            }
+          });
+        }
         $scope.fullnodeListObject.selected = true;
 
         
@@ -122,6 +125,7 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
       if (err) $log.debug(err);
 
       var p = FullNodeList.create(fullNodeList);
+      console.log("EVERYBODY SAY FUCK", p, fullNodeList)
       storageService.storeNewFullNodeList(p, function(err) {
         // if (err) return cb(err);
         // root.bindProfile(p, function(err) {
@@ -162,10 +166,12 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
     //   })
     // })
     $scope.defaultExists = false
-    $rootScope.fullnodeList.forEach((val, ix) => {
-      if(val.default)
-        $scope.defaultExists = true
-    })
+    if($rootScope.fullnodeList) {
+      $rootScope.fullnodeList.forEach((val, ix) => {
+        if(val.default)
+          $scope.defaultExists = true
+      })
+    }
   });
 
 });

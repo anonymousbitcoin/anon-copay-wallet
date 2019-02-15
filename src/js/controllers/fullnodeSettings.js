@@ -60,7 +60,12 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
       //   if(err) {
       //   }
         storageService.getFullNodeList(function(err, result){
-          $rootScope.fullnodeList = JSON.parse(result);
+          console.log("MOREE YOU WANT MORE", result)
+          if(result)
+            $rootScope.fullnodeList = JSON.parse(result);
+           else 
+            $rootScope.fullnodeList = [];
+          
         })
       // })
     }

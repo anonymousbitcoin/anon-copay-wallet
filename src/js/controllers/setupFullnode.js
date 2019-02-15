@@ -70,9 +70,10 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
   var fetchLocalRPCInfo = function () {
     //only run when we know that anon core is ON
     if ($rootScope.isAnonCoreON) {
-      setupFullnode.localRPCGetinfo(function (res) {
-        if (res.error) {
-          $scope.anonCoreErrorMessage = res.error.message
+      setupFullnode.localRPCGetinfo(function (res, status) {
+        console.log("NONSENSICAL", res, status)
+        if (res === null) {
+          $scope.anonCoreErrorMessage = "Error"
           $scope.isAnonCoreReady = false
         } else {
           // $scope.anonCoreErrorMessage = res.error.message

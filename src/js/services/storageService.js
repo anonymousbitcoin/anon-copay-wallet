@@ -155,10 +155,13 @@ angular
     root.storeNewFullNodeList = function(fullNodeList, cb) {
       root.getFullNodeList((err, str) =>{
         let newList = []
-        let responseArray = JSON.parse(str);
-        if(responseArray[0]) {
-          responseArray.push(fullNodeList);
-          newList = responseArray;
+        console.log("I AM THE STRING ", str)
+        if(str) {
+          let responseArray = JSON.parse(str);
+          if(Array.isArray(responseArray)) {
+            responseArray.push(fullNodeList);
+            newList = responseArray;
+          }
         } else {
           newList.push(fullNodeList)
         }

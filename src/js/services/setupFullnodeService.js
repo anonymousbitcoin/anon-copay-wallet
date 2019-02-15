@@ -23,12 +23,17 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
   $log.debug("homedir: ", homedir);
 
+  var newHomeDir = homedir.split('\\')[1];
+
+  $log.debug('newHOMEDIR:', newHomeDir);
+
   this.setupOSPath = function(cb) {
     //setup windows path
     if (platformInfo.OS === "Win") {
-      $rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
-      $rootScope.path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
-      path_to_zcashparams = homedir + "\\AppData\\Roaming\\ZcashParams";
+      console.log("::::::::::::((((((((((((((((", homedir)
+      $rootScope.path_to_executables = "" + homedir + "'\\AppData\\Roaming\\AnonCopayFullnode'";
+      $rootScope.path_to_datadir = "'" + homedir + "\\AppData\\Roaming\\Anon'";
+      path_to_zcashparams = "'" + homedir + "\\AppData\\Roaming\\ZcashParams'";
       slash = "\\";
       download_anond_link = "https://assets.anonfork.io/win64/anond.exe";
       download_anoncli_link = "https://assets.anonfork.io/win64/anon-cli.exe";
@@ -124,13 +129,14 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //checks if a file exist and can be read
   var isFileExist = function (file, callback) {
     var fs = require('fs');
-    fs.access(file.replace(/["']/g, ""), fs.constants.F_OK | fs.constants.R_OK, callback);
+    fs.access(file.toString().replace(/["']/g, ""), fs.constants.F_OK | fs.constants.R_OK, callback);
   }
 
   //checks if a file exist and can be read
   var ensureAnonFolderExist = function (path, callback) {
     var fs = require('fs');
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(path.replace(/["']/g, ""))) {
+      console.log("WORLD TOWN", path.replace(/["']/g, ""))
       fs.mkdir(path, function (err) {
         if (err)
           return callback(err)
@@ -198,8 +204,9 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var download = (url, file, path_file_folder, finalCb, cb) => {
       //create folder if it doesn't exist
-      if (!fs.existsSync(path_file_folder))
-        fs.mkdirSync(path_file_folder);
+      console.log("XR2", path_file_folder)
+      if (!fs.existsSync(path_file_folder.replace(/["']/g, "")))
+        fs.mkdirSync(path_file_folder.replace(/["']/g, ""));
 
       var file = fs.createWriteStream(file);
 
@@ -310,7 +317,10 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
-      var ex = spawn($rootScope.path_to_executables + slash + anon_binary, [" --datadir=" + $rootScope.path_to_datadir, command], {
+      console.log("ALL GOOD THINGS TO COME", $rootScope.path_to_executables + slash + anon_binary, [" --datadir=" + $rootScope.path_to_datadir, command], {
+        shell: true
+      })
+      var ex = spawn("'" + $rootScope.path_to_executables + slash + anon_binary + "'", [" --datadir=" + $rootScope.path_to_datadir, command], {
         shell: true
       });
 
@@ -328,12 +338,12 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         // ex.removeListener('stderr', callback(null, null, stderr.toString()));
         return callback(stderr.toString());
       });
-      if (platformInfo.OS === "Win") {
-        //temporal hack for Windows
-        setTimeout(function () {
-          return callback(null, "Anon core successfully started on Windows");
-        }, 5000)
-      }
+      // if (platformInfo.OS === "Win") {
+      //   //temporal hack for Windows
+      //   setTimeout(function () {
+      //     return callback(null, "Anon core successfully started on Windows");
+      //   }, 5000)
+      // }
     };
 
     execute(cmd, function (error, stdout) {
@@ -408,10 +418,12 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       }
     }
 
-    // $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+    console.log("HAHAHAHAHAHAHHA", btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword))
 
+    // $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
     $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
+        console.log("SUCCESS:", data, status)
         return cb(data, status)
       })
       .error(function (data, status, header, config) {
