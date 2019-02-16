@@ -2,7 +2,7 @@
 
 angular.module('copayApp.services').service('setupFullnode', function ($log, $http, $rootScope, platformInfo) {
 
-  const homedir = require('os').homedir();
+  const homedirOG = require('os').homedir();
 
   //os specific path
   $rootScope.path_to_executables;
@@ -20,18 +20,33 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   //executables name
   var anond;
   var anon_cli;
+	$log.debug("homedir: ", homedirOG);
+	
+	var theDIR = []
+	var homeDirLength = homedirOG.match(/\\/gi).length+1; // count how many \slashes there are
+	var newHomeDir = homedirOG.split('\\',homeDirLength); // split the string into array
+	var homeDirStart = `${newHomeDir[0]}\\`; // save first part and add \slash
+	// theDIR.push(homeDirStart);
 
-  $log.debug("homedir: ", homedir);
+	console.log('theDIR after first push:', theDIR);
 
-  var newHomeDir = homedir.split('\\')[1];
+	for(var i = 1 ; i < homeDirLength ; i++)
+	{
+		theDIR.push("'" + newHomeDir[i] +"'");
+		console.log(`theDIR after`, theDIR);
+	}
 
-  $log.debug('newHOMEDIR:', newHomeDir);
+	console.log('theDIR final', theDIR);
+
+	const homedir = homeDirStart + theDIR.join('\\');
+
+	$log.debug('newHOMEDIR2:', homedir);
 
   this.setupOSPath = function(cb) {
     //setup windows path
     if (platformInfo.OS === "Win") {
       console.log("::::::::::::((((((((((((((((", homedir)
-      $rootScope.path_to_executables = "" + homedir + "'\\AppData\\Roaming\\AnonCopayFullnode'";
+			$rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
       $rootScope.path_to_datadir = "'" + homedir + "\\AppData\\Roaming\\Anon'";
       path_to_zcashparams = "'" + homedir + "\\AppData\\Roaming\\ZcashParams'";
       slash = "\\";
@@ -320,7 +335,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       console.log("ALL GOOD THINGS TO COME", $rootScope.path_to_executables + slash + anon_binary, [" --datadir=" + $rootScope.path_to_datadir, command], {
         shell: true
       })
-      var ex = spawn("'" + $rootScope.path_to_executables + slash + anon_binary + "'", [" --datadir=" + $rootScope.path_to_datadir, command], {
+      var ex = spawn($rootScope.path_to_executables + slash + anon_binary, [" --datadir=" + $rootScope.path_to_datadir, command], {
         shell: true
       });
 
