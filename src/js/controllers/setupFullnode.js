@@ -126,6 +126,7 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug("err:")
       // $log.debug(err)
       if (err) {
+        console.log("START ANON ERROR", err)
         $rootScope.isAnonCoreON = false;
         $scope.startlog = err;
         $scope.startingAnonCore = false;

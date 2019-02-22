@@ -168,8 +168,8 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
     $scope.defaultExists = false
     if($rootScope.fullnodeList) {
       $rootScope.fullnodeList.forEach((val, ix) => {
-        if(val.default)
-          $scope.defaultExists = true
+        // if(val.default)
+          // $scope.defaultExists = true
       })
     }
   });

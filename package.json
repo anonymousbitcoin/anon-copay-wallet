@@ -94,6 +94,7 @@
     "cordova-plugin-x-toast": "~2.5.2",
     "cordova-windows": "~6.0.0",
     "express": "^4.11.2",
+    "fix-path": "^2.1.0",
     "fs-extra": "^4.0.2",
     "grunt-angular-gettext": "^2.2.3",
     "grunt-browserify": "^5.0.0",

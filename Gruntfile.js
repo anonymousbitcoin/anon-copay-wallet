@@ -230,7 +230,7 @@ module.exports = function(grunt) {
     nwjs: {
       options: {
         appName: '<%= pkg.title %>',
-        platforms: ['win64'],
+        platforms: ['win64', 'osx64'],
         buildDir: './webkitbuilds',
         version: '0.19.5',
         macIcns: './resources/<%= pkg.name %>/mac/app.icns',
