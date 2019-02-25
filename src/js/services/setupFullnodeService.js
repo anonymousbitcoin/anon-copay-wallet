@@ -5,7 +5,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   const homedirOG = require('os').homedir();
   let homedir = homedirOG;
   var path = require("path");
-  homedir = homedir.replace(/\s/g, "\ ")
+  // homedir = homedir.replace(/\s/g, "\ ")
   console.log("SWIM AND SLEEP LIKE A SHARK", homedir)
 
   //os specific path
@@ -54,6 +54,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       console.log("::::::::::::((((((((((((((((", homedir)
 			$rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
       $rootScope.path_to_datadir = "" + homedir + "\\AppData\\Roaming\\Anon";
+      console.log("LIFE ON EARTH IS A BLOODY MESS ITS A FACT", $rootScope.path_to_executables)
       path_to_zcashparams = "" + homedir + "\\AppData\\Roaming\\ZcashParams";
       slash = "\\";
       download_anond_link = "https://assets.anonfork.io/win64/anond.exe";
@@ -338,7 +339,14 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
-      console.log("ALL GOOD THINGS TO COME", $rootScope.path_to_executables + slash + anon_binary );
+      // $rootScope.path_to_executables = "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode";
+      console.log("YES IT IS ", $rootScope.path_to_executables)
+      console.log("ALL GOOD THINGS TO COME", anon_binary, [command], {
+        shell: true,
+        // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
+        cwd: $rootScope.path_to_executables
+        // stdio: null
+      });
       // var nas = spawn("ls", [], {
       //   shell: true,
       //   cwd: path.dirname($rootScope.path_to_executables + slash + anon_binary)
@@ -350,7 +358,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       // nas.once("err", function(stdout) {
       //   console.log("GOD BLESS YOUUR DEATH", stdout.toString())
       // })
-
       var ex = spawn(anon_binary, [command], {
         shell: true,
         // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
