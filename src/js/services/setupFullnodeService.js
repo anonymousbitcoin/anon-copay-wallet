@@ -53,7 +53,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     if (platformInfo.OS === "Win") {
       console.log("::::::::::::((((((((((((((((", homedir)
 			$rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
-      $rootScope.path_to_datadir = "" + homedir + "\\AppData\\Roaming\\Anon";
+      $rootScope.path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
       console.log("LIFE ON EARTH IS A BLOODY MESS ITS A FACT", $rootScope.path_to_executables)
       path_to_zcashparams = "" + homedir + "\\AppData\\Roaming\\ZcashParams";
       slash = "\\";
@@ -340,8 +340,8 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
       // $rootScope.path_to_executables = "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode";
-      console.log("YES IT IS ", $rootScope.path_to_executables)
-      console.log("ALL GOOD THINGS TO COME", anon_binary, [command], {
+      console.log("YES IT IS ", [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""])
+      console.log("ALL GOOD THINGS TO COME", anon_binary, [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""], {
         shell: true,
         // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
         cwd: $rootScope.path_to_executables
@@ -358,7 +358,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       // nas.once("err", function(stdout) {
       //   console.log("GOD BLESS YOUUR DEATH", stdout.toString())
       // })
-      var ex = spawn(anon_binary, [command], {
+      var ex = spawn(anon_binary, [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""], {
         shell: true,
         // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
         cwd: $rootScope.path_to_executables
