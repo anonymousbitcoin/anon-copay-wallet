@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, storageService, $state) {
+angular.module('copayApp.controllers').controller('fullnodeSettingsController', function ($scope, $rootScope, $log, configService, platformInfo, setupFullnode, storageService, $state, $timeout) {
 
   var readConfig = function () {
     var config = configService.getSync();
@@ -60,7 +60,6 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
       //   if(err) {
       //   }
         storageService.getFullNodeList(function(err, result){
-          console.log("MOREE YOU WANT MORE", result)
           if(result)
             $rootScope.fullnodeList = JSON.parse(result);
            else 
@@ -73,10 +72,13 @@ angular.module('copayApp.controllers').controller('fullnodeSettingsController', 
 
   $scope.goToSetup = (fullnode) => {
     $rootScope.anonCoreDatadir = fullnode.anonCoreDatadir;
-    $rootScope.anonCoreFullPath = fullnode.anonCoreFullPath
+    $rootScope.anonCoreFullPath = fullnode.anonCoreFullPath;
 
     $rootScope.path_to_datadir = fullnode.anonCoreDatadir;
-    $rootScope.path_to_executables = fullnode.anonCoreFullPath
+    $rootScope.path_to_executables = fullnode.anonCoreFullPath;
+    $timeout(function() {
+      $scope.$apply();
+    });    
     $state.go('tabs.setupfullnode');
   }
 

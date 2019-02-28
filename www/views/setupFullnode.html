@@ -24,7 +24,7 @@
     <div class="zero-state">
 
       <div ng-show="startlog" ng-bind="startlog" class="zero-state-description"></div>
-      <button class="button button-standard button-primary" ng-disabled="startingAnonCore" ng-click="startAnonCore()"
+      <button class="button button-standard button-primary" ng-disabled="startingAnonCore" ng-click="startAnonCore(path_to_datadir)"
         translate>{{ startingAnonCore ? "Starting" : "Start Full Node" }} </button>
 
     </div>

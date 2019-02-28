@@ -41,21 +41,6 @@ angular.module('copayApp.controllers').controller('tabHomeController',
         // setupFullnode.updatePath();
 
         if($rootScope.isFullnodeMode){
-          setupFullnode.setupAnonConfService(function(err,res){
-            if(err) 
-              $log.debug("Error: tabHomeController->setupAnonConfService - ", err); 
-            else {
-              $rootScope.RPCusername = res.rpcuser.data;
-              $rootScope.RPCpassword = res.rpcpassword.data;
-              setupFullnode.checkIfAnonFullnodeONService();
-              $scope.mainnet = !$rootScope.testnet
-              $scope.testnet = $rootScope.testnet
-              walletService.getZTotalBalance((result) => {
-                $scope.privateBalance = result.private;
-                $rootScope.privateBalance = parseInt(result.private);
-              });
-            }
-          });
           setupFullnode.setupOSPath((err, response) => {
             if(err) {
               console.log("Error:", error)
@@ -63,6 +48,21 @@ angular.module('copayApp.controllers').controller('tabHomeController',
             storageService.getFullNodeList(function(err, result){
               $rootScope.fullnodeList = JSON.parse(result);
             })
+            setupFullnode.setupAnonConfService(function(err,res){
+              if(err) 
+                $log.debug("Error: tabHomeController->setupAnonConfService - ", err); 
+              else {
+                setupFullnode.checkIfAnonFullnodeONService();
+                $rootScope.RPCusername = res.rpcuser.data;
+                $rootScope.RPCpassword = res.rpcpassword.data;
+                $scope.mainnet = !$rootScope.testnet
+                $scope.testnet = $rootScope.testnet
+                walletService.getZTotalBalance((result) => {
+                  $scope.privateBalance = result.private;
+                  $rootScope.privateBalance = parseInt(result.private);
+                });
+              }
+            });
           })
         }
 

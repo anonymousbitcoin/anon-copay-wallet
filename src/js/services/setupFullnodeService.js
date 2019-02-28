@@ -6,7 +6,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   let homedir = homedirOG;
   var path = require("path");
   // homedir = homedir.replace(/\s/g, "\ ")
-  console.log("SWIM AND SLEEP LIKE A SHARK", homedir)
 
   //os specific path
   $rootScope.path_to_executables;
@@ -46,15 +45,14 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   // }
 
 
-	console.log('newHOMEDIR2:', homedir);
 
   this.setupOSPath = function(cb) {
     //setup windows path
     if (platformInfo.OS === "Win") {
-      console.log("::::::::::::((((((((((((((((", homedir)
-			$rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
-      $rootScope.path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
-      console.log("LIFE ON EARTH IS A BLOODY MESS ITS A FACT", $rootScope.path_to_executables)
+			if(!$rootScope.fullnodeSelected){
+        $rootScope.path_to_executables = homedir + "\\AppData\\Roaming\\AnonCopayFullnode";
+        $rootScope.path_to_datadir = homedir + "\\AppData\\Roaming\\Anon";
+      }
       path_to_zcashparams = "" + homedir + "\\AppData\\Roaming\\ZcashParams";
       slash = "\\";
       download_anond_link = "https://assets.anonfork.io/win64/anond.exe";
@@ -68,13 +66,13 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       //setup macos path
     } else if (platformInfo.OS === "Mac") {
       $rootScope.path_to_executables = homedir + "/AnonCopayFullnode";
-      $rootScope.path_to_datadir = homedir + "'/Library/Application Support/Anon'";
+      $rootScope.path_to_datadir = homedir + "/Library/Application Support/Anon";
       path_to_zcashparams = homedir + "/Library/Application Support/ZcashParams"
       slash = "/";
       download_anond_link = "https://assets.anonfork.io/osx/anond";
       download_anoncli_link = "https://assets.anonfork.io/osx/anon-cli";
-      anond = "anond";
-      anon_cli = "anon-cli";
+      anond = "./anond";
+      anon_cli = "./anon-cli";
       $rootScope.isOSsupported = true;
     }
     //this OS isn't supported
@@ -158,7 +156,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
   var ensureAnonFolderExist = function (path, callback) {
     var fs = require('fs');
     if (!fs.existsSync(path.replace(/["']/g, ""))) {
-      console.log("WORLD TOWN", path.replace(/["']/g, ""))
       fs.mkdir(path, function (err) {
         if (err)
           return callback(err)
@@ -226,7 +223,6 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var download = (url, file, path_file_folder, finalCb, cb) => {
       //create folder if it doesn't exist
-      console.log("XR2", path_file_folder)
       if (!fs.existsSync(path_file_folder.replace(/["']/g, "")))
         fs.mkdirSync(path_file_folder.replace(/["']/g, ""));
 
@@ -339,61 +335,43 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
 
     var execute = function (command, callback) {
       var spawn = require('child_process').spawn;
-      // $rootScope.path_to_executables = "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode";
-      console.log("YES IT IS ", [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""])
-      console.log("ALL GOOD THINGS TO COME", anon_binary, [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""], {
-        shell: true,
-        // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
-        cwd: $rootScope.path_to_executables
-        // stdio: null
-      });
-      // var nas = spawn("ls", [], {
-      //   shell: true,
-      //   cwd: path.dirname($rootScope.path_to_executables + slash + anon_binary)
-      // });
-      // nas.stdout.once("data", function(stdout) {
-      //   console.log("GOD BLESS YOUUR LIFE", stdout.toString())
-      // })
 
-      // nas.once("err", function(stdout) {
-      //   console.log("GOD BLESS YOUUR DEATH", stdout.toString())
-      // })
-      var ex = spawn(anon_binary, [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""], {
-        shell: true,
-        // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
-        cwd: $rootScope.path_to_executables
-        // stdio: null
-      });
+      var ex;
+      if (cmd == "stop") {
+        anon_binary = anon_cli;
+        ex = spawn(anon_binary, [command], {
+          shell: true,
+          // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
+          cwd: $rootScope.path_to_executables
+          // stdio: null
+        });
+      } else if (cmd == "-daemon") {
+        ex = spawn(anon_binary, [command, "\"--datadir=" + $rootScope.path_to_datadir + "\""], {
+          shell: true,
+          // cwd: "C:\\Users\\VIVO PC\\AppData\\Roaming\\AnonCopayFullnode",
+          cwd: $rootScope.path_to_executables
+          // stdio: null
+        });
+      }
+      $rootScope.fullnodeSelected = true;
 
-      console.log("DO I EXIST", ex)
 
       //create listeners
       ex.once('error', function (err) {
-        console.log("1")
         // ex.removeListener('error', callback(err.toString(), null, null));
         return callback(err.toString());
       });
       ex.stdout.once('data', function (stdout) {
-        console.log("2")
         // ex.removeListener('data', callback(null, stdout.toString(), null));
         return callback(null, stdout.toString());
       });
 
       ex.stderr.once('data', function (stderr) {
-        console.log("3")        
         // ex.removeListener('stderr', callback(null, null, stderr.toString()));
         return callback(stderr.toString());
       });
 
-      // ex.on('exit', function(code) {
-      //   console.log('ESECCO?ND ON EXIT ' + code);
-      //   //Here you can get the exit code of the script
-      //   return callbback(null,code);
-      // });
-      // ex.stdprocess.once('data', function (stdout) {
-      //   // ex.removeListener('data', callback(null, stdout.toString(), null));
-      //   return callback(null, stdout.toString());
-      // });
+
       if (platformInfo.OS === "Win") {
         //temporal hack for Windows
         setTimeout(function () {
@@ -449,14 +427,17 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         });
     }
 
-    isAnonON(function (data, status) {
+    this.localRPCGetinfo(function (data, status) {
       $log.debug("data: ", data);
       $log.debug("status: ", status);
       //we accept status 500 because anon core is likely still verifying blocks
-      if (status && status === 200 || status === 500)
+      if (status && status === 200 || status === 500){
+        $rootScope.testnet = data.result.testnet;
+        $rootScope.mainnet = !data.result.testnet;
         $rootScope.isAnonCoreON = true;
-      else
+      } else
         $rootScope.isAnonCoreON = false;
+      
     });
   };
 
@@ -470,13 +451,13 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
     var config = {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword)
+        // 'Authorization': 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword)
       }
     }
 
-    console.log("HAHAHAHAHAHAHHA", btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword))
 
-    // $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
+
+    $http.defaults.headers.common.Authorization = 'Basic ' + btoa($rootScope.RPCusername + ":" + $rootScope.RPCpassword);
     $http.post('http://localhost:3130', data, config)
       .success(function (data, status, headers, config) {
         console.log("SUCCESS:", data, status)
@@ -536,6 +517,7 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
         return cb(err);
       //if it is exist
       readFile($rootScope.path_to_datadir + slash + "anon.conf", function (err, res) {
+        console.log("READ ERROR", err)
         if (err)
           return cb(err);
         return cb(null, res);
@@ -598,36 +580,37 @@ angular.module('copayApp.services').service('setupFullnode', function ($log, $ht
       //no point to open a file for writing if anon.conf doesn't need to be updated
       $log.debug("anon_conf_min_setup", anon_conf_min_setup);
       if (isUpdateAnonConfRequired(anon_conf_min_setup)) {
+        console.warn("The anon.conf is incorrect")
         //check if anon.conf exist
-        isFileExist($rootScope.path_to_datadir + slash + "anon.conf", function (err) {
-          //when anon.conf doesn't exist
-          if (err) {
-            //create anon folder if doesn't exist
-            ensureAnonFolderExist($rootScope.path_to_datadir, function (err) {
-              if (err)
-                return cb(err)
-              //write anon.conf from scratch
-              writeToFile($rootScope.path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
-                //something went wrong during writing the file
-                if (err)
-                  return cb(err)
-                //wrote the file successfully
-                $log.debug("Anon.conf has been created");
-                return cb(null, anon_conf_min_setup);
-              });
-            })
-            //when anon.conf already exist, we just want to append the missing settings
-          } else {
-            appendToFile($rootScope.path_to_datadir + slash + "anon.conf", "#ADDED BY ANON COPAY WALLET\n" + formatData(anon_conf_min_setup), function (err) {
-              //something went wrong during writing the file
-              if (err)
-                return cb(err)
-              //wrote the file successfully
-              $log.debug("Anon.conf has been updated");
-              return cb(null, anon_conf_min_setup);
-            })
-          }
-        })
+        // isFileExist($rootScope.path_to_datadir + slash + "anon.conf", function (err) {
+        //   //when anon.conf doesn't exist
+        //   if (err) {
+        //     //create anon folder if doesn't exist
+        //     ensureAnonFolderExist($rootScope.path_to_datadir, function (err) {
+        //       if (err)
+        //         return cb(err)
+        //       //write anon.conf from scratch
+        //       writeToFile($rootScope.path_to_datadir + slash + "anon.conf", formatData(anon_conf_min_setup), function (err) {
+        //         //something went wrong during writing the file
+        //         if (err)
+        //           return cb(err)
+        //         //wrote the file successfully
+        //         $log.debug("Anon.conf has been created");
+        //         return cb(null, anon_conf_min_setup);
+        //       });
+        //     })
+        //     //when anon.conf already exist, we just want to append the missing settings
+        //   } else {
+        //     appendToFile($rootScope.path_to_datadir + slash + "anon.conf", "#ADDED BY ANON COPAY WALLET\n" + formatData(anon_conf_min_setup), function (err) {
+        //       //something went wrong during writing the file
+        //       if (err)
+        //         return cb(err)
+        //       //wrote the file successfully
+        //       $log.debug("Anon.conf has been updated");
+        //       return cb(null, anon_conf_min_setup);
+        //     })
+        //   }
+        // })
       } else {
         $log.debug("Didn't have to update the anon.conf");
         //we didn't have to update the anon.conf, so we are done here

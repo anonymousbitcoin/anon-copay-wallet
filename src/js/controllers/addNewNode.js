@@ -83,7 +83,6 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
           });
         }
         $scope.fullnodeListObject.selected = true;
-
         
         createFullNodeList($scope.fullnodeListObject)
         // popupService.showConfirm("Choose Datadir", "This is a folder where Anon Fullnode stores blocks.", "Choose", "Keep Default", function(res) {
@@ -125,7 +124,6 @@ angular.module('copayApp.controllers').controller('addNewNodeController', functi
       if (err) $log.debug(err);
 
       var p = FullNodeList.create(fullNodeList);
-      console.log("EVERYBODY SAY FUCK", p, fullNodeList)
       storageService.storeNewFullNodeList(p, function(err) {
         // if (err) return cb(err);
         // root.bindProfile(p, function(err) {

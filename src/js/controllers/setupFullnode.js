@@ -71,7 +71,6 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     //only run when we know that anon core is ON
     if ($rootScope.isAnonCoreON) {
       setupFullnode.localRPCGetinfo(function (res, status) {
-        console.log("NONSENSICAL", res, status)
         if (res === null) {
           $scope.anonCoreErrorMessage = "Error"
           $scope.isAnonCoreReady = false
@@ -116,7 +115,8 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
     });
   }
 
-  $scope.startAnonCore = function () {
+  $scope.startAnonCore = function (path_to_datadir) {
+    $rootScope.path_to_datadir = path_to_datadir;
     $scope.startingAnonCore = true;
     $scope.stoplog = "";
     setupFullnode.callAnonCore("start", function (err, res) {
@@ -126,7 +126,6 @@ angular.module('copayApp.controllers').controller('setupFullnodeController', fun
       // $log.debug("err:")
       // $log.debug(err)
       if (err) {
-        console.log("START ANON ERROR", err)
         $rootScope.isAnonCoreON = false;
         $scope.startlog = err;
         $scope.startingAnonCore = false;

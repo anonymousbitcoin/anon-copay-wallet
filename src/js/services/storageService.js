@@ -155,7 +155,6 @@ angular
     root.storeNewFullNodeList = function(fullNodeList, cb) {
       root.getFullNodeList((err, str) =>{
         let newList = []
-        console.log("I AM THE STRING ", str)
         if(str) {
           let responseArray = JSON.parse(str);
           if(Array.isArray(responseArray)) {
